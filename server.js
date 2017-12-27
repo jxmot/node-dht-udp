@@ -10,9 +10,9 @@
         * NICE TO HAVE: Listen for external connections to a socket and then
           forward sensor data and statuses to a client.
 
-    PHASE 1 : Listen for sensor data and statuses, display on console.
+DONE    PHASE 1 : Listen for sensor data and statuses, display on console.
 
-    PHASE 2 : Forward the incoming data to a database. Options are - 
+WIP     PHASE 2 : Forward the incoming data to a database. Options are - 
         * Firebase
         * mLab/mongodb
         * MySQL
@@ -83,6 +83,14 @@ server.on('message', (msg, rinfo) => {
     // finish the announcement
     temp += ']';
 
+    // trigger an event....
+    // consider passing srvcfg.reply so that the
+    // event handler knows if it should reply. the
+    // content of the reply is determined by the
+    // handler. and it can decide to not reply as 
+    // needed.
+
+
     if(srvcfg.reply === true) {
         // put a reply together...
         const reply = new Buffer(temp);
@@ -123,6 +131,8 @@ client.on('message', (payload, remote) => {
     // the correct way to extract a string from the payload is this - 
     var message = payload.filter(letter => letter !== 0);
     console.log(`multicast received : [${message}] from ${remote.address}:${remote.port}`);
+
+    // trigger an event....
 });
 
 client.bind(mulcfg.port);
