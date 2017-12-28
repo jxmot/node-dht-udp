@@ -1,0 +1,426 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Firebase",
+		"_postman_id": "95f90305-ea4a-17f7-545b-8c302848591c",
+		"description": "REST tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth - anonymous",
+			"request": {
+				"url": {
+					"raw": "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyC0VLp1C2nZERziTzMwC4QvrpS38KcUlQY",
+					"protocol": "https",
+					"host": [
+						"www",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"identitytoolkit",
+						"v3",
+						"relyingparty",
+						"signupNewUser"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "AIzaSyC0VLp1C2nZERziTzMwC4QvrpS38KcUlQY",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"returnSecureToken\":true}"
+				},
+				"description": "URL:\n\nhttps://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=[API_KEY]\n\nWhere:\n\n[API_KEY] is your Firebase API key (no brackets)\n\nBody: \n\n{\"returnSecureToken\":true}\n\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Write Data with auth = anonymous idToken value",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/pman/SENS01/data.json?auth=eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsInByb3ZpZGVyX2lkIjoiYW5vbnltb3VzIiwiYXVkIjoiZXNwODI2Ni0wMS01YzgwYiIsImF1dGhfdGltZSI6MTUwMTEzMTI1OSwidXNlcl9pZCI6ImNJQUFBRE1rSlBaUjg2a0FneEJKQjZuTDlaSzIiLCJzdWIiOiJjSUFBQURNa0pQWlI4NmtBZ3hCSkI2bkw5WksyIiwiaWF0IjoxNTAxMTMxMjYwLCJleHAiOjE1MDExMzQ4NjAsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnt9LCJzaWduX2luX3Byb3ZpZGVyIjoiYW5vbnltb3VzIn19.g9BGV2cfix2WNbAXjKypNyfR4z6tbif6TfhhmNtFlMSEOrkfkeoQ1guYfqdojyU5aPj4xEV1DHogq7YdjLq2W1xZI7kEeejvbXFLkuNZVUG2Zmo_RCdLKqKthRJ_dZ8pdzxSePtGIP8Tsc9-osKaq6yH5eMF7KdgCSIWH_SVVUlusCfLeoLpijJXPPoa-WXF3VOUnAgV6SM1QjJEUQQ58U8_P6mhrtCtpKXz3CfW9YLotHeqnAQOEA_zX46BN5kNd8MAHwLQwRFPR0rD82R7q1UxE9OIb23OSOx2zfeJacvy23rjRiNHG89FdsmOK982ySngCYl0y8xybBH9NXP3Kg",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						"pman",
+						"SENS01",
+						"data.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsInByb3ZpZGVyX2lkIjoiYW5vbnltb3VzIiwiYXVkIjoiZXNwODI2Ni0wMS01YzgwYiIsImF1dGhfdGltZSI6MTUwMTEzMTI1OSwidXNlcl9pZCI6ImNJQUFBRE1rSlBaUjg2a0FneEJKQjZuTDlaSzIiLCJzdWIiOiJjSUFBQURNa0pQWlI4NmtBZ3hCSkI2bkw5WksyIiwiaWF0IjoxNTAxMTMxMjYwLCJleHAiOjE1MDExMzQ4NjAsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnt9LCJzaWduX2luX3Byb3ZpZGVyIjoiYW5vbnltb3VzIn19.g9BGV2cfix2WNbAXjKypNyfR4z6tbif6TfhhmNtFlMSEOrkfkeoQ1guYfqdojyU5aPj4xEV1DHogq7YdjLq2W1xZI7kEeejvbXFLkuNZVUG2Zmo_RCdLKqKthRJ_dZ8pdzxSePtGIP8Tsc9-osKaq6yH5eMF7KdgCSIWH_SVVUlusCfLeoLpijJXPPoa-WXF3VOUnAgV6SM1QjJEUQQ58U8_P6mhrtCtpKXz3CfW9YLotHeqnAQOEA_zX46BN5kNd8MAHwLQwRFPR0rD82R7q1UxE9OIb23OSOx2zfeJacvy23rjRiNHG89FdsmOK982ySngCYl0y8xybBH9NXP3Kg",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"t\": 77.2, \"h\": 36}"
+				},
+				"description": "Copies token from previous \"Auth - anonymous\""
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - email and password obtain idToken value",
+			"request": {
+				"url": {
+					"raw": "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyC0VLp1C2nZERziTzMwC4QvrpS38KcUlQY",
+					"protocol": "https",
+					"host": [
+						"www",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"identitytoolkit",
+						"v3",
+						"relyingparty",
+						"verifyPassword"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "AIzaSyC0VLp1C2nZERziTzMwC4QvrpS38KcUlQY",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"iotdev@stupiddog.net\",\"password\":\"aZ2GrgR3ePNzEfBT\",\"returnSecureToken\":true}"
+				},
+				"description": "URL:\n\nhttps://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=[API_KEY]\n\nWhere:\n\n[API_KEY] is your Firebase API key (no brackets)\n\nBody: \n\n{\"email\":\"valid@email.com\", \"password\":\"password\", returnSecureToken\":true}\n\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Read config/SENS01/mac with auth = idToken value",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/config/SENS01/mac.json?auth=eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsImF1ZCI6ImVzcDgyNjYtMDEtNWM4MGIiLCJhdXRoX3RpbWUiOjE1MDExNzM4NTgsInVzZXJfaWQiOiI2SDFxN1VaUFZPVjFZbGkwU1d1eUxIbThQSGwxIiwic3ViIjoiNkgxcTdVWlBWT1YxWWxpMFNXdXlMSG04UEhsMSIsImlhdCI6MTUwMTE3Mzg1OCwiZXhwIjoxNTAxMTc3NDU4LCJlbWFpbCI6ImlvdGRldkBzdHVwaWRkb2cubmV0IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImlvdGRldkBzdHVwaWRkb2cubmV0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.jE_Zc5Jf5tXzQJmrBQRDVyCvEilco_k8ifcIBwryrzzeWpLvAGkLUSebPlYTfmSqsIFkWE2PmNkjimPH_lLTlk4P_p5gQIwV2Q3yzThO9IJVW4XXSK1Xy1s1ohPjFqRc1OnR53uxnDJdmbHOTYul7T4nNTkFroBmHDZuw4PG9gARjuIdATXjrlKiKMTVA4QHPWVIzVQwD4m9Kkm7P-SEZPJxUmcpv_LvkXBxLQJus8YbCBSsoeewcRDp4z4yBvwOOpDIQMgtJmurPvQwxfZSsX3lX5oUmdA1ZBbKRb_AaRapkfJLpRIEK73erxAsmh78s-BDEeHk7jRVQm5_hutD8g",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						"config",
+						"SENS01",
+						"mac.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsImF1ZCI6ImVzcDgyNjYtMDEtNWM4MGIiLCJhdXRoX3RpbWUiOjE1MDExNzM4NTgsInVzZXJfaWQiOiI2SDFxN1VaUFZPVjFZbGkwU1d1eUxIbThQSGwxIiwic3ViIjoiNkgxcTdVWlBWT1YxWWxpMFNXdXlMSG04UEhsMSIsImlhdCI6MTUwMTE3Mzg1OCwiZXhwIjoxNTAxMTc3NDU4LCJlbWFpbCI6ImlvdGRldkBzdHVwaWRkb2cubmV0IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImlvdGRldkBzdHVwaWRkb2cubmV0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.jE_Zc5Jf5tXzQJmrBQRDVyCvEilco_k8ifcIBwryrzzeWpLvAGkLUSebPlYTfmSqsIFkWE2PmNkjimPH_lLTlk4P_p5gQIwV2Q3yzThO9IJVW4XXSK1Xy1s1ohPjFqRc1OnR53uxnDJdmbHOTYul7T4nNTkFroBmHDZuw4PG9gARjuIdATXjrlKiKMTVA4QHPWVIzVQwD4m9Kkm7P-SEZPJxUmcpv_LvkXBxLQJus8YbCBSsoeewcRDp4z4yBvwOOpDIQMgtJmurPvQwxfZSsX3lX5oUmdA1ZBbKRb_AaRapkfJLpRIEK73erxAsmh78s-BDEeHk7jRVQm5_hutD8g",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Reads from config/SENS01/mac"
+			},
+			"response": []
+		},
+		{
+			"name": "Write pman/SENS01/data with auth = idToken value",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/pman/SENS01/data.json?auth=eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsImF1ZCI6ImVzcDgyNjYtMDEtNWM4MGIiLCJhdXRoX3RpbWUiOjE1MDExNzM4NTgsInVzZXJfaWQiOiI2SDFxN1VaUFZPVjFZbGkwU1d1eUxIbThQSGwxIiwic3ViIjoiNkgxcTdVWlBWT1YxWWxpMFNXdXlMSG04UEhsMSIsImlhdCI6MTUwMTE3Mzg1OCwiZXhwIjoxNTAxMTc3NDU4LCJlbWFpbCI6ImlvdGRldkBzdHVwaWRkb2cubmV0IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImlvdGRldkBzdHVwaWRkb2cubmV0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.jE_Zc5Jf5tXzQJmrBQRDVyCvEilco_k8ifcIBwryrzzeWpLvAGkLUSebPlYTfmSqsIFkWE2PmNkjimPH_lLTlk4P_p5gQIwV2Q3yzThO9IJVW4XXSK1Xy1s1ohPjFqRc1OnR53uxnDJdmbHOTYul7T4nNTkFroBmHDZuw4PG9gARjuIdATXjrlKiKMTVA4QHPWVIzVQwD4m9Kkm7P-SEZPJxUmcpv_LvkXBxLQJus8YbCBSsoeewcRDp4z4yBvwOOpDIQMgtJmurPvQwxfZSsX3lX5oUmdA1ZBbKRb_AaRapkfJLpRIEK73erxAsmh78s-BDEeHk7jRVQm5_hutD8g",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						"pman",
+						"SENS01",
+						"data.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsImF1ZCI6ImVzcDgyNjYtMDEtNWM4MGIiLCJhdXRoX3RpbWUiOjE1MDExNzM4NTgsInVzZXJfaWQiOiI2SDFxN1VaUFZPVjFZbGkwU1d1eUxIbThQSGwxIiwic3ViIjoiNkgxcTdVWlBWT1YxWWxpMFNXdXlMSG04UEhsMSIsImlhdCI6MTUwMTE3Mzg1OCwiZXhwIjoxNTAxMTc3NDU4LCJlbWFpbCI6ImlvdGRldkBzdHVwaWRkb2cubmV0IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImlvdGRldkBzdHVwaWRkb2cubmV0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.jE_Zc5Jf5tXzQJmrBQRDVyCvEilco_k8ifcIBwryrzzeWpLvAGkLUSebPlYTfmSqsIFkWE2PmNkjimPH_lLTlk4P_p5gQIwV2Q3yzThO9IJVW4XXSK1Xy1s1ohPjFqRc1OnR53uxnDJdmbHOTYul7T4nNTkFroBmHDZuw4PG9gARjuIdATXjrlKiKMTVA4QHPWVIzVQwD4m9Kkm7P-SEZPJxUmcpv_LvkXBxLQJus8YbCBSsoeewcRDp4z4yBvwOOpDIQMgtJmurPvQwxfZSsX3lX5oUmdA1ZBbKRb_AaRapkfJLpRIEK73erxAsmh78s-BDEeHk7jRVQm5_hutD8g",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"t\": 77.2, \"h\": 36}"
+				},
+				"description": "Copies idToken from previous \"Auth - email/password\" and writes to pman/SENS01/data"
+			},
+			"response": []
+		},
+		{
+			"name": "Read pman/SENS01/data with auth = idToken value",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/pman/SENS01/data.json?auth=eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsImF1ZCI6ImVzcDgyNjYtMDEtNWM4MGIiLCJhdXRoX3RpbWUiOjE1MDExNzM4NTgsInVzZXJfaWQiOiI2SDFxN1VaUFZPVjFZbGkwU1d1eUxIbThQSGwxIiwic3ViIjoiNkgxcTdVWlBWT1YxWWxpMFNXdXlMSG04UEhsMSIsImlhdCI6MTUwMTE3Mzg1OCwiZXhwIjoxNTAxMTc3NDU4LCJlbWFpbCI6ImlvdGRldkBzdHVwaWRkb2cubmV0IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImlvdGRldkBzdHVwaWRkb2cubmV0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.jE_Zc5Jf5tXzQJmrBQRDVyCvEilco_k8ifcIBwryrzzeWpLvAGkLUSebPlYTfmSqsIFkWE2PmNkjimPH_lLTlk4P_p5gQIwV2Q3yzThO9IJVW4XXSK1Xy1s1ohPjFqRc1OnR53uxnDJdmbHOTYul7T4nNTkFroBmHDZuw4PG9gARjuIdATXjrlKiKMTVA4QHPWVIzVQwD4m9Kkm7P-SEZPJxUmcpv_LvkXBxLQJus8YbCBSsoeewcRDp4z4yBvwOOpDIQMgtJmurPvQwxfZSsX3lX5oUmdA1ZBbKRb_AaRapkfJLpRIEK73erxAsmh78s-BDEeHk7jRVQm5_hutD8g",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						"pman",
+						"SENS01",
+						"data.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsImF1ZCI6ImVzcDgyNjYtMDEtNWM4MGIiLCJhdXRoX3RpbWUiOjE1MDExNzM4NTgsInVzZXJfaWQiOiI2SDFxN1VaUFZPVjFZbGkwU1d1eUxIbThQSGwxIiwic3ViIjoiNkgxcTdVWlBWT1YxWWxpMFNXdXlMSG04UEhsMSIsImlhdCI6MTUwMTE3Mzg1OCwiZXhwIjoxNTAxMTc3NDU4LCJlbWFpbCI6ImlvdGRldkBzdHVwaWRkb2cubmV0IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImlvdGRldkBzdHVwaWRkb2cubmV0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.jE_Zc5Jf5tXzQJmrBQRDVyCvEilco_k8ifcIBwryrzzeWpLvAGkLUSebPlYTfmSqsIFkWE2PmNkjimPH_lLTlk4P_p5gQIwV2Q3yzThO9IJVW4XXSK1Xy1s1ohPjFqRc1OnR53uxnDJdmbHOTYul7T4nNTkFroBmHDZuw4PG9gARjuIdATXjrlKiKMTVA4QHPWVIzVQwD4m9Kkm7P-SEZPJxUmcpv_LvkXBxLQJus8YbCBSsoeewcRDp4z4yBvwOOpDIQMgtJmurPvQwxfZSsX3lX5oUmdA1ZBbKRb_AaRapkfJLpRIEK73erxAsmh78s-BDEeHk7jRVQm5_hutD8g",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Read config/SENS01/mac with auth = idToken value",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/config/SENS01/mac.json?auth=eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsInByb3ZpZGVyX2lkIjoiYW5vbnltb3VzIiwiYXVkIjoiZXNwODI2Ni0wMS01YzgwYiIsImF1dGhfdGltZSI6MTUwMTEzMTI1OSwidXNlcl9pZCI6ImNJQUFBRE1rSlBaUjg2a0FneEJKQjZuTDlaSzIiLCJzdWIiOiJjSUFBQURNa0pQWlI4NmtBZ3hCSkI2bkw5WksyIiwiaWF0IjoxNTAxMTMxMjYwLCJleHAiOjE1MDExMzQ4NjAsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnt9LCJzaWduX2luX3Byb3ZpZGVyIjoiYW5vbnltb3VzIn19.g9BGV2cfix2WNbAXjKypNyfR4z6tbif6TfhhmNtFlMSEOrkfkeoQ1guYfqdojyU5aPj4xEV1DHogq7YdjLq2W1xZI7kEeejvbXFLkuNZVUG2Zmo_RCdLKqKthRJ_dZ8pdzxSePtGIP8Tsc9-osKaq6yH5eMF7KdgCSIWH_SVVUlusCfLeoLpijJXPPoa-WXF3VOUnAgV6SM1QjJEUQQ58U8_P6mhrtCtpKXz3CfW9YLotHeqnAQOEA_zX46BN5kNd8MAHwLQwRFPR0rD82R7q1UxE9OIb23OSOx2zfeJacvy23rjRiNHG89FdsmOK982ySngCYl0y8xybBH9NXP3Kg",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						"config",
+						"SENS01",
+						"mac.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0Yjg5NTc5MWRiZGZkNDI5MGFkN2E1NTFmODZiN2I0ZjJjZmI5ZGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXNwODI2Ni0wMS01YzgwYiIsInByb3ZpZGVyX2lkIjoiYW5vbnltb3VzIiwiYXVkIjoiZXNwODI2Ni0wMS01YzgwYiIsImF1dGhfdGltZSI6MTUwMTEzMTI1OSwidXNlcl9pZCI6ImNJQUFBRE1rSlBaUjg2a0FneEJKQjZuTDlaSzIiLCJzdWIiOiJjSUFBQURNa0pQWlI4NmtBZ3hCSkI2bkw5WksyIiwiaWF0IjoxNTAxMTMxMjYwLCJleHAiOjE1MDExMzQ4NjAsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnt9LCJzaWduX2luX3Byb3ZpZGVyIjoiYW5vbnltb3VzIn19.g9BGV2cfix2WNbAXjKypNyfR4z6tbif6TfhhmNtFlMSEOrkfkeoQ1guYfqdojyU5aPj4xEV1DHogq7YdjLq2W1xZI7kEeejvbXFLkuNZVUG2Zmo_RCdLKqKthRJ_dZ8pdzxSePtGIP8Tsc9-osKaq6yH5eMF7KdgCSIWH_SVVUlusCfLeoLpijJXPPoa-WXF3VOUnAgV6SM1QjJEUQQ58U8_P6mhrtCtpKXz3CfW9YLotHeqnAQOEA_zX46BN5kNd8MAHwLQwRFPR0rD82R7q1UxE9OIb23OSOx2zfeJacvy23rjRiNHG89FdsmOK982ySngCYl0y8xybBH9NXP3Kg",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Settings Read Rules auth = SECRET",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/.settings/rules.json?auth=8abFQ2DtCZSpZXyQl1gz4Hql8gilKYp6QILe9SKJ",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						".settings",
+						"rules.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "8abFQ2DtCZSpZXyQl1gz4Hql8gilKYp6QILe9SKJ",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "",
+							"value": "",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Params\n\nauth=SECRET\n\nWhere SECRET is found at :\n\nproject -> Settings -> Service Accounts -> Database Secrets\n\nThen hover over obscured secret and click 'SHOW' to reveal it. Then select and copy/paste it to the data for the \"auth\" param."
+			},
+			"response": []
+		},
+		{
+			"name": "Read config/SENS01/mac with auth = SECRET",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/config/SENS01/mac.json?auth=8abFQ2DtCZSpZXyQl1gz4Hql8gilKYp6QILe9SKJ",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						"config",
+						"SENS01",
+						"mac.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "8abFQ2DtCZSpZXyQl1gz4Hql8gilKYp6QILe9SKJ",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "\nauth=SECRET\n\nWhere SECRET is found at :\n\nproject -> Settings -> Service Accounts -> Database Secrets\n\nThen hover over obscured secret and click 'SHOW' to reveal it. Then select and copy/paste it to the data for the \"auth\" param."
+			},
+			"response": []
+		},
+		{
+			"name": "Read pman/SENS01/data with auth = SECRET",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/pman/SENS01/data.json?auth=8abFQ2DtCZSpZXyQl1gz4Hql8gilKYp6QILe9SKJ",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						"pman",
+						"SENS01",
+						"data.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "8abFQ2DtCZSpZXyQl1gz4Hql8gilKYp6QILe9SKJ",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "\nauth=SECRET\n\nWhere SECRET is found at :\n\nproject -> Settings -> Service Accounts -> Database Secrets\n\nThen hover over obscured secret and click 'SHOW' to reveal it. Then select and copy/paste it to the data for the \"auth\" param."
+			},
+			"response": []
+		},
+		{
+			"name": "Write pman/SENS01/data with auth = SECRET",
+			"request": {
+				"url": {
+					"raw": "https://esp8266-01-5c80b.firebaseio.com/pman/SENS01/data.json?auth=8abFQ2DtCZSpZXyQl1gz4Hql8gilKYp6QILe9SKJ",
+					"protocol": "https",
+					"host": [
+						"esp8266-01-5c80b",
+						"firebaseio",
+						"com"
+					],
+					"path": [
+						"pman",
+						"SENS01",
+						"data.json"
+					],
+					"query": [
+						{
+							"key": "auth",
+							"value": "8abFQ2DtCZSpZXyQl1gz4Hql8gilKYp6QILe9SKJ",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"t\": 77.2, \"h\": 36}"
+				},
+				"description": "\nauth=SECRET\n\nWhere SECRET is found at :\n\nproject -> Settings -> Service Accounts -> Database Secrets\n\nThen hover over obscured secret and click 'SHOW' to reveal it. Then select and copy/paste it to the data for the \"auth\" param."
+			},
+			"response": []
+		}
+	]
+}

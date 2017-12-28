@@ -1,0 +1,3 @@
+# Firebase REST API
+
+This sub-project provides an alternative to using a Firebase `npm` package. It's intended purpose is to be ran on the **Tessel 2** platform. Which has limited memory resources and the use of third party NPM packages will typically use more than what is available. However, this code can be run on most any NodeJS platform as-is. In fact NodeJS >6.10.2 was used in the development of this code.
