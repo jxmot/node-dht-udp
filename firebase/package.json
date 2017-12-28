@@ -1,0 +1,15 @@
+{
+  "name": "tessel-firebase-rest",
+  "version": "0.0.1",
+  "description": "Tessel Firebase project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "Tessel"
+  ],
+  "license": "MIT",
+  "readme": "A Firebase/REST demo for the Tessel 2."
+}
