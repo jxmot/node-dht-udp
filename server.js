@@ -42,6 +42,15 @@ const mulcfg = {
 };
 
 /* ************************************************************************ */
+// Events
+const EventEmitter = require('events');
+const srvmsg_events = new EventEmitter();
+
+// wait "on"...
+//      data push status
+//
+
+/* ************************************************************************ */
 const sensorlist = require('./sensorlist.js');
 
 for(var ix = 0; sensorlist.list[ix].name !== 'END'; ix++) {
@@ -69,19 +78,17 @@ server.on('error', (err) => {
 server.on('message', (msg, rinfo) => {
     // got one, bump the counter!
     count += 1;
-    // start the announcement...
-    var temp = `>> #${count.toString()}  [`;
+
+    var temp = '';
     
     // Strings arrive as a "string of character codes". They
     // have to be converted to ASCII strings.
     msg.filter(charcode => {
-        if(charcode !== 0) {
+        if(charcode !== 0 && charcode !== undefined) {
             temp = temp + String.fromCharCode(charcode);
             return true;
         }
     });
-    // finish the announcement
-    temp += ']';
 
     // trigger an event....
     // consider passing srvcfg.reply so that the
@@ -89,8 +96,10 @@ server.on('message', (msg, rinfo) => {
     // content of the reply is determined by the
     // handler. and it can decide to not reply as 
     // needed.
+    if(!srvmsg_events.emit('MSG_RCVD', temp, rinfo)) console.log('MSG_RCVD no listeners!!!');
+});
 
-
+/*
     if(srvcfg.reply === true) {
         // put a reply together...
         const reply = new Buffer(temp);
@@ -101,6 +110,7 @@ server.on('message', (msg, rinfo) => {
         });
     } else console.log(temp);
 });
+*/
 
 /*
     Server Listening has begun
@@ -130,10 +140,26 @@ client.on('listening', () => {
 client.on('message', (payload, remote) => {
     // the correct way to extract a string from the payload is this - 
     var message = payload.filter(letter => letter !== 0);
-    console.log(`multicast received : [${message}] from ${remote.address}:${remote.port}`);
+
+    var temp = '';
+    
+    // Strings arrive as a "string of character codes". They
+    // have to be converted to ASCII strings.
+    payload.filter(charcode => {
+        if(charcode !== 0 && charcode !== undefined) {
+            temp = temp + String.fromCharCode(charcode);
+            return true;
+        }
+    });
 
     // trigger an event....
+    if(!srvmsg_events.emit('STATUS_RCVD', temp, remote)) console.log('STATUS_RCVD no listeners!!!');
+
+    console.log(`multicast received : [${temp}] from ${remote.address}:${remote.port}`);
 });
 
 client.bind(mulcfg.port);
+
+var fb = require(__dirname + '/firebase');
+fb(srvmsg_events);
 
