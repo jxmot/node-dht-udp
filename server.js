@@ -12,11 +12,16 @@
 
 DONE    PHASE 1 : Listen for sensor data and statuses, display on console.
 
-WIP     PHASE 2 : Forward the incoming data to a database. Options are - 
-        * Firebase <--
+DONE    PHASE 2 : Forward the incoming data to a database. Options are - 
+        * Firebase <-- USED!
         * mLab/mongodb
         * MySQL
 
+WIP     PHASE 3 : Implement end-to-end commands to devices via multi-cast
+        UDP messaging. Commands could be - 
+        * RESET - can reset one or ALL devices
+        * STOP - can stop one or more devices from reporting data
+        * START - see above
     
 */
 // an option argument can specify and alternative server configuration file. 
