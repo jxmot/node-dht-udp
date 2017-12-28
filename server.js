@@ -13,7 +13,7 @@
 DONE    PHASE 1 : Listen for sensor data and statuses, display on console.
 
 WIP     PHASE 2 : Forward the incoming data to a database. Options are - 
-        * Firebase
+        * Firebase <--
         * mLab/mongodb
         * MySQL
 
