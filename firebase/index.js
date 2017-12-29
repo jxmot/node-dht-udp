@@ -70,9 +70,35 @@ function createPushPath(cfg, user, parent, child, gchild) {
     return pushPath;
 };
 
+// queue up messages until false again???
+var reauthInProgress = false;
+var reauthComplete = false;
+var reauthCount = 0;
+
 function pushCallBack(status, resp, user) {
     console.log('pushCallBack');
     console.log('status = ' + status);
     console.log('resp = ' + resp);
+
+// https://stackoverflow.com/questions/40520696/how-do-i-access-my-firebase-database-via-http-rest-api
+
+    // handle expired auth tokens here...
+    if(status === 401) {
+        if(reauthInProgress === false) {
+            reauthCount += 1;
+            console.log('reauth!!! reauthCount = ' + reauthCount);
+            // handle it! BUT lose the last data written :(
+            reauthComplete = false;
+            reauthInProgress = true;
+            firebase.reAuth(user, reauthCallBack);
+        }
+    }
 };
 
+function reauthCallBack(status, resp) {
+    if(status === 200) {
+        reauthInProgress = false;
+        reauthComplete = true;
+    }
+    console.log('reauth cb resp = ' + resp);
+};

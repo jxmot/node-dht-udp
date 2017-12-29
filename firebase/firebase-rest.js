@@ -43,6 +43,20 @@ exports.firebase = (function() {
             'Content-Length': JSON.stringify(firebase.cfg.CRED).length
         }
     };
+
+    firebase.reauthReq = {
+        port: 443,
+        method: 'POST',
+        hostname: firebase.cfg.CONFIG.REAUTH_HOST,
+        path: firebase.cfg.CONFIG.REAUTH_LOGIN + firebase.cfg.CONFIG.APIKEY,
+        headers: {
+            'Host': firebase.cfg.CONFIG.REAUTH_HOST,
+            'Accept': '*/*',
+            'User-Agent': firebase.cfg.USER_AGENT,
+            'Content-Type': 'application/json',
+            'Content-Length': JSON.stringify(firebase.cfg.CRED).length
+        }
+    };
     
     firebase.loginReqAnony = {
         port: 443,
@@ -264,8 +278,10 @@ exports.firebase = (function() {
                 allData += d.toString();
             });
             res.on('end', function () {
-                if(res.statusCode === 200) _callback(res.statusCode, allData, firebase.getCurrUser());
-                else _callback(res.statusCode, allData);
+                _callback(res.statusCode, allData, firebase.getCurrUser());
+
+                //if(res.statusCode === 200) _callback(res.statusCode, allData, firebase.getCurrUser());
+                //else _callback(res.statusCode, allData);
             });
         });
         
@@ -279,6 +295,38 @@ exports.firebase = (function() {
         req.end();
     };
 
+//////////////////////////////////////////////////////////////////////////////
+    firebase.reAuth = function(user, cb) {
+
+        var _callback = cb;
+
+        var payload = {
+            grant_type: 'refresh_token',
+            refresh_token: user.refreshToken
+        };
+
+        firebase.reauthReq.headers['Content-Length'] = JSON.stringify(payload).length;
+
+        var req = https.request(firebase.reauthReq, function(res) {
+            var allData = '';
+            res.on('data', function(d) {
+                allData += d.toString();
+            });
+            res.on('end', function () {
+                if(res.statusCode === 200) saveCurrUser(allData);
+// not used anywhere -                validUserStatus = res.statusCode;
+                _callback(res.statusCode, allData);
+            });
+        });
+        
+        req.on('error', function(err) {
+            var errMsg = 'ERROR - code = ' + err.code + '   message = ' + err.message;
+            _callback(err.code, errMsg);
+        });
+        
+        req.write(JSON.stringify(payload));
+        req.end();
+    };
 //////////////////////////////////////////////////////////////////////////////
     return firebase;
 })();
