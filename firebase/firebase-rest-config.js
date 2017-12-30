@@ -2,9 +2,6 @@ module.exports = {
     // components for building firebase API calls - 
     CONFIG : require(__dirname + '/_firebase-config.js'),
 
-    // credentials for email login to firebase - 
-    CRED : require(__dirname + '/_firebase-cred.json'),
-    
     /*
         Path components used in creating full paths to the data
         we want to access. This would be specific to the application
@@ -12,6 +9,8 @@ module.exports = {
     */
     PATHS : require(__dirname + '/_firebase-paths.js'),
 
+    HTTPS_PORT : 443,
+    HTTP_PORT : 80,
     USER_AGENT : 'nodejs-app'
 };
 
