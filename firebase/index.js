@@ -6,17 +6,19 @@ require(__dirname + '/firebase-rest.js');
 module.exports = function init(evts) {
 
     // login using an email and password
-    firebase.emailLogin(emailLoginCallback);
+//    firebase.emailLogin(emailLoginCallback);
 
     // wait for events....
     evts.on('MSG_RCVD', (m, r) => {
         console.log(m);
-        pushPayload(emailLoginUser, JSON.parse(m), firebase.cfg.PATHS.SENSOR_DATA);
+        //pushPayload(emailLoginUser, JSON.parse(m), firebase.cfg.PATHS.SENSOR_DATA);
+        pushPayload(JSON.parse(m), firebase.cfg.PATHS.SENSOR_DATA);
     });
 
     evts.on('STATUS_RCVD', (m, r) => {
         console.log(m);
-        pushPayload(emailLoginUser, JSON.parse(m), firebase.cfg.PATHS.SENSOR_STAT);
+        //pushPayload(emailLoginUser, JSON.parse(m), firebase.cfg.PATHS.SENSOR_STAT);
+        pushPayload(JSON.parse(m), firebase.cfg.PATHS.SENSOR_STAT);
     });
 };
 
@@ -32,14 +34,16 @@ function emailLoginCallback(status, resp, user) {
     else console.log('resp = ' + resp);
 }
 
-function pushPayload(user, _payload, child)
+//function pushPayload(user, _payload, child)
+function pushPayload(_payload, child)
 {
     // Now we can do something...
     var pushArg = {
-        path: createPushPath(firebase.cfg, user, firebase.cfg.PATHS.SENSOR_PARENT, child),
+        //path: createPushPath(firebase.cfg, user, firebase.cfg.PATHS.SENSOR_PARENT, child),
+        path: createPushPath(firebase.cfg, firebase.cfg.PATHS.SENSOR_PARENT, child),
         payload: _payload,
-        cb: pushCallBack,
-        user: user
+        cb: pushCallBack
+//        user: user
     };
     firebase.push(pushArg);
 }
@@ -47,6 +51,17 @@ function pushPayload(user, _payload, child)
 //////////////////////////////////////////////////////////////////////////////
 var os = require('os');
 
+// HOST + PATH_SEP + SENSOR_PARENT + PATH_SEP + SENSOR_DATA + JSON_AUTH + SECRET
+//      OR                                      
+// HOST + PATH_SEP + SENSOR_PARENT + PATH_SEP + SENSOR_STAT + JSON_AUTH + SECRET
+
+function createPushPath(cfg, parent, child) {
+    var pushPath = cfg.PATHS.PATH_SEP + parent + cfg.PATHS.PATH_SEP + child + cfg.CONFIG.JSON_AUTH + cfg.CONFIG.SECRET;
+    console.log('pushPath = ' + pushPath);
+    return pushPath;
+};
+
+/*
 function createPushPath(cfg, user, parent, child, gchild) {
 
     var pushPath = cfg.PATHS.PATH_SEP + parent + cfg.PATHS.PATH_SEP;
@@ -69,17 +84,19 @@ function createPushPath(cfg, user, parent, child, gchild) {
                 
     return pushPath;
 };
+*/
 
 // queue up messages until false again???
 var reauthInProgress = false;
 var reauthComplete = false;
 var reauthCount = 0;
 
-function pushCallBack(status, resp, user) {
+//function pushCallBack(status, resp, user) {
+function pushCallBack(status, resp) {
     console.log('pushCallBack');
     console.log('status = ' + status);
     console.log('resp = ' + resp);
-
+/*
 // https://stackoverflow.com/questions/40520696/how-do-i-access-my-firebase-database-via-http-rest-api
 
     // handle expired auth tokens here...
@@ -93,6 +110,7 @@ function pushCallBack(status, resp, user) {
             firebase.reAuth(user, reauthCallBack);
         }
     }
+*/
 };
 
 function reauthCallBack(status, resp) {
