@@ -1,0 +1,18 @@
+{
+    "rules": {
+        ".read": true,
+        ".write": "auth != null",
+        "sensorlog" : {
+            "data" : {
+                "tstamp" : {
+                    ".indexOn" : ".value"
+                }
+            },
+            "status" : {
+                "tstamp" : {
+                    ".indexOn" : ".value"
+                }
+            }
+        }
+    }
+}

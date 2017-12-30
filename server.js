@@ -17,11 +17,18 @@ DONE    PHASE 2 : Forward the incoming data to a database. Options are -
         * mLab/mongodb
         * MySQL
 
-WIP     PHASE 3 : Implement end-to-end commands to devices via multi-cast
+WIP     PHASE 3 : 
+        1) Implement end-to-end commands to devices via multi-cast
         UDP messaging. Commands could be - 
         * RESET - can reset one or ALL devices
         * STOP - can stop one or more devices from reporting data
         * START - see above
+
+        2) Add timestamps to data records, timestamps are created in this
+        application and NOT on the devices. Must change rules to index on
+        the timestamp field.
+
+        3) add configurable automatic record count limiting.
     
 */
 // an option argument can specify and alternative server configuration file. 

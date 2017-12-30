@@ -10,11 +10,11 @@
                 +- SENSOR_PARENT - 
                                   |
                                   + - SENSOR_DATA -
-                                  |                +- data
+                                  |                +- data...
                                   |
                                   |
                                   + - SENSOR_STAT -
-                                                   +- data
+                                                   +- data...
 
     
     
