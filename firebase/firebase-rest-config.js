@@ -11,6 +11,6 @@ module.exports = {
 
     HTTPS_PORT : 443,
     HTTP_PORT : 80,
-    USER_AGENT : 'nodejs-app'
+    USER_AGENT : 'IoT-Server/0.0.1'
 };
 
