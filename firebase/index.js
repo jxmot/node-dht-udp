@@ -15,9 +15,10 @@ module.exports = function init(evts) {
 };
 
 //////////////////////////////////////////////////////////////////////////////
-function pushPayload(_payload, child)
+function pushPayload(payload, child)
 {
-    // Now we can do something...
+    var _payload = Object.assign({}, payload, {tstamp : Date.now()});
+
     var pushArg = {
         path: createPushPath(firebase.cfg, firebase.cfg.PATHS.SENSOR_PARENT, child),
         payload: _payload,
