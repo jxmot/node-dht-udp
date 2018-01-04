@@ -24,7 +24,7 @@ WIP     PHASE 3 :
         * STOP - can stop one or more devices from reporting data
         * START - see above
 
-        2) Add timestamps to data records, timestamps are created in this
+DONE    2) Add timestamps to data records, timestamps are created in this
         application and NOT on the devices. Must change rules to index on
         the timestamp field.
 
