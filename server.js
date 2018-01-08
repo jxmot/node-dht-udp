@@ -7,8 +7,6 @@
     This server will also - 
 
         * forward sensor data and statuses to a database
-        * NICE TO HAVE: Listen for external connections to a socket and then
-          forward sensor data and statuses to a client.
 
 DONE    PHASE 1 : Listen for sensor data and statuses, display on console.
 
@@ -28,10 +26,28 @@ DONE    2) Add timestamps to data records, timestamps are created in this
         application and NOT on the devices. Must change rules to index on
         the timestamp field.
 
-        3) add configurable automatic record count limiting.
+DONE    3) add configurable automatic record count limiting.
+        NOTE: Record quantity limiting is accomplished by using Firebase
+        Cloud Functions. To change the quantities the function code must
+        be edited and re-deployed.
+
+WIP     4) find a working alternative to using the firebase secret, must
+        work with the REST API! 
+        To investigate :
+        *   https://stackoverflow.com/questions/34876641/authenticating-servers-using-firebase-app-secret
+            which leads to - http://jsfiddle.net/firebase/XDXu5/
+        *   
+        *   
     
+WIP     5) Use the low_limit and high_limit found for each sensor in 
+        sensorlist.js to trigger an "alert". 
+        To investigate :
+        * use an SMS service to transmit the alerts, configure the
+          destination on this end (or as a firebase record???).
 */
 // an option argument can specify and alternative server configuration file. 
+// this will allow the port number(s), IP address(es), and if a reply is
+// required.
 var serverCfgFile = process.argv[2];
 
 // we're assuming that if there's an argument present then it's going to be
@@ -42,6 +58,7 @@ if((serverCfgFile === undefined) || (serverCfgFile === ''))
 // read the IP address and port # that we'll be using
 const cfg = require(serverCfgFile);
 
+// separate the configurations
 const srvcfg = {
     host : cfg.server.host,
     port : cfg.server.port,
@@ -58,11 +75,8 @@ const mulcfg = {
 const EventEmitter = require('events');
 const srvmsg_events = new EventEmitter();
 
-// wait "on"...
-//      data push status
-//
-
 /* ************************************************************************ */
+// when implemented, this is where the low and high limts are set...
 const sensorlist = require('./sensorlist.js');
 
 for(var ix = 0; sensorlist.list[ix].name !== 'END'; ix++) {
