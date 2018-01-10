@@ -59,3 +59,8 @@ In order to see the code operate you can temporarily reduce those limits. A valu
 
 **NOTE**: Occasionally the deployment may fail. If this occurs check your code and support files to insure that they are correct. Then try the deployment again. I've seen occurrences where a deployment will fail, and an subsequent attempt is successful.
 
+### Removing All Records
+
+As the database increases in size the Firebase Console will prohibit any attempts to remove or even add records. The easiest solution to remove all records is to import the `erase_all.json` file. The file's only contents are `{}`.
+
+
