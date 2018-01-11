@@ -18,5 +18,9 @@ This NodeJs application must -
 
 * Be as *thin* as possible. The intended target platform is the **Tessel 2**. However this application can be run on *any* NodeJS installation.
 * Utilize a database where clients can be notified *in real time* when new records are written to the database. At this time Firebase is the only solution that offers that feature.
-* Acts only as a means to forward data to the database. The sensor devices define the layout and contents of the data records.
+* Acts only as a means to forward data to the database. The sensor devices define the layout and contents of the data records. The only alteration to the data records is the addition of a timestamp. 
+
+# Details
+
+## Configuration
 
