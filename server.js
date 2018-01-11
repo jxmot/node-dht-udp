@@ -62,7 +62,7 @@ const cfg = require(serverCfgFile);
 const srvcfg = {
     host : cfg.server.host,
     port : cfg.server.port,
-    reply : cfg.server.reply
+//    reply : cfg.server.reply
 };
 
 const mulcfg = {
@@ -150,7 +150,7 @@ server.on('listening', () => {
 server.bind(srvcfg.port, srvcfg.host);
 
 /* ************************************************************************ */
-// create a socket to listen on...
+// create a socket to listen on for multi-cast packets...
 const client = require('dgram').createSocket('udp4');
 
 client.on('listening', () => {
