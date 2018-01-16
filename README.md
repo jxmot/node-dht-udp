@@ -69,4 +69,22 @@ This application utilizes a total of three configuration files -
 * `firebase-rest-config.js` - 
     * `_firebase-config.js` (*see* `example_firebase-config.js`)
     * `_firebase-paths.js` (*see* `example_firebase-paths.js`)
+    
+
+
+
+
+
+# Future Development
+
+## MySQL
+
+I will be investigating the use of MySQL and *triggers* to accomplish things such as - 
+
+* Limiting the quantity of records
+* *TBD*
+
+However the implementation may require the use of an `npm` package or two. At that point this application may no longer be suitable for *thin clients*.
+
+
 
