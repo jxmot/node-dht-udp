@@ -77,14 +77,24 @@ This application utilizes a total of three configuration files -
 
 # Future Development
 
-## MySQL
+## Databases
 
-I will be investigating the use of MySQL and *triggers* to accomplish things such as - 
+In order to avoid the monetary costs of using Firebase alternative solutions are required. I'll need to see if any can fulfill these requriements - 
 
-* Limiting the quantity of records
-* *TBD*
+* Limiting the quantity of records automatically, Firebase accomplishes this with *Firebase Functions*.
+* Notifying the clients when a new record has been created (or updated?). On the *client* side this is easily done. 
+
+### MySQL
+
+I will be investigating the use of MySQL and *triggers* to accomplish what's been described above.
 
 However the implementation may require the use of an `npm` package or two. At that point this application may no longer be suitable for *thin clients*.
+
+### MongoDB
+
+Not sure if what I need is possible here. Further investigation is necessary.
+
+
 
 
 
