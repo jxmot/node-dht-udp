@@ -26,6 +26,8 @@ DONE    2) Add timestamps to data records, timestamps are created in this
         application and NOT on the devices. Must change rules to index on
         the timestamp field.
 
+FIREBASE --->
+
 DONE    3) add configurable automatic record count limiting.
         NOTE: Record quantity limiting is accomplished by using Firebase
         Cloud Functions. To change the quantities the function code must
@@ -38,12 +40,26 @@ WIP     4) find a working alternative to using the firebase secret, must
             which leads to - http://jsfiddle.net/firebase/XDXu5/
         *   
         *   
-    
+
+<--- FIREBASE
+
+
 WIP     5) Use the low_limit and high_limit found for each sensor in 
         sensorlist.js to trigger an "alert". 
         To investigate :
         * use an SMS service to transmit the alerts, configure the
           destination on this end (or as a firebase record???).
+
+MYSQL --->
+
+WIP     6) Re-work using MySQL. To limit the quantity of records we'll be 
+        using "trigger" functions. Then to signal the client(s) of data
+        updates we'll use SocketIO connections. Updates will be broadcast
+        to all connected clients.
+
+
+<--- MySQL
+
 */
 // an option argument can specify and alternative server configuration file. 
 // this will allow the port number(s), IP address(es), and if a reply is
@@ -186,6 +202,16 @@ client.on('message', (payload, remote) => {
 
 client.bind(mulcfg.port);
 
+/*
+    Firebase
+
 var fb = require(__dirname + '/firebase');
 fb(srvmsg_events);
+
+*/
+
+
+/*
+    MySQL
+*/
 
