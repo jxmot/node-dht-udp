@@ -32,6 +32,10 @@ Run the application with - `node server.js`
 
 In order to run for more than a relatively short period of time it is necessary to use some means to limit the amount of accumulated sensor data and status records. The method used here are *Firebase Cloud Functions*. For details please review this [README](<https://github.com/jxmot/node-dht-udp/blob/master/firebase/cloudfuncs/README.md>).
 
+### MySQL Requirements
+
+#### Trigger Functions
+
 ## Configuration
 
 ### File Naming Convention
@@ -71,7 +75,7 @@ This application utilizes a total of three configuration files -
     * `_firebase-paths.js` (*see* `example_firebase-paths.js`)
     
 
-
+### MySQL Configuration
 
 
 
@@ -79,7 +83,7 @@ This application utilizes a total of three configuration files -
 
 ## Databases
 
-In order to avoid the monetary costs of using Firebase alternative solutions are required. I'll need to see if any can fulfill these requriements - 
+In order to avoid the monetary costs of using Firebase alternative solutions are required. I'll need to see if any can fulfill these requirements - 
 
 * Limiting the quantity of records automatically, Firebase accomplishes this with *Firebase Functions*.
 * Notifying the clients when a new record has been created (or updated?). On the *client* side this is easily done. 
