@@ -143,6 +143,7 @@ server.on('message', (msg, rinfo) => {
     // handler. and it can decide to not reply as 
     // needed.
     if(!srvmsg_events.emit('MSG_RCVD', temp, rinfo)) console.log('MSG_RCVD no listeners!!!');
+    else console.log(`udp received : [${temp}] from ${rinfo.address}:${rinfo.port}`);
 });
 
 /*
