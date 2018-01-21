@@ -1,18 +1,3 @@
-
-
-module.exports = function init(evts) {
-    // wait for events....
-    evts.on('MSG_RCVD', (m, r) => {
-        console.log(m);
-        pushPayload(JSON.parse(m), firebase.cfg.PATHS.SENSOR_DATA);
-    });
-
-    evts.on('STATUS_RCVD', (m, r) => {
-        console.log(m);
-        pushPayload(JSON.parse(m), firebase.cfg.PATHS.SENSOR_STAT);
-    });
-};
-
 /* ************************************************** */
 /*
     This code makes the logging possible, it consists
@@ -68,4 +53,16 @@ var database = require('./database-mysql.js').database;
 // as we are
 database.setLog(log);
 
+module.exports = function init(evts) {
+    // wait for events....
+    evts.on('MSG_RCVD', (m, r) => {
+        log(m);
+        pushPayload(JSON.parse(m), firebase.cfg.PATHS.SENSOR_DATA);
+    });
+
+    evts.on('STATUS_RCVD', (m, r) => {
+        log(m);
+        pushPayload(JSON.parse(m), firebase.cfg.PATHS.SENSOR_STAT);
+    });
+};
 
