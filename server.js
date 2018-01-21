@@ -209,22 +209,14 @@ client.bind(mulcfg.port);
 
 var db;
 
-/*
-    Firebase
-*/
-if(dbcfg.type === 'firebase') {
-    db = require(__dirname + '/firebase');
-    db(srvmsg_events);
-}
+// Firebase
+if(dbcfg.type === 'firebase') db = require(__dirname + '/firebase');
 
-/*
-    MySQL
-*/
-if(dbcfg.type === 'mysql') {
-    db = require(__dirname + '/mysql');
-    db(srvmsg_events);
-}
+// MySQL
+if(dbcfg.type === 'mysql') db = require(__dirname + '/mysql');
 
+// initialize the chosen database connection 
+db(srvmsg_events);
 
 
 
