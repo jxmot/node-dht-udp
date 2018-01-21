@@ -54,15 +54,35 @@ var database = require('./database-mysql.js').database;
 database.setLog(log);
 
 module.exports = function init(evts) {
-    // wait for events....
-    evts.on('MSG_RCVD', (m, r) => {
-        log(m);
-        pushPayload(JSON.parse(m), firebase.cfg.PATHS.SENSOR_DATA);
-    });
 
-    evts.on('STATUS_RCVD', (m, r) => {
-        log(m);
-        pushPayload(JSON.parse(m), firebase.cfg.PATHS.SENSOR_STAT);
-    });
+    // When the database is opened continue with
+    // the rest of the application
+    database.openDB('./_dbcfg.js', openDone);
+
+    function openDone(dbopen, err) {
+        // did we have success?
+        if(dbopen === false) {
+            // no, log errors and end the transaction
+            log('ERROR - openDone() err = ');
+            log(err);
+        } else {
+            // wait for events....
+            evts.on('MSG_RCVD', (m, r) => {
+                log(m);
+                var data = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
+                database.writeRow('data', data, writeDone);
+            });
+        
+            evts.on('STATUS_RCVD', (m, r) => {
+                log(m);
+                var status = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
+                database.writeRow('status', status, writeDone);
+            });
+        }
+    };
+
+    function writeDone(newID) {
+        log('writeDone() - newID = '+newID);
+    };
 };
 
