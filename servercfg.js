@@ -12,5 +12,9 @@ module.exports = {
     multi : {
         addr : '224.0.0.1',
         port : 54321,
+    },
+
+    db : {
+        type : 'mysql'
     }
 };

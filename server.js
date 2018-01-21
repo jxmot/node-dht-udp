@@ -86,6 +86,10 @@ const mulcfg = {
     port : cfg.multi.port
 };
 
+const dbcfg = {
+    type = cfg.db.type
+};
+
 /* ************************************************************************ */
 // Events
 const EventEmitter = require('events');
@@ -202,16 +206,25 @@ client.on('message', (payload, remote) => {
 
 client.bind(mulcfg.port);
 
+
+var db;
+
 /*
     Firebase
-
-var fb = require(__dirname + '/firebase');
-fb(srvmsg_events);
-
 */
-
+if(dbcfg.type === 'firebase') {
+    db = require(__dirname + '/firebase');
+    db(srvmsg_events);
+}
 
 /*
     MySQL
 */
+if(dbcfg.type === 'mysql') {
+    db = require(__dirname + '/mysql');
+    db(srvmsg_events);
+}
+
+
+
 
