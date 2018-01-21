@@ -7,7 +7,7 @@
 
     First, load the option settings...
 */
-var appOpt = require('./sensornet-opt.js');
+var appOpt = require('./log-opt.js');
 /*
     For containing our constructed Log object
  
