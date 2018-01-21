@@ -87,7 +87,7 @@ const mulcfg = {
 };
 
 const dbcfg = {
-    type = cfg.db.type
+    type : cfg.db.type
 };
 
 /* ************************************************************************ */
