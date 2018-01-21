@@ -22,7 +22,8 @@
                    ],
             col:   [
                     'column_1 varchar(12),column_2 varchar(12),column_3 varchar(32)'
-                   ]
+                   ],
+            TABLE_SOMETABLE_IDX : 0
         };
 
     The intent is to allow for reuse and flexibility. The configuration file 
@@ -60,8 +61,8 @@ exports.database = (function() {
     var initconn;
     // A row counter used during initialization
     var initRowCount;
-    // For logging
-    var log;
+    // For logging, defaults to console.log()
+    var log = console.log;
     /* ******************************************************************** */
     /*
         Optionally change where log output goes.
@@ -87,12 +88,12 @@ exports.database = (function() {
                 // details
             };
     */
-    database.openDB = function(config, callme) {
+    database.openDB = function(_dbcfg, callme) {
         // for reporting errors to the client
         var errObj;
         // if the database configuration data hasn't been read 
         // yet the read it now
-        if(dbcfg === undefined) dbcfg = require(config);
+        if(dbcfg === undefined) dbcfg = _dbcfg;
         // we'll call this when we're done
         openCallBack = callme;
         // if already open, then disconnect
@@ -167,12 +168,12 @@ exports.database = (function() {
             connection.query('insert into '+table+' set ?', record, function(error, result) {
                 if(error) {
                     log('database.writeRow() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno+']');
-                    writeCallBack(-1);
-                } else writeCallBack(result.insertId);
+                    writeCallBack(false, table, record);
+                } else writeCallBack(true, table, record);
             });
         } else {
             log('database.writeRow() - ERROR database not open');
-            writeCallBack(-1);
+            writeCallBack(false, table, record);
         }
     };
 
@@ -304,7 +305,8 @@ exports.database = (function() {
         it's tables and optional data. The content of the config
         files determines what is created or initialized.
     */
-    database.initDB = function(config, idata, parts, callme) {
+    //database.initDB = function(config, idata, parts, callme) {
+    database.initDB = function(_dbcfg, idata, parts, callme) {
         // save the call back we'll use when we're done
         initCallBack = callme;
         // make sure that there isn't an open database and there
@@ -313,7 +315,7 @@ exports.database = (function() {
             // all good, get the necessary configuration and SQL
             // statement pieces and store them globally within
             // this object
-            dbcfg  = require(config);
+            dbcfg  = _dbcfg;
             sql    = require(parts);
             dbdata = require(idata);
             var params = {
