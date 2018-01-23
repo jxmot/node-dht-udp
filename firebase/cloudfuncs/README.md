@@ -64,3 +64,7 @@ In order to see the code operate you can temporarily reduce those limits. A valu
 As the database increases in size the Firebase Console will prohibit any attempts to remove or even add records.  This is actually a *good thing* because a large quantity of records will cause the browser to slow down to the point of becoming unusable. The easiest solution to remove all records is to import the `erase_all.json` file. The file's only contents are `{}`.
 
 
+### Estimating Costs
+
+
+
