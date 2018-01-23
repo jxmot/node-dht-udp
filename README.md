@@ -29,8 +29,6 @@ As detailed below I decided to store the data in an SQL database. This may unfor
 
 # Details
 
-This application makes use of the *Firebase REST API*. And it does not require any packages other than the native NodeJS packages.
-
 ## Database Candidates
 
 Initially I decided to use one of two potential candidates for a database to store sensor data and status. My first choice was Firebase due to a number of its features - 
@@ -39,6 +37,8 @@ Initially I decided to use one of two potential candidates for a database to sto
 * The client side can receive notifications when new data has been saved.
 
 ### Firebase Requirements
+
+This application makes use of the *Firebase REST API*. And it does not require any packages other than the native NodeJS packages.
 
 In order to run for more than a relatively short period of time it is necessary to use some means to limit the amount of accumulated sensor data and status records. The method used here are *Firebase Cloud Functions*. For details please review this [README](<https://github.com/jxmot/node-dht-udp/blob/master/firebase/cloudfuncs/README.md>).
 
