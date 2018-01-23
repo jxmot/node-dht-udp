@@ -200,15 +200,15 @@ exports.database = (function() {
             connection.query('update '+table+' set ? where '+keyfield, record, function(error, result) {
                 if(error) {
                     log('database.updateRow() - ERROR - update: ['+error.message+'  '+error.code+'  '+error.errno+']');
-                    updateCallBack(-1, updateCallBackData);
+                    updateCallBack(table, -1, updateCallBackData);
                 } else {
                     log('database.updateRow() - SUCCESS - message = '+result.message);
-                    updateCallBack(result.changedRows, updateCallBackData);
+                    updateCallBack(table, result.changedRows, updateCallBackData);
                 }
             });
         } else {
             log('database.updateRow() - ERROR database not open');
-            updateCallBack(-1, updateCallBackData);
+            updateCallBack(table, -1, updateCallBackData);
         }
     };
 
@@ -235,12 +235,12 @@ exports.database = (function() {
                 if(error) {
                     log('database.readRows() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno+']');
                     this.dbopen = false;
-                    readCallBack();
-                } else readCallBack(result);
+                    readCallBack(table, null);
+                } else readCallBack(table, result);
             });
         } else {
             log('database.readRows() - ERROR database not open');
-            readCallBack();
+            readCallBack(table, null);
         }
     };
 
@@ -254,12 +254,12 @@ exports.database = (function() {
             connection.query('select * from '+table+' where '+keyfield, function(error, result) {
                 if(error) {
                     log('database.readRow() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno+']');
-                    readCallBack();
-                } else readCallBack(result[0]);
+                    readCallBack(table, null);
+                } else readCallBack(table, result[0]);
             });
         } else {
             log('database.readRow() - ERROR database not open');
-            readCallBack();
+            readCallBack(table, null);
         }
     };
 
@@ -272,29 +272,32 @@ exports.database = (function() {
             connection.query('delete from '+table+' where '+keyfield, function(error, result) {
                 if(error) {
                     log('database.deleteRow() - ERROR delete: ['+error.message+'  '+error.code+'  '+error.errno+']');
-                    deleteCallBack(false);
-                } else deleteCallBack(true);
+                    deleteCallBack(table, false, 0);
+                } else deleteCallBack(table, true, result.affectedRows);
             });
         } else {
             log('database.deleteRow() - ERROR - database not open');
-            deleteCallBack(false);
+            deleteCallBack(table, false, 0);
         }
     };
 
     /*
         Count the Rows in a Table
     */
-    database.countRows = function(table, callme) {
+    database.countRows = function(table, col, callme) {
         countCallBack = callme;
         if(this.dbopen === true) {
-            connection.query('select count(id) as total from '+table, function(error, result) {
+            connection.query('select count('+col+') as total from '+table, function(error, result) {
                 if(error) {
                     log('database.countRows() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno);
-                    countCallBack(-1);
+                    countCallBack(table, col, -1);
                 } else {
-                    countCallBack(result);
+                    countCallBack(table, col, result);
                 }
             });
+        } else {
+            log('database.countRows() - ERROR - database not open');
+            countCallBack(table, col, -1);
         }
     };
 
@@ -305,7 +308,6 @@ exports.database = (function() {
         it's tables and optional data. The content of the config
         files determines what is created or initialized.
     */
-    //database.initDB = function(config, idata, parts, callme) {
     database.initDB = function(_dbcfg, idata, parts, callme) {
         // save the call back we'll use when we're done
         initCallBack = callme;
