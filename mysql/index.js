@@ -22,10 +22,8 @@ function initLog(logname) {
         option is true...
     */
     if(logOpt.log === true) {
-        //var Log = require('./Log.js');
         var Log = require('../lib/Log.js');
         if((logOpt.logname === undefined) || (logOpt.logname === '')) {
-            //fileOut = new Log('sensornet', logOpt.logext);
             fileOut = new Log(logname, logOpt.logext);
         } else {
             fileOut = new Log(true, logOpt.logname);
@@ -61,6 +59,7 @@ initLog(dbcfg.parms.database);
 // set the database module to use the same log file
 // as we are
 database.setLog(log);
+log('LOG START');
 
 module.exports = function init(evts) {
     // When the database is opened continue with
@@ -86,6 +85,12 @@ module.exports = function init(evts) {
                 var status = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
+
+            // set up data purge, if configured
+            if(dbcfg.purge.enabled === true) {
+                enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
+                enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
+            }
         }
     };
 
@@ -98,5 +103,67 @@ module.exports = function init(evts) {
             //clientNotify(target, data);
         }
     };
+
+    //////////////////////////////////////////////////////////////////////////
+    purgetimes = require('./purgetimes.js');
+
+    var purgetimeouts = [];
+    var purgetimer = {
+        timeout: {},
+        table: '',
+        // purge info
+        col: '',
+        interval: 0,
+        depth: 0,
+        // addtional purge info
+        callback: undefined,
+        purgecount: 0
+    };
+
+    function enablePurge(table, purge) {
+        log('enabling purge - ' + table + '   ' + JSON.stringify(purge));
+        console.log('enabling purge - ' + table + '   ' + JSON.stringify(purge));
+
+        startPurgeTimer(table, purge, purgedata);
+
+        if(purge.oninit === true) 
+            purgedata(table, purge);
+    };
+
+    //function purgedata(table, purge) {
+    function purgedata(table, purge) {
+        var keyfield = purge.col + ' < (' + Date.now() + ' - ' + (purge.depth * purgetimes.DAY_1_MS) + ')';
+        database.deleteRow(table, keyfield, purgedone)
+    };
+
+    function purgedone(table, result, rows) {
+        log('Purge complete on table '+table+' - '+result+'   '+rows);
+    };
+
+    function startPurgeTimer(table, purge, callme) {
+        purgetimer.callback = callme;
+        purgetimer.table = table;
+        purgetimer.purgecount = 0;
+
+        purgetimer.col = purge.col;
+
+        if(purge.interval <= purgetimes.MAX_DAYS) {
+            purgetimer.interval = (purge.interval * purgetimes.DAY_1_MS);
+            if(purge.depth <= purgetimes.MAX_DAYS) {
+                purgetimer.depth = (purge.depth * purgetimes.DAY_1_MS);
+
+                var purgeidx = (purgetimeouts.push(JSON.parse(JSON.stringify(purgetimer))) - 1);
+
+                purgetimeouts[purgeidx].timeout = setInterval(purgetimer.callback, purgetimer.interval, purgeidx);
+
+                log('Purge Timer started - '+JSON.stringify(purgetimer));
+
+                return true;
+            } else log('ERROR - purge.depth too large - '+purge.depth);
+        } else log('ERROR - purge.depth too interval - '+purge.depth);
+
+        return false;
+    };
 };
+
 
