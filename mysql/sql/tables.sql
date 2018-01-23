@@ -96,4 +96,10 @@ DELETE FROM sensornet.data where tstamp < (1516492740000 - 7776000000);
 */
 call proc_loop_test;
 
+/*
+    either one of these will delete the test records
+*/
+DELETE FROM sensornet.data where t = 99.40;
+DELETE FROM sensornet.data where seq = 0;
+
 
