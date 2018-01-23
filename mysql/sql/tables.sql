@@ -89,3 +89,11 @@ values ("ESP_49EB40", 1, 65.4, 16.8, FLOOR(RAND()*(1516492740000-1484956740000)+
 DELETE FROM sensornet.data where tstamp < (1516492740000 - 7776000000);
 
 
+/*
+    store a handful of test records with random timestamps
+
+    see - storedproc-test.sql
+*/
+call proc_loop_test;
+
+
