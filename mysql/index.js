@@ -1,4 +1,12 @@
-/* ************************************************** */
+/* ************************************************************************ */
+/*
+    MySQL Module - this module is responsible for :
+
+        * Configure and start logging
+        * Connecting to the database
+        * Managing data(or status) row purges
+*/
+/* ************************************************************************ */
 /*
     This code makes the logging possible, it consists
     of reading the module's options first and then a 
@@ -15,7 +23,9 @@ var logOpt = require('./log-opt.js');
     object otherwise it will be undefined.
 */
 var fileOut;
-
+/*
+    Initialize logging and specify a logfile name
+*/
 function initLog(logname) {
     /*
         Let's log the output to a file if the
@@ -46,9 +56,9 @@ function log(text) {
     else if(logOpt.silent === false) console.log(text);
 };
 
-/* ************************************************** */
+/* ************************************************************************ */
 /*
-    Database API Abstraction
+    Database Interface Configure and other necessary things.
 */
 var database = require('./database-mysql.js').database;
 // database configuration, we need access to it here because
@@ -59,13 +69,21 @@ initLog(dbcfg.parms.database);
 // set the database module to use the same log file
 // as we are
 database.setLog(log);
+// if not already created, this will cause the logfile to
+// be created.
 log('LOG START');
-
+/*
+    Initialize the database connection and prepare for incoming
+    data/status events.
+*/
 module.exports = function init(evts) {
     // When the database is opened continue with
     // the rest of the application
     database.openDB(dbcfg, openDone);
 
+    // "database is open" handler,  if no errors have occurred
+    // it will set up the data and status events that we'll get
+    // from the server.
     function openDone(dbopen, err) {
         // did we have success?
         if(dbopen === false) {
@@ -86,7 +104,7 @@ module.exports = function init(evts) {
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
 
-            // set up data purge, if configured
+            // if enabled set up a data purge...
             if(dbcfg.purge.enabled === true) {
                 enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
                 enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
@@ -94,6 +112,10 @@ module.exports = function init(evts) {
         }
     };
 
+    /*
+        Handle all post row saves, and notify a client
+        that there's some "fresh" data to be managed.
+    */
     function writeDone(result, target, data) {
         log('writeDone() - result = '+result);
         log('writeDone() - target = '+target);
@@ -105,63 +127,102 @@ module.exports = function init(evts) {
     };
 
     //////////////////////////////////////////////////////////////////////////
-    purgetimes = require('./purgetimes.js');
+    /*
+        Data Purge - Remove rows specified by the key column 'tstamp'. This
+        is done on an interval specified in 'example_dbcfg.js' (or _dbcfg.js
+        for the file with the login and password).
 
-    var purgetimeouts = [];
+        It is also possible to enable a purge-on-init so that the old data is
+        removed when this application is started.
+
+        
+    */
+    // constant values representing time in milliseconds
+    purgetimes = require('./purgetimes.js');
+    // When a purge timer is created and started this object is 
+    // filled in. And then this object is pushed into purgetimeouts[].
     var purgetimer = {
         timeout: {},
         table: '',
         // purge info
         col: '',
+        // these values will be represented in milliseconds
         interval: 0,
         depth: 0,
         // addtional purge info
         callback: undefined,
         purgecount: 0
     };
+    // contains the active purge timers.
+    var purgetimeouts = [];
 
+    /*
+        Enable a Purge Timer - enables a purge timer for a specified table
+    */
     function enablePurge(table, purge) {
         log('enabling purge - ' + table + '   ' + JSON.stringify(purge));
         console.log('enabling purge - ' + table + '   ' + JSON.stringify(purge));
-
+        // start a purge timer
         startPurgeTimer(table, purge, purgedata);
-
+        // is an immediate purge set?
         if(purge.oninit === true) 
             purgedata(table, purge);
     };
 
-    //function purgedata(table, purge) {
+    /*
+        Purge Timer Expired Handler - this gets called by the expired
+        purge interval timer. It takes a table name and purge configuration
+        object. See example_dbcfg.js(_dbcfg.js) for details on how to 
+        specify the interval and depth.
+
+        NOTE: This function can be called directly as needed. The interval
+        timer is not required.
+    */
     function purgedata(table, purge) {
         var keyfield = purge.col + ' < (' + Date.now() + ' - ' + (purge.depth * purgetimes.DAY_1_MS) + ')';
         database.deleteRow(table, keyfield, purgedone)
     };
 
+    /*
+        Purge Complete Handler - when the specified rows are purged this
+        function is called by database.deleteRow()
+    */
     function purgedone(table, result, rows) {
         log('Purge complete on table '+table+' - '+result+'   '+rows);
     };
 
+    /*
+        Start a Purge Timer - This will start an interval timer for a 
+        specified table in the database.
+
+        It will return 'true' on success, otherwise it returns 'false'.
+    */
     function startPurgeTimer(table, purge, callme) {
+        // save the purge callback and specs...
         purgetimer.callback = callme;
         purgetimer.table = table;
         purgetimer.purgecount = 0;
-
         purgetimer.col = purge.col;
-
+        // Check the purge interval and depth, if both are valid then
+        // initialize an interval timer and save the purge object in
+        // an array.
         if(purge.interval <= purgetimes.MAX_DAYS) {
             purgetimer.interval = (purge.interval * purgetimes.DAY_1_MS);
             if(purge.depth <= purgetimes.MAX_DAYS) {
                 purgetimer.depth = (purge.depth * purgetimes.DAY_1_MS);
-
+                // The purge interval and depth have been calculated and
+                // now it's time to save the purge timer so we can have
+                // the ability to cancel it(if necessary).
                 var purgeidx = (purgetimeouts.push(JSON.parse(JSON.stringify(purgetimer))) - 1);
-
+                // set the interval timer...
                 purgetimeouts[purgeidx].timeout = setInterval(purgetimer.callback, purgetimer.interval, purgeidx);
-
+                // some purge info...
                 log('Purge Timer started - '+JSON.stringify(purgetimer));
-
+                // success!
                 return true;
             } else log('ERROR - purge.depth too large - '+purge.depth);
         } else log('ERROR - purge.depth too interval - '+purge.depth);
-
+        // oops! something has failed.
         return false;
     };
 };
