@@ -107,13 +107,13 @@ module.exports = function init(evts) {
         } else {
             // wait for events....
             evts.on('MSG_RCVD', (m, r) => {
-                log(m);
+                log(`MSG_RCVD : ${m}`);
                 var data = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
                 database.writeRow(dbcfg.table[dbcfg.TABLE_DATA_IDX], data, writeDone);
             });
         
             evts.on('STATUS_RCVD', (m, r) => {
-                log(m);
+                log(`STATUS_RCVD : ${m}`);
                 var status = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
@@ -131,9 +131,8 @@ module.exports = function init(evts) {
         that there's some "fresh" data to be displayed.
     */
     function writeDone(result, target, data) {
-        log('writeDone() - result = '+result);
-        log('writeDone() - target = '+target);
-        log('writeDone() - data   = '+JSON.stringify(data));
+        log(`writeDone() - result = ${result}   target = ${target}   data = ${JSON.stringify(data)}`);
+
         if(result) {
             // notify all connected clients...
             notify.send(target, data);
@@ -172,8 +171,8 @@ module.exports = function init(evts) {
         Enable a Purge Timer - enables a purge timer for a specified table
     */
     function enablePurge(table, purge) {
-        log('enabling purge - ' + table + '   ' + JSON.stringify(purge));
-        console.log('enabling purge - ' + table + '   ' + JSON.stringify(purge));
+        log(`enabling purge - table = ${table}   purge = ${JSON.stringify(purge)}`);
+
         // start a purge timer
         startPurgeTimer(table, purge, purgedata);
         // is an immediate purge set?
@@ -200,7 +199,7 @@ module.exports = function init(evts) {
         function is called by database.deleteRow()
     */
     function purgedone(table, result, rows) {
-        log('Purge complete on table '+table+' - '+result+'   '+rows);
+        log(`Purge complete on table ${table} - ${result}   ${rows}`);
         // notify all connected clients of the purge...
         notify.send('PURGE', {dbtable: table, dbresult: result, dbrows: rows});
     };
@@ -231,11 +230,11 @@ module.exports = function init(evts) {
                 // set the interval timer...
                 purgetimeouts[purgeidx].timeout = setInterval(purgetimer.callback, purgetimer.interval, purgeidx);
                 // some purge info...
-                log('Purge Timer started - '+JSON.stringify(purgetimer));
+                log(`Purge Timer started - ${JSON.stringify(purgetimer)}`);
                 // success!
                 return true;
-            } else log('ERROR - purge.depth too large - '+purge.depth);
-        } else log('ERROR - purge.depth too interval - '+purge.depth);
+            } else log(`ERROR - purge.depth too large - ${purge.depth}`);
+        } else log(`ERROR - purge.interval too large - ${purge.interval}`);
         // oops! something has failed.
         return false;
     };

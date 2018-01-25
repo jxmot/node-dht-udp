@@ -41,12 +41,12 @@ module.exports = (function() {
         connCount += 1;
     
         // log the new connection for debugging purposes.
-        log('notify on connect - '+socket.id+'   '+connCount);
+        log(`notify on connect - ${socket.id}   ${connCount}`);
     
         // The client that initiated the connection has disconnected.
         socket.on('disconnect', function () {
             connCount -= 1;
-            log('notify on disconnect - '+socket.id+'   '+connCount);
+            log(`notify on disconnect - ${socket.id}   ${connCount}`);
         });
     });
     
@@ -58,7 +58,7 @@ module.exports = (function() {
     // 'channel' will indicate the destination within the client
     // and 'data' becomes the payload. 
     notify.send = function(channel, data) {
-        log('notify - channel = '+channel+'  payload = '+JSON.stringify(data));
+        log(`notify - channel = ${channel}  payload = ${JSON.stringify(data)}`);
         if(connCount > 0) io.emit(channel, {payload: data});
         else log('notify.send - no connections');
     };

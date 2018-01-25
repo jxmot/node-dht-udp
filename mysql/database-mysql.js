@@ -114,7 +114,7 @@ exports.database = (function() {
                         errno: error.errno
                     }
                 };
-                log('database.openDB() - ERROR connect: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                log(`database.openDB() - ERROR connect: [${error.message}  ${error.code}  ${error.errno}]`);
             } else {
                 database.dbopen   = true;
                 database.threadid = connection.threadId;
@@ -129,7 +129,7 @@ exports.database = (function() {
     database.closeDB = function(callme) {
         closeCallBack = callme;
         connection.end(function(error) {
-            if(error) log('database.closeDB() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno+']');
+            if(error) log(`database.closeDB() - ERROR end: [${error.message}  ${error.code}  ${error.errno}]`);
             // The connection is terminated now 
             database.dbopen   = false;
             database.threadid = 0;
@@ -167,7 +167,7 @@ exports.database = (function() {
         if(this.dbopen === true) {
             connection.query('insert into '+table+' set ?', record, function(error, result) {
                 if(error) {
-                    log('database.writeRow() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                    log(`database.writeRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     writeCallBack(false, table, record);
                 } else writeCallBack(true, table, record);
             });
@@ -199,10 +199,10 @@ exports.database = (function() {
         if(this.dbopen === true) {
             connection.query('update '+table+' set ? where '+keyfield, record, function(error, result) {
                 if(error) {
-                    log('database.updateRow() - ERROR - update: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                    log(`database.updateRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     updateCallBack(table, -1, updateCallBackData);
                 } else {
-                    log('database.updateRow() - SUCCESS - message = '+result.message);
+                    log(`database.updateRow() - SUCCESS - message = ${result.message}`);
                     updateCallBack(table, result.changedRows, updateCallBackData);
                 }
             });
@@ -233,7 +233,7 @@ exports.database = (function() {
         if(this.dbopen === true) {
             connection.query('select * from '+table, function(error, result) {
                 if(error) {
-                    log('database.readRows() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                    log(`database.readRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     this.dbopen = false;
                     readCallBack(table, null);
                 } else readCallBack(table, result);
@@ -250,10 +250,9 @@ exports.database = (function() {
     database.readRow = function(table, keyfield, callme) {
         readCallBack = callme;
         if(this.dbopen === true) {
-            log('database.readRow() - select * from '+table+' where '+keyfield);
             connection.query('select * from '+table+' where '+keyfield, function(error, result) {
                 if(error) {
-                    log('database.readRow() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                    log(`database.readRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     readCallBack(table, null);
                 } else readCallBack(table, result[0]);
             });
@@ -271,7 +270,7 @@ exports.database = (function() {
         if(this.dbopen === true) {
             connection.query('delete from '+table+' where '+keyfield, function(error, result) {
                 if(error) {
-                    log('database.deleteRow() - ERROR delete: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                    log(`database.deleteRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     deleteCallBack(table, false, 0);
                 } else deleteCallBack(table, true, result.affectedRows);
             });
@@ -289,7 +288,7 @@ exports.database = (function() {
         if(this.dbopen === true) {
             connection.query('select count('+col+') as total from '+table, function(error, result) {
                 if(error) {
-                    log('database.countRows() - ERROR select: ['+error.message+'  '+error.code+'  '+error.errno);
+                    log(`database.countRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     countCallBack(table, col, -1);
                 } else {
                     countCallBack(table, col, result);
@@ -329,13 +328,13 @@ exports.database = (function() {
             initconn = mysql.createConnection(params);
             initconn.connect(function(error) {
                 if(error) {
-                    log('database.initDB() - ERROR connecting: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                    log(`database.initDB() - ERROR connect: [${error.message}  ${error.code}  ${error.errno}]`);
                     initCallBack(-1);
                 } else {
                     // first create the database...
                     initconn.query(createDBStr(), function(error, result) {
                         if(error) {
-                            log('database.initDB() - ERROR create: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                            log(`database.initDB() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                             initCallBack(-1);
                         } else {
                             // create the table(s)
@@ -369,7 +368,7 @@ exports.database = (function() {
             // assemble the SQL statement and send the query
             initconn.query(createTableStr(idx), function(error, result) {
                 if(error) {
-                    log('database.createTable() - ERROR create: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                    log(`database.createTable() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     initCallBack(-1);
                 } else {
                     // recurse...
@@ -378,9 +377,9 @@ exports.database = (function() {
             });
         } else {
             // done
-            log('database.createTable() - '+idx+' tables were created.');
+            log(`database.createTable() - ${idx} tables were created.`);
             if(dbdata.length > 0) {
-                log('database.createTable() - creating rows for '+dbdata.length+' tables.');
+                log(`database.createTable() - creating rows for ${dbdata.length} tables.`);
                 initRows(0, 0, idx);
             }
         }
@@ -394,7 +393,7 @@ exports.database = (function() {
             
             initconn.query('insert into '+dbcfg.parms.database+'.'+table+' set ?', record, function(error, result) {
                 if(error) {
-                    log('database.initRows() - ERROR insert: ['+error.message+'  '+error.code+'  '+error.errno+']');
+                    log(`database.initRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     initCallBack(-1);                   
                 } else {
                     // recurse...
@@ -407,7 +406,7 @@ exports.database = (function() {
             else {
                 initconn.end(function(error) {
                     if(error) {
-                        log('database.initRows() - ERROR end(): ['+error.message+'  '+error.code+'  '+error.errno+']');
+                        log(`database.initRows() - ERROR end: [${error.message}  ${error.code}  ${error.errno}]`);
                         initCallBack(-1);
                     } else {
                         // The connection is terminated now 
@@ -429,7 +428,7 @@ exports.database = (function() {
     */
     function createDBStr() {
         var retStr = sql.parts[sql.CREATE_DB] + dbcfg.parms.database + sql.parts[sql.SQL_ENDS];
-        log('database.createDBStr() - '+retStr);
+        log(`database.createDBStr() - ${retStr}`);
         return retStr;
     };
 
@@ -454,7 +453,7 @@ exports.database = (function() {
             // col_1 varchar(5),col_1 integer(4)); <-- the column definitions go here
             retStr = retStr + sql.parts[sql.SQL_OPAR] + dbcfg.col[idx] + sql.parts[sql.SQL_ENDF];
         }
-        log('database.createTableStr() - '+retStr);
+        log(`database.createTableStr() - ${retStr}`);
         return retStr;
     };
 
