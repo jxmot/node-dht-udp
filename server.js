@@ -96,15 +96,6 @@ const EventEmitter = require('events');
 const srvmsg_events = new EventEmitter();
 
 /* ************************************************************************ */
-// when implemented, this is where the low and high limts are set...
-const sensorlist = require('./sensorlist.js');
-
-for(var ix = 0; sensorlist.list[ix].name !== 'END'; ix++) {
-    console.log(`sensor #${ix} - name: ${sensorlist.list[ix].name}  loc: ${sensorlist.list[ix].loc}`);
-}
-console.log('\n');
-
-/* ************************************************************************ */
 // create a socket to listen on...
 const server = require('dgram').createSocket('udp4');
 // a running count of packets received
