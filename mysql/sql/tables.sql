@@ -37,6 +37,7 @@ create database sensornet;
         
         90 days = 7776000000
 */
+
 /*
     Sensor Status Table
 */
@@ -59,7 +60,17 @@ create table sensornet.status (
 
         SELECT RAND()*(b-a)+a;
 
-    
+
+    Here's a MySQL example that creates a random value that is between
+    today's epoch and an epoch one year ago.
+
+    The value 31471200000 represents one year (364.25 days) in milliseconds.
+
+*/
+select FLOOR(RAND()*((unix_timestamp(now()) * 1000)-((unix_timestamp(now()) * 1000) - 31471200000))+((unix_timestamp(now()) * 1000) - 31471200000));
+
+/*
+    Sensor Status Table
 */
 insert into sensornet.status 
 (dev_id,status,tstamp)
@@ -139,9 +150,9 @@ values
 /*
     store a handful of test records with random timestamps
 
-    see - storedproc-test.sql
+    see - storedproc-sensordata_fill.sql
 */
-call proc_loop_test;
+call sensordata_fill;
 
 /*
     either one of these will delete the test records
