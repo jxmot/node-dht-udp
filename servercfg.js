@@ -15,5 +15,7 @@ module.exports = {
 
     db : {
         type : 'mysql'
-    }
+    },
+
+    conlog: true
 };

@@ -52,7 +52,7 @@ WIP     5) Use the low_limit and high_limit found for each sensor in
 
 MYSQL --->
 
-WIP     6) Re-work using MySQL. To limit the quantity of records we'll be 
+DONE    6) Re-work using MySQL. To limit the quantity of records we'll be 
         using "trigger" functions. Then to signal the client(s) of data
         updates we'll use SocketIO connections. Updates will be broadcast
         to all connected clients.
@@ -91,6 +91,17 @@ const dbcfg = {
 };
 
 /* ************************************************************************ */
+/*
+    A single place to control if calls to console.log() will
+    produce any output.
+*/
+function consolelog(text) {
+    if(cfg.conlog) {
+        console.log(text);
+    }
+};
+
+/* ************************************************************************ */
 // Events
 const EventEmitter = require('events');
 const srvmsg_events = new EventEmitter();
@@ -105,7 +116,7 @@ var count = 0;
     If an error occurs announce it and close the server.
 */
 server.on('error', (err) => {
-    console.log(err.stack);
+    console.error(err.stack);
     server.close();
 });
 
@@ -133,20 +144,20 @@ server.on('message', (msg, rinfo) => {
     // content of the reply is determined by the
     // handler. and it can decide to not reply as 
     // needed.
-    if(!srvmsg_events.emit('MSG_RCVD', temp, rinfo)) console.log('MSG_RCVD no listeners!!!');
-    else console.log(`udp received : [${temp}] from ${rinfo.address}:${rinfo.port}`);
+    if(!srvmsg_events.emit('MSG_RCVD', temp, rinfo)) console.error('MSG_RCVD no listeners!!!');
+    else consolelog(`udp received : [${temp}] from ${rinfo.address}:${rinfo.port}`);
 });
 
 /*
     if(srvcfg.reply === true) {
         // put a reply together...
         const reply = new Buffer(temp);
-        console.log(`UDP Server reply: ${reply.toString()}`);
+        consolelog(`UDP Server reply: ${reply.toString()}`);
         // send it back to the sender of the message...
         server.send(reply, 0, reply.length, rinfo.port, rinfo.address, (err, bytes) => {
-            if(err) console.log(err.stack);
+            if(err) console.error(err.stack);
         });
-    } else console.log(temp);
+    } else consolelog(temp);
 });
 */
 
@@ -155,7 +166,7 @@ server.on('message', (msg, rinfo) => {
 */
 server.on('listening', () => {
     const address = server.address();
-    console.log(`UDP server listening on - ${address.address}:${address.port}`);
+    consolelog(`UDP server listening on - ${address.address}:${address.port}`);
 });
 
 // must tell the server to listen on the port and address
@@ -169,7 +180,7 @@ client.on('listening', () => {
     client.setBroadcast(true)
     client.setMulticastTTL(128); 
     client.addMembership(mulcfg.addr);
-    console.log(`UDP Multi-Cast Client listening on - ${mulcfg.addr}:${mulcfg.port}`);
+    consolelog(`UDP Multi-Cast Client listening on - ${mulcfg.addr}:${mulcfg.port}`);
 });
 
 /*
@@ -191,9 +202,9 @@ client.on('message', (payload, remote) => {
     });
 
     // trigger an event....
-    if(!srvmsg_events.emit('STATUS_RCVD', temp, remote)) console.log('STATUS_RCVD no listeners!!!');
+    if(!srvmsg_events.emit('STATUS_RCVD', temp, remote)) console.error('STATUS_RCVD no listeners!!!');
 
-    console.log(`multicast received : [${temp}] from ${remote.address}:${remote.port}`);
+    consolelog(`multicast received : [${temp}] from ${remote.address}:${remote.port}`);
 });
 
 client.bind(mulcfg.port);
