@@ -78,7 +78,7 @@ log('LOG START');
 /*
     Initialize the notification module.
 */
-var notify = require('./notify.js').notify;
+var notify = require('./notify.js');
 notify.setLog(log);
 /* ************************************************************************ */
 /*
