@@ -117,7 +117,7 @@ module.exports = function init(evts) {
                 var status = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
-
+// temporarily disabled during development
             // if enabled set up a data purge...
             //if(dbcfg.purge.enabled === true) {
             //    enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
@@ -131,7 +131,7 @@ module.exports = function init(evts) {
         that there's some "fresh" data to be displayed.
     */
     function writeDone(result, target, data) {
-        log(`writeDone() - result = ${result}   target = ${target}   data = ${JSON.stringify(data)}`);
+        log(`writeDone() - result = ${result}   target = ${target}   payload = ${JSON.stringify(data)}`);
 
         if(result) {
             // notify all connected clients...
