@@ -117,12 +117,11 @@ module.exports = function init(evts) {
                 var status = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
-// temporarily disabled during development
             // if enabled set up a data purge...
-            //if(dbcfg.purge.enabled === true) {
-            //    enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
-            //    enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
-            //}
+            if(dbcfg.purge.enabled === true) {
+                enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
+                enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
+            }
         }
     };
 
