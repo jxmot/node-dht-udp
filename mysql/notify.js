@@ -48,6 +48,10 @@ module.exports = (function() {
             connCount -= 1;
             log(`notify on disconnect - ${socket.id}   ${connCount}`);
         });
+
+        // get the last data & status written and update the client
+        // TO DO: What would be the best method to accomplish this?
+
     });
     
     // Start listening...
