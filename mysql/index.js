@@ -127,8 +127,8 @@ module.exports = function init(evts) {
     };
 
     /*
-        Handle all post row saves, and notify a client
-        that there's some "fresh" data to be managed.
+        Handle all post row-saves, and notify a client
+        that there's some "fresh" data to be displayed.
     */
     function writeDone(result, target, data) {
         log('writeDone() - result = '+result);
