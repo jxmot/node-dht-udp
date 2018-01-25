@@ -458,6 +458,5 @@ exports.database = (function() {
         return retStr;
     };
 
-    log = console.log;
     return database;
 })();

@@ -3,7 +3,7 @@
 
         * database create
         * table creation
-        * test insertions & deletions
+        * test data insertions & deletions
 */
 
 create database sensornet;
