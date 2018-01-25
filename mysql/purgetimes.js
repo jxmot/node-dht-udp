@@ -1,22 +1,24 @@
 /*
-         1 day  =   86400000
+         1 day  =    86400000
         
-         5 days =  432000000
+         5 days =   432000000
         
-        10 days =  864000000
+        10 days =   864000000
         
-        14 days = 1209600000
+        14 days =  1209600000
 
-        21 days = 1814400000
+        21 days =  1814400000
         
         The intervals/depths below require special handling due to the
         limit of 2147483647ms (24.9 days).
 
-        30 days = 2592000000
+        30 days =  2592000000
         
-        60 days = 5184000000
+        60 days =  5184000000
         
-        90 days = 7776000000
+        90 days =  7776000000
+
+    364.25 days = 31471200000
 */
 module.exports = {
     // approximately 24.9 days
