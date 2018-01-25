@@ -5,6 +5,8 @@
         * Configure and start logging
         * Connecting to the database
         * Managing data(or status) row purges
+        * Notifying connected clients when a new status or data has
+          been written to the database.
 */
 /* ************************************************************************ */
 /*
@@ -72,9 +74,19 @@ database.setLog(log);
 // if not already created, this will cause the logfile to
 // be created.
 log('LOG START');
+/* ************************************************************************ */
+/*
+    Initialize the notification module.
+*/
+var notify = require('./notify.js').notify;
+notify.setLog(log);
+/* ************************************************************************ */
 /*
     Initialize the database connection and prepare for incoming
     data/status events.
+
+    The server will forward incoming status and data via events. It is the
+    owner of the EventEmitter, and passes a reference to this module.
 */
 module.exports = function init(evts) {
     // When the database is opened continue with
@@ -90,6 +102,8 @@ module.exports = function init(evts) {
             // no, log errors and end the transaction
             log('ERROR - openDone() err = ');
             log(err);
+            // notify all connected clients of the error...
+            notify.send('ERROR', err);
         } else {
             // wait for events....
             evts.on('MSG_RCVD', (m, r) => {
@@ -105,10 +119,10 @@ module.exports = function init(evts) {
             });
 
             // if enabled set up a data purge...
-            if(dbcfg.purge.enabled === true) {
-                enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
-                enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
-            }
+            //if(dbcfg.purge.enabled === true) {
+            //    enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
+            //    enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
+            //}
         }
     };
 
@@ -122,7 +136,7 @@ module.exports = function init(evts) {
         log('writeDone() - data   = '+JSON.stringify(data));
         if(result) {
             // notify all connected clients...
-            //clientNotify(target, data);
+            notify.send(target, data);
         }
     };
 
@@ -134,8 +148,6 @@ module.exports = function init(evts) {
 
         It is also possible to enable a purge-on-init so that the old data is
         removed when this application is started.
-
-        
     */
     // constant values representing time in milliseconds
     purgetimes = require('./purgetimes.js');
@@ -189,6 +201,8 @@ module.exports = function init(evts) {
     */
     function purgedone(table, result, rows) {
         log('Purge complete on table '+table+' - '+result+'   '+rows);
+        // notify all connected clients of the purge...
+        notify.send('PURGE', {dbtable: table, dbresult: result, dbrows: rows});
     };
 
     /*
