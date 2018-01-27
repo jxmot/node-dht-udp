@@ -3,6 +3,8 @@
     Notify connected clients when chosen events (some with data) occur on 
     the server. The client for this module chooses which events and data
     to send. The client(s) must agree on the channel.
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 module.exports = (function() {
 
@@ -39,10 +41,12 @@ module.exports = (function() {
 
         // Increment the connection counter
         connCount += 1;
-    
+
         // log the new connection for debugging purposes.
         log(`notify on connect - ${socket.id}   ${connCount}`);
-    
+
+        console.log(JSON.stringify(sensorlast));
+
         // The client that initiated the connection has disconnected.
         socket.on('disconnect', function () {
             connCount -= 1;
@@ -58,11 +62,27 @@ module.exports = (function() {
     var cfg = require('./socket_cfg.js');
     server.listen(cfg.port);
 
+    // contains the last status and data for each device
+    var sensorlast = {
+        status: [],
+        data: [],
+        purge: [],
+        // To Do: curently not in use, will require some 
+        // thought and a decision in regards to just how
+        // much awareness of client modules is necessary.
+        error: []
+    };
+
     // Send something to all connected clients (a broadcast) the
     // 'channel' will indicate the destination within the client
     // and 'data' becomes the payload. 
     notify.send = function(channel, data) {
         log(`notify - channel = ${channel}  payload = ${JSON.stringify(data)}`);
+
+        // save for new client connections
+        if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
+        else sensorlast[channel][data.dev_id] = data;
+
         if(connCount > 0) io.emit(channel, {payload: data});
         else log('notify.send - no connections');
     };
