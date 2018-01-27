@@ -13,6 +13,9 @@
 
     RunKit Test :
         https://runkit.com/embed/or2oiue1mtig
+
+
+    (c) 2018 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 // a handy string formatter...
 var fmt = require('sprintf-js');
@@ -69,14 +72,13 @@ var timeout = setInterval( () => {
 function sendUDP() {
     if(countdown > 0) {
         countdown -= 1;
-        // send some data...
+        // create the data that will be sent...
         var data = getMockData();
         console.log(`sending - ${data}`);
-  
+        // send it
         client.send(data, 0, data.length, cfg.port, cfg.host, (err, bytes) => {
             if(err) throw err;
         });
-
     }else  process.exit();
 };
 
