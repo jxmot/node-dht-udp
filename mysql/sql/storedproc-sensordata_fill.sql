@@ -24,6 +24,8 @@
     today (when the procedure is run) and one year ago. 
 
         31471200000 = 1 year in milliseconds
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sensordata_fill`()
 BEGIN

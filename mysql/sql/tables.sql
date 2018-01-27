@@ -4,6 +4,8 @@
         * database create
         * table creation
         * test data insertions & deletions
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 
 create database sensornet;

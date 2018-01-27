@@ -7,6 +7,8 @@
         * Managing data(or status) row purges
         * Notifying connected clients when a new status or data has
           been written to the database.
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 /* ************************************************************************ */
 /*
@@ -103,7 +105,8 @@ module.exports = function init(evts) {
             log('ERROR - openDone() err = ');
             log(err);
             // notify all connected clients of the error...
-            notify.send('ERROR', err);
+            // To Do: see notify.send()
+            //notify.send('error', err);
         } else {
             // wait for events....
             evts.on('MSG_RCVD', (m, r) => {
@@ -200,7 +203,7 @@ module.exports = function init(evts) {
     function purgedone(table, result, rows) {
         log(`Purge complete on table ${table} - ${result}   ${rows}`);
         // notify all connected clients of the purge...
-        notify.send('PURGE', {dbtable: table, dbresult: result, dbrows: rows});
+        notify.send('purge', {dbtable: table, dbresult: result, dbrows: rows});
     };
 
     /*
