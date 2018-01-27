@@ -2,6 +2,8 @@
     A collection of pieces of SQL statements that get put
     together with database configuration items to create
     complete SQL statements. Say that fast five times.
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 module.exports = {
     parts: [

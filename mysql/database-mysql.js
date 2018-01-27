@@ -29,6 +29,7 @@
     The intent is to allow for reuse and flexibility. The configuration file 
     can be made to contain any reasonable quantity of tables for a database.
 
+    (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 exports.database = (function() {
     // Public Data

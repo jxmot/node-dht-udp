@@ -8,6 +8,8 @@
 
     To Do: make column names, types, and sizes individual 
     as configuration items.
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 module.exports = {
     parms: {

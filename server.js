@@ -60,6 +60,7 @@ DONE    6) Re-work using MySQL. To limit the quantity of records we'll be
 
 <--- MySQL
 
+    (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 // an option argument can specify and alternative server configuration file. 
 // this will allow the port number(s), IP address(es), and if a reply is
