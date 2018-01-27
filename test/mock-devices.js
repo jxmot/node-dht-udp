@@ -20,45 +20,43 @@ var fmt = require('sprintf-js');
 // get our configuration
 const cfg = require('./mock-devices-cfg.js');
 
-// generates a random value between a "min" and a "max" value
-function randomVal(min,max) {
-    return Math.floor(Math.random()*(max-min+1)+min);
-};
-
+//////////////////////////////////////////////////////////////////////////////
 // mock data generator - 
 var seq = 0;
 var devidx = -1;
 
 function getMockData() {
 
+    // limit the range of the sequence number
     if(seq < 1000) seq += 1;
     else seq = 1;
 
+    // two modes, sequential device ID, or random device ID
     if(cfg.mode === 'seq') {
         if((devidx += 1) === cfg.devlist.length) devidx = 0;
     } else devidx = randomVal(0, cfg.devlist.length - 1);
 
+    // dividing the random value will provide fractional values
+    var t = randomVal(cfg.t_min, cfg.t_max) / cfg.divisor;
+    var h = randomVal(cfg.h_min, cfg.h_max) / cfg.divisor;
+
+    // create the data packet
     var data = fmt.sprintf('{"dev_id":"%s","seq":%d,"t":%f,"h":%f}',
-                           cfg.devlist[devidx],
-                           seq,
-                           randomVal(4500,9500)/100,
-                           randomVal(1000,3000)/100);
+                           cfg.devlist[devidx], seq, t, h);
+
     return data;
 };
 
-/*
-    here are some mock data messages -
-
-for(var ix = 1;ix <= cfg.repeat;ix++) {
-    console.log(getMockData());
-}
-*/ 
+// generates a random value between a "min" and a "max" value
+function randomVal(min, max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+};
 
 //////////////////////////////////////////////////////////////////////////////
-// create a socket to listen on...
+// create a socket
 const dgram = require('dgram');
 const client = dgram.createSocket('udp4');
-// keep going until 0
+// keep going until the count down reaches 0
 var countdown = cfg.repeat;
 // start sending...
 sendUDP();
@@ -67,16 +65,13 @@ var timeout = setInterval( () => {
                 sendUDP();
             }, cfg.interval);
 
-/*
-    Send a UDP packet to the server
-*/
+// Send a UDP packet to the server
 function sendUDP() {
-
     if(countdown > 0) {
         countdown -= 1;
         // send some data...
         var data = getMockData();
-        console.log(data);
+        console.log(`sending - ${data}`);
   
         client.send(data, 0, data.length, cfg.port, cfg.host, (err, bytes) => {
             if(err) throw err;
@@ -84,8 +79,4 @@ function sendUDP() {
 
     }else  process.exit();
 };
-
-
-
-
 
