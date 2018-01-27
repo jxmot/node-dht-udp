@@ -114,10 +114,29 @@ function sendUDP() {
         client.send(data, 0, data.length, cfg.port, cfg.host, (err, bytes) => {
             if(err) throw err;
         });
-
     }else  process.exit();
 };
 ```
 
+## Output Example
 
+While the application is running it will send output to the console as it transmits over UDP - 
+
+```
+sending - {"dev_id":"ESP_000001","seq":1,"t":85.87,"h":10.74}
+sending - {"dev_id":"ESP_000002","seq":2,"t":78.6,"h":24.38}
+sending - {"dev_id":"ESP_000003","seq":3,"t":91.66,"h":10.96}
+sending - {"dev_id":"ESP_000004","seq":4,"t":51.3,"h":11.01}
+sending - {"dev_id":"ESP_000005","seq":5,"t":62.42,"h":20.9}
+sending - {"dev_id":"ESP_000001","seq":6,"t":61.92,"h":22.97}
+sending - {"dev_id":"ESP_000002","seq":7,"t":45.73,"h":12.31}
+sending - {"dev_id":"ESP_000003","seq":8,"t":88.68,"h":19.72}
+sending - {"dev_id":"ESP_000004","seq":9,"t":79.83,"h":28.17}
+sending - {"dev_id":"ESP_000005","seq":10,"t":56.1,"h":26.2}
+sending - {"dev_id":"ESP_000001","seq":11,"t":67.08,"h":29.59}
+sending - {"dev_id":"ESP_000002","seq":12,"t":79.86,"h":26.9}
+sending - {"dev_id":"ESP_000003","seq":13,"t":45.68,"h":16.78}
+sending - {"dev_id":"ESP_000004","seq":14,"t":57.7,"h":23.22}
+sending - {"dev_id":"ESP_000005","seq":15,"t":70.68,"h":25.76}
+```
 
