@@ -45,17 +45,17 @@ module.exports = (function() {
         // log the new connection for debugging purposes.
         log(`notify on connect - ${socket.id}   ${connCount}`);
 
-        console.log(JSON.stringify(sensorlast));
+        // get the last purge, status and data that was saved 
+        // and update the new client
+        for(var key of Object.keys(sensorlast)) {
+            resend(key, socket, sensorlast[key]);
+        }
 
         // The client that initiated the connection has disconnected.
         socket.on('disconnect', function () {
             connCount -= 1;
             log(`notify on disconnect - ${socket.id}   ${connCount}`);
         });
-
-        // get the last data & status written and update the client
-        // TO DO: What would be the best method to accomplish this?
-
     });
     
     // Start listening...
@@ -64,13 +64,22 @@ module.exports = (function() {
 
     // contains the last status and data for each device
     var sensorlast = {
-        status: [],
-        data: [],
         purge: [],
+        status: [],
+        data: []
         // To Do: curently not in use, will require some 
         // thought and a decision in regards to just how
         // much awareness of client modules is necessary.
-        error: []
+        //error: []
+    };
+
+    function resend(channel, socket, payloads) {
+        if(connCount > 0) {
+            for(var key of Object.keys(payloads)) {
+                log(`resend(${channel}) - ${key}: ${JSON.stringify(payloads[key])}`);
+                socket.emit(channel, {payload: payloads[key]});
+            }
+        } else log('resend() - no connections');
     };
 
     // Send something to all connected clients (a broadcast) the
