@@ -163,8 +163,8 @@ module.exports = function init(evts) {
         interval: 0,
         depth: 0,
         // addtional purge info
-        callback: undefined,
-        purgecount: 0
+        //purgecount: 0,
+        callback: undefined
     };
     // contains the active purge timers.
     var purgetimeouts = [];
@@ -189,10 +189,11 @@ module.exports = function init(evts) {
         specify the interval and depth.
 
         NOTE: This function can be called directly as needed. The interval
-        timer is not required.
+        timer is not required, but useful.
     */
     function purgedata(table, purge) {
         var keyfield = purge.col + ' < (' + Date.now() + ' - ' + (purge.depth * purgetimes.DAY_1_MS) + ')';
+        log(`Attempting to purge rows in ${table} - that match - ${keyfield}`);
         database.deleteRow(table, keyfield, purgedone)
     };
 
@@ -203,7 +204,7 @@ module.exports = function init(evts) {
     function purgedone(table, result, rows) {
         log(`Purge complete on table ${table} - ${result}   ${rows}`);
         // notify all connected clients of the purge...
-        notify.send('purge', {dbtable: table, dbresult: result, dbrows: rows, tstamp : Date.now()});
+        notify.send('purge', {dbtable: table, dbresult: result, dbrows: rows, tstamp: Date.now()});
     };
 
     /*
@@ -216,7 +217,7 @@ module.exports = function init(evts) {
         // save the purge callback and specs...
         purgetimer.callback = callme;
         purgetimer.table = table;
-        purgetimer.purgecount = 0;
+        //purgetimer.purgecount = 0;
         purgetimer.col = purge.col;
         // Check the purge interval and depth, if both are valid then
         // initialize an interval timer and save the purge object in
