@@ -37,7 +37,7 @@ module.exports = (function() {
     // A client has connected, 
     io.on('connection', function(socket) {
 
-        socket.emit('SERVER', {message: 'READY', status: true, id: socket.id});
+        socket.emit('SERVER', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
 
         // Increment the connection counter
         connCount += 1;

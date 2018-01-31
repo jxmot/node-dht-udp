@@ -203,7 +203,7 @@ module.exports = function init(evts) {
     function purgedone(table, result, rows) {
         log(`Purge complete on table ${table} - ${result}   ${rows}`);
         // notify all connected clients of the purge...
-        notify.send('purge', {dbtable: table, dbresult: result, dbrows: rows});
+        notify.send('purge', {dbtable: table, dbresult: result, dbrows: rows, tstamp : Date.now()});
     };
 
     /*
