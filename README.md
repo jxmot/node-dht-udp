@@ -36,6 +36,26 @@ Initially I decided to use one of two potential candidates for a database to sto
 * JSON data can used directly when writing data to a node.
 * The client side can receive notifications when new data has been saved.
 
+### Choosing SQL vs NoSQL
+
+I have some primary criteria for choosing SQL vs NoSQL - 
+
+* Will the individual records be dynamic in regards to the fields they contain? *YES* - use NoSQL like MongoDB or Firebase. *NO* The SQL _might_ be the way to go. SQL databases require _well defined_ schemas. And are not flexible, if a change is necessary it can be painful to migrate existing data to a new schema.
+* How much _overhead_ can you tolerate in your application? *None, or very little.* - The something like MongoDB or Firebase might be preferable. The advantage there is textual JSON can be used directly to write records to the database. In my humble opinon NoSQL database require less code to implement.
+* Are queries (_simple and complex_) required? *YES* - The SQL is the better choice. _Tip_: MySQL Workbench is extremely useful for testing SQL statments and procedures _before_ they end up in your code. On the other hand, you'll do your query development and testing in your code for the NoSQL alternatives.
+* What level of security is required by your application? *None or very little* - then a NoSQL like MongoDB is ok. *Basic to strong security is requried* - Then SQL _or_  a NoSQL database like Firebase should be sufficient. 
+* If you're developing for a _customer_ (or employer) what are they currently using? Generally speaking it's better to "go with the flow" and work with what they have been using.
+
+Other than the above I also look at what are the _feature_ that my application will require. For example, my current project requried - 
+
+1) Control over the quantity of data that is stored and kept. 
+2) The client side of the application requires notification when a new record is written to the database.
+3) Some basic queries are required.
+4) The _business logic_ side of the application (_typically a NodeJS app_) needs to have a small footprint. In other words, it may be required to run on a _thin client_.... like a Arduino platform or a Tessel 2.
+5) There cannot be any monetary cost for hosting the application.
+
+First I started with Firebase (NoSQL) but I quickly discovered that #1 would incur a monetary cost if #4 was satisfied. At that point I switch over to a SQL database (_hosted on equipment in my home_) and used Socket.io to satisfy #2, which Firebase does quite easily.
+
 ### Firebase Requirements
 
 This application makes use of the *Firebase REST API*. And it does not require any packages other than the native NodeJS packages.
