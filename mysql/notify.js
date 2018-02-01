@@ -42,7 +42,8 @@ module.exports = (function() {
             // Increment the connection counter
             connCount += 1;
             // log the new connection for debugging purposes.
-            log(`notify on connect - ${socket.id}   ${connCount}`);
+            log(`notify on connect - ${socket.id}  connCount = ${connCount}`);
+            log(`notify on connect - ${socket.id}  remote = ${socket.client.conn.remoteAddress}  referer = ${socket.handshake.headers.referer}`);
             // get the last purge, status and data that was saved 
             // and update the new client
             for(var key of Object.keys(sensorlast)) {
@@ -51,7 +52,7 @@ module.exports = (function() {
             // The client that initiated the connection has disconnected.
             socket.on('disconnect', function () {
                 connCount -= 1;
-                log(`notify on disconnect - ${socket.id}   ${connCount}`);
+                log(`notify on disconnect - ${socket.id}   connCount = ${connCount}`);
             });
         });
     };
