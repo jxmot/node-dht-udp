@@ -38,9 +38,9 @@ function initLog(logname) {
     if(logOpt.log === true) {
         var Log = require('../lib/Log.js');
         if((logOpt.logname === undefined) || (logOpt.logname === '')) {
-            fileOut = new Log(logname, logOpt.logext);
+            fileOut = new Log(logname, logOpt.logext, logOpt.maxsize);
         } else {
-            fileOut = new Log(true, logOpt.logname);
+            fileOut = new Log(true, logOpt.logname, logOpt.maxsize);
         }
     }
 };
