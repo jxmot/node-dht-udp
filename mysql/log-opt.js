@@ -21,10 +21,6 @@ module.exports = {
     logname: '',                // use the file name provided by
                                 // the client, then add the extension
                                 // found above
-
-    // To Do: will require overhaul of file name creation and a method
-    // for determining whether or not the filename is time stamped.
-    maxsize: 32768              // max log file size when logfile names
-                                // contain a time stamp
+    maxsize: 262144             // max log file size
 };
 
