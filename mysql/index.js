@@ -82,6 +82,9 @@ log('LOG START');
 */
 var notify = require('./notify.js');
 notify.setLog(log);
+
+//notify.init();
+
 /* ************************************************************************ */
 /*
     Initialize the database connection and prepare for incoming
@@ -108,6 +111,9 @@ module.exports = function init(evts) {
             // To Do: see notify.send()
             //notify.send('error', err);
         } else {
+            // get the last status and data rows for all sensors
+            sensorLast();
+
             // wait for events....
             evts.on('MSG_RCVD', (m, r) => {
                 log(`MSG_RCVD : ${m}`);
@@ -125,6 +131,8 @@ module.exports = function init(evts) {
                 enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
                 enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
             }
+
+            notify.init();
         }
     };
 
@@ -139,6 +147,17 @@ module.exports = function init(evts) {
             // notify all connected clients...
             notify.send(target, data);
         }
+    };
+    //////////////////////////////////////////////////////////////////////////
+    function sensorLast() {
+        database.readRows('config', (table, rows) => {
+            if(rows !== null) {
+                rows.forEach(row => {
+                    database.readRow('status', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                    database.readRow('data', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                });
+            }
+        });
     };
 
     //////////////////////////////////////////////////////////////////////////
