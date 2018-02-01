@@ -34,29 +34,26 @@ module.exports = (function() {
     // If the counter is zero then we won't send anything over the socket.
     var connCount = 0;
 
-    // A client has connected, 
-    io.on('connection', function(socket) {
-
-        socket.emit('SERVER', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
-
-        // Increment the connection counter
-        connCount += 1;
-
-        // log the new connection for debugging purposes.
-        log(`notify on connect - ${socket.id}   ${connCount}`);
-
-        // get the last purge, status and data that was saved 
-        // and update the new client
-        for(var key of Object.keys(sensorlast)) {
-            resend(key, socket, sensorlast[key]);
-        }
-
-        // The client that initiated the connection has disconnected.
-        socket.on('disconnect', function () {
-            connCount -= 1;
-            log(`notify on disconnect - ${socket.id}   ${connCount}`);
+    notify.init = function() {
+        // A client has connected, 
+        io.on('connection', function(socket) {
+            socket.emit('SERVER', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
+            // Increment the connection counter
+            connCount += 1;
+            // log the new connection for debugging purposes.
+            log(`notify on connect - ${socket.id}   ${connCount}`);
+            // get the last purge, status and data that was saved 
+            // and update the new client
+            for(var key of Object.keys(sensorlast)) {
+                resend(key, socket, sensorlast[key]);
+            }
+            // The client that initiated the connection has disconnected.
+            socket.on('disconnect', function () {
+                connCount -= 1;
+                log(`notify on disconnect - ${socket.id}   ${connCount}`);
+            });
         });
-    });
+    };
     
     // Start listening...
     var cfg = require('./socket_cfg.js');
@@ -89,11 +86,16 @@ module.exports = (function() {
         log(`notify - channel = ${channel}  payload = ${JSON.stringify(data)}`);
 
         // save for new client connections
-        if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
-        else sensorlast[channel][data.dev_id] = data;
+        notify.updateLast(channel, data);
 
         if(connCount > 0) io.emit(channel, {payload: data});
         else log('notify.send - no connections');
+    };
+
+    notify.updateLast = function(channel, data) {
+        // save for new client connections
+        if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
+        else sensorlast[channel][data.dev_id] = data;
     };
 
     return notify;
