@@ -7,6 +7,8 @@
         * Managing data(or status) row purges
         * Notifying connected clients when a new status or data has
           been written to the database.
+        * On start collects the most recent status and data and saves
+          them for when clients connect.
 
     (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
@@ -78,12 +80,10 @@ database.setLog(log);
 log('LOG START');
 /* ************************************************************************ */
 /*
-    Initialize the notification module.
+    Initialize the client notification module.
 */
 var notify = require('./notify.js');
 notify.setLog(log);
-
-//notify.init();
 
 /* ************************************************************************ */
 /*
@@ -114,7 +114,7 @@ module.exports = function init(evts) {
             // get the last status and data rows for all sensors
             sensorLast();
 
-            // wait for events....
+            // wait for sensor events from the server....
             evts.on('MSG_RCVD', (m, r) => {
                 log(`MSG_RCVD : ${m}`);
                 var data = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
@@ -126,16 +126,20 @@ module.exports = function init(evts) {
                 var status = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
-            // if enabled set up a data purge...
+            // if enabled set up a recurring data purge...
             if(dbcfg.purge.enabled === true) {
+                // sensor data
                 enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
+                // sensor status
                 enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
             }
 
+            // initialize the client notification module
             notify.init();
         }
     };
 
+    //////////////////////////////////////////////////////////////////////////
     /*
         Handle all post row-saves, and notify a client
         that there's some "fresh" data to be displayed.
@@ -148,7 +152,17 @@ module.exports = function init(evts) {
             notify.send(target, data);
         }
     };
-    //////////////////////////////////////////////////////////////////////////
+
+    /*
+        Obtain and save the last sensor status an data that was written to
+        the database.
+
+        This compliments the client status & data update, which occurs when 
+        a client is connected. In situations where the parent application 
+        has been started there is no accumulated status & data. This function
+        reads the database for the most recent status & data and then saves
+        for when the clients recconnect.
+    */
     function sensorLast() {
         database.readRows('config', (table, rows) => {
             if(rows !== null) {
@@ -167,7 +181,8 @@ module.exports = function init(evts) {
         for the file with the login and password).
 
         It is also possible to enable a purge-on-init so that the old data is
-        removed when this application is started.
+        removed when this application is started. This is configurable for
+        each table.
     */
     // constant values representing time in milliseconds
     purgetimes = require('./purgetimes.js');
@@ -176,7 +191,7 @@ module.exports = function init(evts) {
     var purgetimer = {
         timeout: {},
         table: '',
-        // purge info
+        // the column used for locating records to purge
         col: '',
         // these values will be represented in milliseconds
         interval: 0,

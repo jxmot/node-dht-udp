@@ -17,13 +17,14 @@ module.exports = (function() {
     // For logging, defaults to console.log()
     var log = console.log;
 
+    // the module client chooses the logging destination
     notify.setLog = function(newLog){
         if(newLog !== undefined) log = newLog;
         else log = console.log;
     };
 
     /* ******************************************************************** */
-    // initialize the server
+    // Initialize the server that web clients will connect to.
     var http   = require('http');
     var server = http.createServer();
 
@@ -66,10 +67,12 @@ module.exports = (function() {
         data: []
         // To Do: curently not in use, will require some 
         // thought and a decision in regards to just how
-        // much awareness of client modules is necessary.
+        // much awareness the client modules need of 
+        // internal errors.
         //error: []
     };
 
+    // resend (or send) payloads to a specified socket.
     function resend(channel, socket, payloads) {
         if(connCount > 0) {
             for(var key of Object.keys(payloads)) {
@@ -79,19 +82,19 @@ module.exports = (function() {
         } else log('resend() - no connections');
     };
 
-    // Send something to all connected clients (a broadcast) the
+    // Broadcast something to all connected clients (a broadcast) the
     // 'channel' will indicate the destination within the client
     // and 'data' becomes the payload. 
     notify.send = function(channel, data) {
         log(`notify - channel = ${channel}  payload = ${JSON.stringify(data)}`);
-
         // save for new client connections
         notify.updateLast(channel, data);
-
+        // don't bother broadcasting anything if noone is connected.
         if(connCount > 0) io.emit(channel, {payload: data});
         else log('notify.send - no connections');
     };
 
+    // add fresh data to the sensorlast container
     notify.updateLast = function(channel, data) {
         // save for new client connections
         if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
