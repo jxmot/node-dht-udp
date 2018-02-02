@@ -20,7 +20,7 @@
         IMPORTANT! : The epoch timestamp values MUST be in milliseconds!
 
 
-    The prodcure below will create timestamp values that fall between
+    The procedure below will create timestamp values that fall between
     today (when the procedure is run) and one year ago. 
 
         31471200000 = 1 year in milliseconds
