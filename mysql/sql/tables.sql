@@ -4,6 +4,7 @@
         * database create
         * table creation
         * test data insertions & deletions
+        * database and table usage information
 
     (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
@@ -72,11 +73,12 @@ create table sensornet.status (
 select FLOOR(RAND()*((unix_timestamp(now()) * 1000)-((unix_timestamp(now()) * 1000) - 31471200000))+((unix_timestamp(now()) * 1000) - 31471200000));
 
 /*
-    Sensor Status Table
+    Insert sensor status rows where the 'tstamp' contains a random
+    value between two dates
 */
 insert into sensornet.status 
 (dev_id,status,tstamp)
-values ("ESP_49EB40", "APP_READY", FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000));
+values ("ESP_123456", "APP_READY", FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000));
 
 /*
     this will delete a range of rows where their timestamp is less than a
@@ -95,9 +97,13 @@ create table sensornet.data (
     tstamp bigint(16) not null, primary key (tstamp) 
 );
 
+/*
+    Insert sensor data rows where the 'tstamp' contains a random
+    value between two dates
+*/
 insert into sensornet.data 
 (dev_id,seq,t,h,tstamp)
-values ("ESP_49EB40", 1, 65.4, 16.8, FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000));
+values ("ESP_123456", 1, 65.4, 16.8, FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000));
 
 DELETE FROM sensornet.data where tstamp < (1516492740000 - 7776000000);
 
@@ -157,9 +163,38 @@ values
 call sensordata_fill;
 
 /*
-    either one of these will delete the test records
+    either one of these will delete the test records that
+    were created by calling sensordata_fill
 */
 DELETE FROM sensornet.data where t = 99.40;
 DELETE FROM sensornet.data where seq = 0;
 
+/*
+    Find out the amount of space being used by each of
+    the tables within the schema
+*/
+SELECT
+  TABLE_NAME AS `Table`,
+-- Choose one of the three below,
+  ROUND((DATA_LENGTH + INDEX_LENGTH)) AS `Size (Bytes)`
+--  ROUND((DATA_LENGTH + INDEX_LENGTH) / 1000) AS `Size (KB)`
+--  ROUND((DATA_LENGTH + INDEX_LENGTH) / 1000 / 1000) AS `Size (MB)`
+FROM
+  information_schema.TABLES
+WHERE
+  TABLE_SCHEMA = "sensornet"
+ORDER BY
+  (DATA_LENGTH + INDEX_LENGTH)
+DESC;
+
+/*
+    This gives a bit more info, such as the number of rows,
+    and the index length of each table.
+*/
+SELECT table_name, table_rows, data_length, index_length,
+-- Choose one of the three below,
+round(((data_length + index_length)),2) `Size in Bytes`
+-- round(((data_length + index_length) / 1024 / 1024),2) `Size in KB`
+-- round(((data_length + index_length) / 1024 / 1024),2) `Size in MB`
+FROM information_schema.TABLES where table_schema = "sensornet";
 
