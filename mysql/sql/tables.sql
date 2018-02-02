@@ -171,7 +171,11 @@ DELETE FROM sensornet.data where seq = 0;
 
 /*
     Find out the amount of space being used by each of
-    the tables within the schema
+    the tables within the schema.
+
+    In Windows 10 the database files are located in - 
+
+        C:\ProgramData\MySQL\MySQL Server 5.7\Data\sensornet
 */
 SELECT
   TABLE_NAME AS `Table`,
