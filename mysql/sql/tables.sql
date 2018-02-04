@@ -6,14 +6,15 @@
         * test data insertions & deletions
         * database and table usage information
 
+        Database Name : sensornet
+        Tables : config, data, status
+
     (c) 2017 Jim Motyl - https://github.com/jxmot/node-dht-udp
 */
 
-create database sensornet;
-
 /*
-    The 'tstamp' column is used as the primary key. This means that it
-    can be used for - 
+    The 'tstamp' column in all tables is used as the primary key. This 
+    means that it can be used for - 
 
         * Selecting a range of rows from the table
         * Deleting(purge) a range of rows from the table
@@ -40,6 +41,8 @@ create database sensornet;
         
         90 days = 7776000000
 */
+
+create database sensornet;
 
 /*
     Sensor Status Table
@@ -73,12 +76,22 @@ create table sensornet.status (
 select FLOOR(RAND()*((unix_timestamp(now()) * 1000)-((unix_timestamp(now()) * 1000) - 31471200000))+((unix_timestamp(now()) * 1000) - 31471200000));
 
 /*
-    Insert sensor status rows where the 'tstamp' contains a random
-    value between two dates
+    Insert sensor status test rows where the 'tstamp' contains a random
+    value between two dates.
 */
 insert into sensornet.status 
 (dev_id,status,tstamp)
-values ("ESP_123456", "APP_READY", FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000));
+values ("ESP_111111", "APP_READY", 
+FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000)
+);
+
+/*
+    To get random date-times between right now and one year ago replace
+    the line `FLOOR(RAND().....) with the following - 
+*/
+-- 31471200000 = 1 year in milliseconds
+FLOOR(RAND()*((unix_timestamp(now()) * 1000)-((unix_timestamp(now()) * 1000) - 31471200000))+((unix_timestamp(now()) * 1000) - 31471200000)
+
 
 /*
     this will delete a range of rows where their timestamp is less than a
@@ -98,12 +111,12 @@ create table sensornet.data (
 );
 
 /*
-    Insert sensor data rows where the 'tstamp' contains a random
+    Insert sensor data test rows where the 'tstamp' contains a random
     value between two dates
 */
 insert into sensornet.data 
 (dev_id,seq,t,h,tstamp)
-values ("ESP_123456", 1, 65.4, 16.8, FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000));
+values ("ESP_111111", 1, 65.4, 16.8, FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000));
 
 DELETE FROM sensornet.data where tstamp < (1516492740000 - 7776000000);
 
@@ -142,18 +155,36 @@ create table sensornet.config (
     t_scale varchar(2) not null,
     t_high decimal(5,2) not null,
     t_low decimal(5,2) not null,
+    h_scale varchar(4) not null,
     h_high decimal(5,2) not null,
     h_low decimal(5,2) not null
 );
 
 insert into sensornet.config 
-(dev_id,loc,t_scale,t_high,t_low,h_high,h_low)
+(dev_id,loc,t_scale,t_high,t_low,h_scale,h_high,h_low)
 values 
-("ESP_49EC8B", "Office", "F", 95, 40, 50, 10),
-("ESP_49F542", "Den", "F", 95, 40, 50, 10),
-("ESP_49EB40", "MBR", "F", 95, 40, 50, 10),
-("ESP_49ECCD", "LR", "F", 95, 40, 50, 10);
+("ESP_111111", "Office", "°F", 95, 40, "%RH", 50, 10),
+("ESP_222222", "Den",    "°F", 95, 40, "%RH", 50, 10),
+("ESP_333333", "MBR",    "°F", 95, 40, "%RH", 50, 10),
+("ESP_444444", "LR",     "°F", 95, 40, "%RH", 50, 10);
 
+-- real dev_id's...
+insert into sensornet.config 
+(dev_id,loc,t_scale,t_high,t_low,h_scale,h_high,h_low)
+values 
+("ESP_49EC8B", "Office", "°F", 95, 40, "%RH", 50, 10),
+("ESP_49F542", "Den",    "°F", 95, 40, "%RH", 50, 10),
+("ESP_49EB40", "MBR",    "°F", 95, 40, "%RH", 50, 10),
+("ESP_49ECCD", "LR",     "°F", 95, 40, "%RH", 50, 10);
+
+/*
+    Retrieve rows using join, this will return all data rows and 
+    join the 'loc' column from the config table. The results will
+    be ordered by 'tstamp' (ascending, it's the default).
+*/
+select sensornet.data.*, sensornet.config.loc 
+from sensornet.data
+left join sensornet.config on sensornet.data.dev_id=sensornet.config.dev_id order by tstamp;
 
 /*
     store a handful of test records with random timestamps
@@ -202,3 +233,10 @@ round(((data_length + index_length)),2) `Size in Bytes`
 -- round(((data_length + index_length) / 1024 / 1024),2) `Size in MB`
 FROM information_schema.TABLES where table_schema = "sensornet";
 
+/*
+    This is a simplified version of the above, if implemented in 
+    code it could be useful for info prior to and after a data
+    purge.
+*/
+SELECT table_name, table_rows 
+FROM information_schema.TABLES where table_schema = "sensornet";
