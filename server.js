@@ -129,27 +129,13 @@ client.on('listening', () => {
 });
 
 /*
-    Reply Received Event Handler
+    Broadcast Received Event Handler
 */
 client.on('message', (payload, remote) => {
     // the correct way to extract a string from the payload is this - 
     var message = payload.filter(letter => letter !== 0);
-
-    var temp = '';
-    
-    // Strings arrive as a "string of character codes". They
-    // have to be converted to ASCII strings.
-    payload.filter(charcode => {
-        if(charcode !== 0 && charcode !== undefined) {
-            temp = temp + String.fromCharCode(charcode);
-            return true;
-        }
-    });
-
-    // trigger an event....
-    if(!srvmsg_events.emit('STATUS_RCVD', temp, remote)) console.error('STATUS_RCVD no listeners!!!');
-
-    consolelog(`multicast received : [${temp}] from ${remote.address}:${remote.port}`);
+    if(!srvmsg_events.emit('STATUS_RCVD', message.toString(), remote)) console.error('STATUS_RCVD no listeners!!!');
+    consolelog(`multicast received : [${message.toString()}] from ${remote.address}:${remote.port}`);
 });
 
 client.bind(mulcfg.port);
