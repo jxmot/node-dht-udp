@@ -121,6 +121,12 @@ values ("ESP_111111", 1, 65.4, 16.8, FLOOR(RAND()*(1516492740000-1484956740000)+
 DELETE FROM sensornet.data where tstamp < (1516492740000 - 7776000000);
 
 /*
+    Return the last 100 rows for a specific sensor, and order 
+    the rows by the time stamp in a descending order.
+*/
+SELECT * FROM sensornet.data where dev_id = "ESP_111111" order by tstamp desc limit 100;
+
+/*
     Sensor configuration table - the primary use is to provide
     high/low limits. When a limit is met or exceeded a configured
     notification will be generated.
