@@ -134,6 +134,7 @@ client.on('listening', () => {
 client.on('message', (payload, remote) => {
     // the correct way to extract a string from the payload is this - 
     var message = payload.filter(letter => letter !== 0);
+    
     if(!srvmsg_events.emit('STATUS_RCVD', message.toString(), remote)) console.error('STATUS_RCVD no listeners!!!');
     consolelog(`multicast received : [${message.toString()}] from ${remote.address}:${remote.port}`);
 });
