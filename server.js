@@ -46,6 +46,44 @@ function consolelog(text) {
     }
 };
 
+/*
+
+    Obtain our IP address(IPv4) associated with the Ethernet
+    interface. Typically this code will be ran on a platform
+    that uses a wired network connnection. The array below
+    represents the object that is returned by accessing
+    os.networkInterfaces().Ethernet.
+
+    Ethernet: 
+        [ 
+            { 
+                address: 'fe80::e5a8:81ea:b43f:459',
+                netmask: 'ffff:ffff:ffff:ffff::',
+                family: 'IPv6',
+                mac: '30:5a:3a:e1:30:3c',
+                scopeid: 3,
+                internal: false 
+            },
+            { 
+                address: '192.168.0.7',
+                netmask: '255.255.255.0',
+                family: 'IPv4',
+                mac: '30:5a:3a:e1:30:3c',
+                internal: false 
+            } 
+        ]
+*/
+var os = require( 'os' );
+var nifs = os.networkInterfaces();
+for(var ix = 0;ix < nifs.Ethernet.length;ix++){
+    if(nifs.Ethernet[ix].family === 'IPv4') {
+        // overwrite the IP address retrieved from
+        // the configuration settng.
+        srvcfg.host = nifs.Ethernet[ix].address;
+        break;
+    }
+}
+
 /* ************************************************************************ */
 // Events
 const EventEmitter = require('events');
@@ -137,6 +175,18 @@ client.on('message', (payload, remote) => {
     
     if(!srvmsg_events.emit('STATUS_RCVD', message.toString(), remote)) console.error('STATUS_RCVD no listeners!!!');
     consolelog(`multicast received : [${message.toString()}] from ${remote.address}:${remote.port}`);
+
+    var msg = JSON.parse(message.toString());
+    if(msg.status === 'REQ_IP') {
+        // reply with our IP, return the sequence number 
+        // back to the caller.
+        var temp = JSON.stringify({reply: 'IP_ADDR', hostip: srvcfg.host, seq: msg.seq});
+        consolelog(`REQ_IP reply - ${temp}`);
+        var reply = new Buffer(temp);
+        client.send(reply, 0, reply.length, remote.port, remote.address, (err, bytes) => {
+            if(err) consolelog(err.stack);
+        });
+    }
 });
 
 client.bind(mulcfg.port);
