@@ -126,12 +126,13 @@ module.exports = function init(evts) {
                 var status = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
+
             // if enabled set up a recurring data purge...
             if(dbcfg.purge.enabled === true) {
                 // sensor data
-                enablePurge(dbcfg.table[dbcfg.TABLE_DATA_IDX], dbcfg.purge.table[dbcfg.TABLE_DATA_IDX]);
+                enablePurge(dbcfg.TABLE_DATA_IDX);
                 // sensor status
-                enablePurge(dbcfg.table[dbcfg.TABLE_STATUS_IDX], dbcfg.purge.table[dbcfg.TABLE_STATUS_IDX]);
+                enablePurge(dbcfg.TABLE_STATUS_IDX);
             }
 
             // initialize the client notification module
@@ -186,34 +187,18 @@ module.exports = function init(evts) {
     */
     // constant values representing time in milliseconds
     purgetimes = require('./purgetimes.js');
-    // When a purge timer is created and started this object is 
-    // filled in. And then this object is pushed into purgetimeouts[].
-    var purgetimer = {
-        timeout: {},
-        table: '',
-        // the column used for locating records to purge
-        col: '',
-        // these values will be represented in milliseconds
-        interval: 0,
-        depth: 0,
-        // addtional purge info
-        //purgecount: 0,
-        callback: undefined
-    };
-    // contains the active purge timers.
-    var purgetimeouts = [];
 
     /*
         Enable a Purge Timer - enables a purge timer for a specified table
     */
-    function enablePurge(table, purge) {
-        log(`enabling purge - table = ${table}   purge = ${JSON.stringify(purge)}`);
-
+    function enablePurge(idx) {
+        log(`enabling purge - table = ${dbcfg.table[idx]}   purge = ${JSON.stringify(dbcfg.purge.config[idx])}`);
         // start a purge timer
-        startPurgeTimer(table, purge, purgedata);
+        startPurgeTimer(idx, purgetimerexpired);
         // is an immediate purge set?
-        if(purge.oninit === true) 
-            purgedata(table, purge);
+        if(dbcfg.purge.config[idx].oninit === true) {
+            purgedata(dbcfg.table[idx], dbcfg.purge.config[idx]);
+        }
     };
 
     /*
@@ -225,8 +210,12 @@ module.exports = function init(evts) {
         NOTE: This function can be called directly as needed. The interval
         timer is not required, but useful.
     */
+    function purgetimerexpired(idx) {
+        purgedata(dbcfg.table[idx], dbcfg.purge.config[idx]);
+    }
+
     function purgedata(table, purge) {
-        var keyfield = purge.col + ' < (' + Date.now() + ' - ' + (purge.depth * purgetimes.DAY_1_MS) + ')';
+        var keyfield = `${purge.col} > (${Date.now()} - ${(purge.depth * purgetimes.DAY_1_MS)})`;
         log(`Attempting to purge rows in ${table} - that match - ${keyfield}`);
         database.deleteRow(table, keyfield, purgedone)
     };
@@ -247,31 +236,18 @@ module.exports = function init(evts) {
 
         It will return 'true' on success, otherwise it returns 'false'.
     */
-    function startPurgeTimer(table, purge, callme) {
-        // save the purge callback and specs...
-        purgetimer.callback = callme;
-        purgetimer.table = table;
-        //purgetimer.purgecount = 0;
-        purgetimer.col = purge.col;
+    function startPurgeTimer(idx, callme) {
         // Check the purge interval and depth, if both are valid then
-        // initialize an interval timer and save the purge object in
-        // an array.
-        if(purge.interval <= purgetimes.MAX_DAYS) {
-            purgetimer.interval = (purge.interval * purgetimes.DAY_1_MS);
-            if(purge.depth <= purgetimes.MAX_DAYS) {
-                purgetimer.depth = (purge.depth * purgetimes.DAY_1_MS);
-                // The purge interval and depth have been calculated and
-                // now it's time to save the purge timer so we can have
-                // the ability to cancel it(if necessary).
-                var purgeidx = (purgetimeouts.push(JSON.parse(JSON.stringify(purgetimer))) - 1);
-                // set the interval timer...
-                purgetimeouts[purgeidx].timeout = setInterval(purgetimer.callback, purgetimer.interval, purgeidx);
+        // initialize an interval timer.
+        if(dbcfg.purge.config[idx].interval <= purgetimes.MAX_DAYS) {
+            if(dbcfg.purge.config[idx].depth <= purgetimes.MAX_DAYS) {
+                setInterval(callme, (dbcfg.purge.config[idx].interval * purgetimes.DAY_1_MS), idx);
                 // some purge info...
-                log(`Purge Timer started - ${JSON.stringify(purgetimer)}`);
+                log(`Purge Timer started - ${JSON.stringify(dbcfg.purge.config[idx])}`);
                 // success!
                 return true;
-            } else log(`ERROR - purge.depth too large - ${purge.depth}`);
-        } else log(`ERROR - purge.interval too large - ${purge.interval}`);
+            } else log(`ERROR - depth too large - ${dbcfg.purge.config[idx].depth}`);
+        } else log(`ERROR - interval too large - ${dbcfg.purge.config[idx].interval}`);
         // oops! something has failed.
         return false;
     };
