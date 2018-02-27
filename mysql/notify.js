@@ -66,7 +66,7 @@ module.exports = (function() {
         purge: [],
         status: [],
         data: []
-        // To Do: curently not in use, will require some 
+        // To Do: currently not in use, will require some 
         // thought and a decision in regards to just how
         // much awareness the client modules need of 
         // internal errors.

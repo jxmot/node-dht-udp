@@ -195,26 +195,32 @@ module.exports = function init(evts) {
         log(`enabling purge - table = ${dbcfg.table[idx]}   purge = ${JSON.stringify(dbcfg.purge.config[idx])}`);
         // start a purge timer
         startPurgeTimer(idx, purgetimerexpired);
-        // is an immediate purge set?
+        // is the immediate purge set to occur?
         if(dbcfg.purge.config[idx].oninit === true) {
             purgedata(dbcfg.table[idx], dbcfg.purge.config[idx]);
         }
     };
 
     /*
-        Purge Timer Expired Handler - this gets called by the expired
-        purge interval timer. It takes a table name and purge configuration
-        object. See example_dbcfg.js(_dbcfg.js) for details on how to 
-        specify the interval and depth.
+        Purge Timer Expired Handler - runs then the purge interval
+        timer expires.
+    */
+    function purgetimerexpired(idx) {
+        log(`purge interval timer expired - idx = ${idx}`);
+        purgedata(dbcfg.table[idx], dbcfg.purge.config[idx]);
+    }
+
+    /*
+        Purge Data - this gets called by purgetimerexpired() when
+        purge interval timer exires. It takes a table name and purge 
+        configuration object as arguments. See example_dbcfg.js(_dbcfg.js) 
+        for details on how to specify the interval and depth.
 
         NOTE: This function can be called directly as needed. The interval
         timer is not required, but useful.
     */
-    function purgetimerexpired(idx) {
-        purgedata(dbcfg.table[idx], dbcfg.purge.config[idx]);
-    }
-
     function purgedata(table, purge) {
+        // specify rows that are older than today minus the depth in days
         var keyfield = `${purge.col} > (${Date.now()} - ${(purge.depth * purgetimes.DAY_1_MS)})`;
         log(`Attempting to purge rows in ${table} - that match - ${keyfield}`);
         database.deleteRow(table, keyfield, purgedone)
