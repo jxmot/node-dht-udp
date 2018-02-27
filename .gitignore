@@ -22,3 +22,6 @@ error_log
 *.url
 # thumbnail files
 Thumbs.db
+# VS Code
+.vscode
+
