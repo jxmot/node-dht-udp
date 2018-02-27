@@ -37,8 +37,10 @@ module.exports = {
         enabled: true,
         table: [
             {
-                oninit: false,
-                // the column used for compaison, this
+                // will execute a purge if true when the 
+                // application is started.
+                oninit: true,
+                // the column used for comparison, this
                 // is also this table's primary key
                 col: 'tstamp',
                 // the number of days between purges
