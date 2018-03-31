@@ -221,7 +221,7 @@ module.exports = function init(evts) {
     */
     function purgedata(table, purge) {
         // specify rows that are older than today minus the depth in days
-        var keyfield = `${purge.col} > (${Date.now()} - ${(purge.depth * purgetimes.DAY_1_MS)})`;
+        var keyfield = `${purge.col} < (${Date.now()} - ${(purge.depth * purgetimes.DAY_1_MS)})`;
         log(`Attempting to purge rows in ${table} - that match - ${keyfield}`);
         database.deleteRow(table, keyfield, purgedone)
     };
