@@ -38,7 +38,7 @@ BEGIN
 	insert into sensornet.data 
 	(dev_id,seq,t,h,tstamp)
 	values (
-        "ESP_49EB40", 0, 99.9, 99.9, 
+        "ESP_BEEFED", 0, 99.9, 99.9, 
         FLOOR(RAND()*((unix_timestamp(now()) * 1000)-((unix_timestamp(now()) * 1000) - 31471200000))+((unix_timestamp(now()) * 1000) - 31471200000))
     );
 

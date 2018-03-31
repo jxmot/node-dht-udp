@@ -30,6 +30,8 @@
          1 day  =   86400000
         
          5 days =  432000000
+
+         7 days =  604800000
         
         10 days =  864000000
         
@@ -92,6 +94,10 @@ FLOOR(RAND()*(1516492740000-1484956740000)+1484956740000)
 -- 31471200000 = 1 year in milliseconds
 FLOOR(RAND()*((unix_timestamp(now()) * 1000)-((unix_timestamp(now()) * 1000) - 31471200000))+((unix_timestamp(now()) * 1000) - 31471200000)
 
+/*
+    Retrieve all rows created in the last 7 days
+*/
+SELECT * FROM sensornet.data where tstamp > ((unix_timestamp(now()) * 1000) - 1209600000)  and tstamp < (unix_timestamp(now()) * 1000) order by tstamp desc;
 
 /*
     this will delete a range of rows where their timestamp is less than a
