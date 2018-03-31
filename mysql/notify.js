@@ -60,6 +60,7 @@ module.exports = (function() {
     // Start listening...
     var cfg = require('./socket_cfg.js');
     server.listen(cfg.port);
+    log(`listening on port - ${cfg.port}`);
 
     // contains the last status and data for each device
     var sensorlast = {
@@ -72,6 +73,10 @@ module.exports = (function() {
         // internal errors.
         //error: []
     };
+
+    //var sensorerr = [];
+    //sensorerr['status'] = {dev_id: 'ESP_DEAD00', status: 'APP_ERROR', msg: 'APP_ERROR', tstamp:Date.now()};
+    //sensorerr['data']   = {dev_id: 'ESP_DEAD00', seq:-99, t: 0.99, h:0.99, tstamp:Date.now()};
 
     // resend (or send) payloads to a specified socket.
     function resend(channel, socket, payloads) {
@@ -96,10 +101,17 @@ module.exports = (function() {
     };
 
     // add fresh data to the sensorlast container
-    notify.updateLast = function(channel, data) {
-        // save for new client connections
-        if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
-        else sensorlast[channel][data.dev_id] = data;
+    notify.updateLast = function(channel, data, error = null) {
+        if(data !== null) {
+            // save for new client connections
+            if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
+            else sensorlast[channel][data.dev_id] = data;
+        } else {
+            if((error !== null) && (error.err === true)) {
+                err = {table:channel, data:null, err:error};
+                log(`notify.updateLast() - err = ${JSON.stringify(err)}`);
+            }
+        }
     };
 
     return notify;

@@ -254,12 +254,15 @@ exports.database = (function() {
             connection.query('select * from '+table+' where '+keyfield, function(error, result) {
                 if(error) {
                     log(`database.readRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
-                    readCallBack(table, null);
-                } else readCallBack(table, result[0]);
+                    readCallBack(table, null, {err:true, msg:'ERROR query: [${error.message}  ${error.code}  ${error.errno}]'});
+                } else {
+                    if((result[0] !== null) && (result[0] !== undefined)) readCallBack(table, result[0]);
+                    else readCallBack(table, null, {err:true, msg:'not found', key:keyfield});
+                }
             });
         } else {
             log('database.readRow() - ERROR database not open');
-            readCallBack(table, null);
+            readCallBack(table, null, {err:true, msg:'database not open', key:keyfield});
         }
     };
 
