@@ -75,11 +75,31 @@ function consolelog(text) {
 */
 var os = require( 'os' );
 var nifs = os.networkInterfaces();
-for(var ix = 0;ix < nifs.Ethernet.length;ix++){
-    if(nifs.Ethernet[ix].family === 'IPv4') {
+
+var niflen;
+var ethers;
+
+// determine current designation for the 
+// ethernet interface
+if(nifs.Ethernet !== undefined) {
+    niflen = nifs.Ethernet.length;
+    ethers = nifs.Ethernet;
+} else {
+    if(nifs.eth0 !== undefined) {
+        niflen = nifs.eth0.length;
+        ethers = nifs.eth0;
+    } else {
+        console.error('server.js - ERROR : can not find ethernet network interface. nifs =');
+        console.error(JSON.stringify(nifs, null, 2));
+        process.exit(-1);
+    }
+}
+
+for(var ix = 0;ix < niflen;ix++){
+    if(ethers[ix].family === 'IPv4') {
         // overwrite the IP address retrieved from
-        // the configuration settng.
-        srvcfg.host = nifs.Ethernet[ix].address;
+        // the configuration setting.
+        srvcfg.host = ethers[ix].address;
         break;
     }
 }
