@@ -197,9 +197,9 @@ client.on('message', (payload, remote) => {
     consolelog(`multicast received : [${message.toString()}] from ${remote.address}:${remote.port}`);
 
     var msg = JSON.parse(message.toString());
+    // a request for our IP & port #?
     if(msg.status === 'REQ_IP') {
-        // reply with our IP, return the sequence number 
-        // back to the caller.
+        // reply with our IP and port #
         var temp = JSON.stringify({reply: 'IP_ADDR', ip: srvcfg.host, port: srvcfg.port});
         consolelog(`REQ_IP reply - ${temp} sent to ${remote.address}:${msg.msg}`);
         var reply = new Buffer(temp);
