@@ -25,12 +25,12 @@ const srvcfg = {
     port : cfg.server.port,
 //    reply : cfg.server.reply
 };
-
+// multi-cast to listen on
 const mulcfg = {
     addr : cfg.multi.addr,
     port : cfg.multi.port
 };
-
+// database type
 const dbcfg = {
     type : cfg.db.type
 };
@@ -200,10 +200,10 @@ client.on('message', (payload, remote) => {
     if(msg.status === 'REQ_IP') {
         // reply with our IP, return the sequence number 
         // back to the caller.
-        var temp = JSON.stringify({reply: 'IP_ADDR', hostip: srvcfg.host, seq: msg.seq});
-        consolelog(`REQ_IP reply - ${temp}`);
+        var temp = JSON.stringify({reply: 'IP_ADDR', ip: srvcfg.host, port: srvcfg.port});
+        consolelog(`REQ_IP reply - ${temp} sent to ${remote.address}:${msg.msg}`);
         var reply = new Buffer(temp);
-        client.send(reply, 0, reply.length, remote.port, remote.address, (err, bytes) => {
+        client.send(reply, 0, reply.length, parseInt(msg.msg), remote.address, (err, bytes) => {
             if(err) consolelog(err.stack);
         });
     }
