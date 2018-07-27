@@ -25,12 +25,12 @@ const srvcfg = {
     port : cfg.server.port,
 //    reply : cfg.server.reply
 };
-
+// multi-cast to listen on
 const mulcfg = {
     addr : cfg.multi.addr,
     port : cfg.multi.port
 };
-
+// database type
 const dbcfg = {
     type : cfg.db.type
 };
@@ -152,19 +152,6 @@ server.on('message', (msg, rinfo) => {
 });
 
 /*
-    if(srvcfg.reply === true) {
-        // put a reply together...
-        const reply = new Buffer(temp);
-        consolelog(`UDP Server reply: ${reply.toString()}`);
-        // send it back to the sender of the message...
-        server.send(reply, 0, reply.length, rinfo.port, rinfo.address, (err, bytes) => {
-            if(err) console.error(err.stack);
-        });
-    } else consolelog(temp);
-});
-*/
-
-/*
     Server Listening has begun
 */
 server.on('listening', () => {
@@ -197,13 +184,13 @@ client.on('message', (payload, remote) => {
     consolelog(`multicast received : [${message.toString()}] from ${remote.address}:${remote.port}`);
 
     var msg = JSON.parse(message.toString());
+    // a request for our IP & port #?
     if(msg.status === 'REQ_IP') {
-        // reply with our IP, return the sequence number 
-        // back to the caller.
-        var temp = JSON.stringify({reply: 'IP_ADDR', hostip: srvcfg.host, seq: msg.seq});
-        consolelog(`REQ_IP reply - ${temp}`);
+        // reply with our IP and port #
+        var temp = JSON.stringify({reply: 'IP_ADDR', ip: srvcfg.host, port: srvcfg.port});
+        consolelog(`REQ_IP reply - ${temp} sent to ${remote.address}:${msg.msg}`);
         var reply = new Buffer(temp);
-        client.send(reply, 0, reply.length, remote.port, remote.address, (err, bytes) => {
+        client.send(reply, 0, reply.length, parseInt(msg.msg), remote.address, (err, bytes) => {
             if(err) consolelog(err.stack);
         });
     }
@@ -212,16 +199,26 @@ client.on('message', (payload, remote) => {
 client.bind(mulcfg.port);
 
 
+/* ************************************************************************ */
+/*
+    Initialize the database of choice (configured in servercfg.js) and give
+    it access to our event emitter.
+*/
 var db;
 
 // Firebase
+// TODO: retest firebase, add mongodb, document both
 if(dbcfg.type === 'firebase') db = require(__dirname + '/firebase');
 
 // MySQL
 if(dbcfg.type === 'mysql') db = require(__dirname + '/mysql');
 
 // initialize the chosen database connection 
-db(srvmsg_events);
+if(db !== undefined) db(srvmsg_events);
+else {
+    consolelog('FATAL ERROR: Database not configured');
+    process.exit(-1);
+}
 
 
 
