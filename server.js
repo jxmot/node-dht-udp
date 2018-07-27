@@ -152,19 +152,6 @@ server.on('message', (msg, rinfo) => {
 });
 
 /*
-    if(srvcfg.reply === true) {
-        // put a reply together...
-        const reply = new Buffer(temp);
-        consolelog(`UDP Server reply: ${reply.toString()}`);
-        // send it back to the sender of the message...
-        server.send(reply, 0, reply.length, rinfo.port, rinfo.address, (err, bytes) => {
-            if(err) console.error(err.stack);
-        });
-    } else consolelog(temp);
-});
-*/
-
-/*
     Server Listening has begun
 */
 server.on('listening', () => {
@@ -212,16 +199,26 @@ client.on('message', (payload, remote) => {
 client.bind(mulcfg.port);
 
 
+/* ************************************************************************ */
+/*
+    Initialize the database of choice (configured in servercfg.js) and give
+    it access to our event emitter.
+*/
 var db;
 
 // Firebase
+// TODO: retest firebase, add mongodb, document both
 if(dbcfg.type === 'firebase') db = require(__dirname + '/firebase');
 
 // MySQL
 if(dbcfg.type === 'mysql') db = require(__dirname + '/mysql');
 
 // initialize the chosen database connection 
-db(srvmsg_events);
+if(db !== undefined) db(srvmsg_events);
+else {
+    consolelog('FATAL ERROR: Database not configured');
+    process.exit(-1);
+}
 
 
 
