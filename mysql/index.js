@@ -261,6 +261,34 @@ module.exports = function init(evts) {
         // oops! something has failed.
         return false;
     };
+
+    //////////////////////////////////////////////////////////////////////////
+    /*
+    */
+    const wsvc = require('../wxsvc/noaa-api-v3.js');
+    wsvc.init(evts);
+
+    // wait for weather service condition update
+    evts.on('WSVC_UPDATE', (wxupdate) => {
+        console.log(`WSVC_UPDATE : ${JSON.stringify(wxupdate)}`);
+        notify.send('wxobsv', wxupdate);
+    });
+
+    // wait for weather service forcast update
+    evts.on('WSVC_FORCST', (wxforcst) => {
+        console.log(`WSVC_FORCST : ${JSON.stringify(wxforcst)}`);
+        notify.send('wxfcst', wxforcst);
+    });
+
+    evts.emit('WSVC_START');
+
+
+
+    //function wxCurrObsv() {
+    //    // var data = Object.assign({}, wsvc.currobsv, {tstamp : Date.now()});
+    //    console.log(`wxCurrObsv : ${JSON.stringify(wsvc.currobsv)}`);
+    //    notify.send('wxsvc_obsv', wsvc.currobsv);
+    //};
 };
 
 

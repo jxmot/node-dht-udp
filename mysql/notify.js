@@ -49,6 +49,7 @@ module.exports = (function() {
             for(var key of Object.keys(sensorlast)) {
                 resend(key, socket, sensorlast[key]);
             }
+
             // The client that initiated the connection has disconnected.
             socket.on('disconnect', function () {
                 connCount -= 1;
@@ -66,7 +67,9 @@ module.exports = (function() {
     var sensorlast = {
         purge: [],
         status: [],
-        data: []
+        data: [],
+        wxobsv: [],
+        wxfcst: []
         // To Do: currently not in use, will require some 
         // thought and a decision in regards to just how
         // much awareness the client modules need of 
@@ -95,7 +98,7 @@ module.exports = (function() {
         log(`notify - channel = ${channel}  payload = ${JSON.stringify(data)}`);
         // save for new client connections
         notify.updateLast(channel, data);
-        // don't bother broadcasting anything if noone is connected.
+        // don't bother broadcasting anything if no one is connected.
         if(connCount > 0) io.emit(channel, {payload: data});
         else log('notify.send - no connections');
     };
@@ -105,7 +108,11 @@ module.exports = (function() {
         if(data !== null) {
             // save for new client connections
             if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
-            else sensorlast[channel][data.dev_id] = data;
+            else {
+                if((channel === 'wxobsv') || (channel === 'wxfcst')) 
+                    sensorlast[channel][data.sta] = data;
+                else sensorlast[channel][data.dev_id] = data;
+            }
         } else {
             if((error !== null) && (error.err === true)) {
                 err = {table:channel, data:null, err:error};
