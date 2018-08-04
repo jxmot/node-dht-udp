@@ -180,10 +180,14 @@ client.on('message', (payload, remote) => {
     // the correct way to extract a string from the payload is this - 
     var message = payload.filter(letter => letter !== 0);
     
-    if(!srvmsg_events.emit('STATUS_RCVD', message.toString(), remote)) console.error('STATUS_RCVD no listeners!!!');
+    var msg = JSON.parse(message.toString());
+
+    // don't announce heartbeat stauses
+    if((msg.status !== 'TICK') && (msg.status !== 'TOCK')){
+        if(!srvmsg_events.emit('STATUS_RCVD', message.toString(), remote)) console.error('STATUS_RCVD no listeners!!!');
+    }
     consolelog(`multicast received : [${message.toString()}] from ${remote.address}:${remote.port}`);
 
-    var msg = JSON.parse(message.toString());
     // a request for our IP & port #?
     if(msg.status === 'REQ_IP') {
         // reply with our IP and port #
@@ -219,6 +223,3 @@ else {
     consolelog('FATAL ERROR: Database not configured');
     process.exit(-1);
 }
-
-
-

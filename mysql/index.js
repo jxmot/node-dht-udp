@@ -118,12 +118,16 @@ module.exports = function init(evts) {
             evts.on('MSG_RCVD', (m, r) => {
                 log(`MSG_RCVD : ${m}`);
                 var data = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
+                if(data.last !== undefined) delete data.last;
                 database.writeRow(dbcfg.table[dbcfg.TABLE_DATA_IDX], data, writeDone);
             });
         
             evts.on('STATUS_RCVD', (m, r) => {
                 log(`STATUS_RCVD : ${m}`);
                 var status = Object.assign({}, JSON.parse(m), {tstamp : Date.now()});
+                if(dbcfg.options.savehbeat === false) {
+                    if(status.status === 'TICK' || status.status === 'TOCK') return;
+                }
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
 
