@@ -35,12 +35,16 @@ module.exports = (function()  {
 
     let sys_evts = {};
 
+    let log = undefined;
+
     /*
     */
-    wxsvc.init = function(evts) {
+    wxsvc.init = function(evts, _log = undefined) {
         // will need to send events that will trigger
         // a data transfer to the clients
         sys_evts = evts;
+
+        log = _log;
 
         sys_evts.on('WSVC_START', () => {
             getCurrent(wcfg.default_station);
@@ -73,13 +77,15 @@ module.exports = (function()  {
             });
 
             res.on('end', function(d) {
-                console.log("\ngetCurrent status code: ", res.statusCode);
+                console.log('\ngetCurrent status code: ', res.statusCode);
+                log('getCurrent status code: ' + res.statusCode);
                 parseStationCurrent(data.toString(), origin);
             });
         });
 
         req.on('error', (err) => {
-            console.log("Error: ", err);
+            console.log('Error: ', err);
+            log('getCurrent Error: ' + err);
         }); 
     
         // send the request
@@ -101,15 +107,7 @@ module.exports = (function()  {
         let raw = JSON.parse(data);
 
         upd.svc = wcfg.service.name;
-        upd.t   = centToFar(raw.properties.temperature);
-        upd.h   = Math.round(raw.properties.relativeHumidity.value);
-        upd.wd  = Math.round(raw.properties.windDirection.value);
-        upd.ws  = metsToMPH(raw.properties.windSpeed);
-        upd.wg  = metsToMPH(raw.properties.windGust);
-        upd.wch = centToFar(raw.properties.windChill);
-        upd.txt = raw.properties.textDescription;
-        upd.dew = centToFar(raw.properties.dewpoint);
-        upd.hix = centToFar(raw.properties.heatIndex);
+
         upd.sta = origin.sta;
         upd.plc = origin.plc;
      
@@ -120,7 +118,16 @@ module.exports = (function()  {
         // date/time of when data was collected
         upd.tstamp = Date.now();
 
-        //console.log(JSON.stringify(upd));
+        upd.t   = centToFar(raw.properties.temperature);
+        upd.h   = Math.round(raw.properties.relativeHumidity.value);
+        upd.wd  = Math.round(raw.properties.windDirection.value);
+        upd.ws  = metsToMPH(raw.properties.windSpeed);
+        upd.wg  = metsToMPH(raw.properties.windGust);
+        upd.wch = centToFar(raw.properties.windChill);
+        upd.txt = raw.properties.textDescription;
+        upd.dew = centToFar(raw.properties.dewpoint);
+        upd.hix = centToFar(raw.properties.heatIndex);
+        upd.bar = paToInchesMerc(raw.properties.barometricPressure);
 
         // make a copy without references
         wxsvc.currobsv = JSON.parse(JSON.stringify(upd));
@@ -153,7 +160,8 @@ module.exports = (function()  {
             });
 
             res.on('end', function() {
-                console.log("\ngetPointMeta status code: ", res.statusCode);
+                console.log('\ngetPointMeta status code: ', res.statusCode);
+                log('getPointMeta status code: ' + res.statusCode);
 
                 let meta = JSON.parse(data.toString());
                 let grid = {
@@ -167,7 +175,8 @@ module.exports = (function()  {
         });
 
         req.on('error', (err) => {
-            console.log("Error: ", err);
+            console.log('Error: ', err);
+            log('getPointMeta Error: ' + err);
         }); 
     
         // send the request
@@ -202,13 +211,15 @@ module.exports = (function()  {
             });
 
             res.on('end', function() {
-                console.log("\ngetForecast status code: ", res.statusCode);
+                console.log('\ngetForecast status code: ', res.statusCode);
+                log('getForecast status code: ' + res.statusCode);
                 parseForecast(data.toString(), origin);
             });
         });
 
         req.on('error', (err) => {
-            console.log("Error: ", err);
+            console.log('Error: ', err);
+            log('getForecast Error: ' + err);
         }); 
     
         // send the request
@@ -247,16 +258,26 @@ module.exports = (function()  {
     */
     function parseForecast(data, origin) {
 
-        let fcast = {
-            per: []
-        };
-
+        let fcast = {};
         let per = {};
 
         let raw = JSON.parse(data);
 
+        // the data provider
+        fcast.svc = wcfg.service.name;
+        // station code & named location
+        fcast.sta = origin.sta;
+        fcast.plc = origin.plc;
+
+        // date/time of observation
+        let d = new Date(raw.properties.updated);
+        fcast.gmt = d.getTime();
+        // date/time of when data was collected
+        fcast.tstamp = Date.now();
+
         let nextslot = 0;
         let end = 5;
+        fcast.per = [];
 
         for(ix = 0;ix <= end; ix++) {
             if(ix === 0) {
@@ -278,24 +299,9 @@ module.exports = (function()  {
             nextslot += 1;
         }
 
-        // date/time of observation
-        let d = new Date(raw.properties.updated);
-        fcast.gmt = d.getTime();
-        // date/time of when data was collected
-        fcast.tstamp = Date.now();
-        // station code & named location
-        fcast.sta = origin.sta;
-        fcast.plc = origin.plc;
-        // the data provider
-        fcast.svc = wcfg.service.name;
         // break the reference and notify...
         wxsvc.forecast = JSON.parse(JSON.stringify(fcast));
         sys_evts.emit('WSVC_FORCST', wxsvc.forecast);
-    };
-
-    /*
-    */
-    function parsePeriod() {
     };
 
     /*
@@ -324,6 +330,20 @@ module.exports = (function()  {
                 windRet = Math.round(rawwind.value);
         }
         return windRet;
+    };
+
+    /*
+    */
+    function paToInchesMerc(rawpa) {
+        let mercRet = -999.999
+
+        if(rawpa.value !== null) {
+            if(rawpa.unitCode === 'unit:pa')
+                mercRet = Math.round(rawpa.value * 0.0002952998);
+            else
+                mercRet = Math.round(rawpa.value);
+        }
+        return mercRet;
     };
 
     return wxsvc;
