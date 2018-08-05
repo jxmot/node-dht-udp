@@ -77,14 +77,14 @@ module.exports = (function()  {
             });
 
             res.on('end', function(d) {
-                console.log('\ngetCurrent status code: ', res.statusCode);
+                //console.log('\ngetCurrent status code: ', res.statusCode);
                 log('getCurrent status code: ' + res.statusCode);
                 parseStationCurrent(data.toString(), origin);
             });
         });
 
         req.on('error', (err) => {
-            console.log('Error: ', err);
+            //console.log('Error: ', err);
             log('getCurrent Error: ' + err);
         }); 
     
@@ -160,7 +160,7 @@ module.exports = (function()  {
             });
 
             res.on('end', function() {
-                console.log('\ngetPointMeta status code: ', res.statusCode);
+                //console.log('\ngetPointMeta status code: ', res.statusCode);
                 log('getPointMeta status code: ' + res.statusCode);
 
                 let meta = JSON.parse(data.toString());
@@ -175,7 +175,7 @@ module.exports = (function()  {
         });
 
         req.on('error', (err) => {
-            console.log('Error: ', err);
+            //console.log('Error: ', err);
             log('getPointMeta Error: ' + err);
         }); 
     
@@ -211,14 +211,14 @@ module.exports = (function()  {
             });
 
             res.on('end', function() {
-                console.log('\ngetForecast status code: ', res.statusCode);
+                //console.log('\ngetForecast status code: ', res.statusCode);
                 log('getForecast status code: ' + res.statusCode);
                 parseForecast(data.toString(), origin);
             });
         });
 
         req.on('error', (err) => {
-            console.log('Error: ', err);
+            //console.log('Error: ', err);
             log('getForecast Error: ' + err);
         }); 
     
