@@ -266,7 +266,7 @@ module.exports = function init(evts) {
     /*
     */
     const wsvc = require('../wxsvc/noaa-api-v3.js');
-    wsvc.init(evts);
+    wsvc.init(evts, log);
 
     // wait for weather service condition update
     evts.on('WSVC_UPDATE', (wxupdate) => {
