@@ -270,25 +270,19 @@ module.exports = function init(evts) {
 
     // wait for weather service condition update
     evts.on('WSVC_UPDATE', (wxupdate) => {
-        console.log(`WSVC_UPDATE : ${JSON.stringify(wxupdate)}`);
+        //log(`WSVC_UPDATE : ${JSON.stringify(wxupdate)}`);
+        log('WSVC_UPDATE : recvd');
         notify.send('wxobsv', wxupdate);
     });
 
     // wait for weather service forcast update
     evts.on('WSVC_FORCST', (wxforcst) => {
-        console.log(`WSVC_FORCST : ${JSON.stringify(wxforcst)}`);
+        //log(`WSVC_FORCST : ${JSON.stringify(wxforcst)}`);
+        log('WSVC_FORCST : recvd');
         notify.send('wxfcst', wxforcst);
     });
 
     evts.emit('WSVC_START');
-
-
-
-    //function wxCurrObsv() {
-    //    // var data = Object.assign({}, wsvc.currobsv, {tstamp : Date.now()});
-    //    console.log(`wxCurrObsv : ${JSON.stringify(wsvc.currobsv)}`);
-    //    notify.send('wxsvc_obsv', wsvc.currobsv);
-    //};
 };
 
 
