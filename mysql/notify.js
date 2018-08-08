@@ -38,7 +38,7 @@ module.exports = (function() {
     notify.init = function() {
         // A client has connected, 
         io.on('connection', function(socket) {
-            socket.emit('SERVER', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
+            socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
             // Increment the connection counter
             connCount += 1;
             // log the new connection for debugging purposes.
