@@ -77,14 +77,12 @@ module.exports = (function()  {
             });
 
             res.on('end', function(d) {
-                //console.log('\ngetCurrent status code: ', res.statusCode);
                 log('getCurrent status code: ' + res.statusCode);
                 parseStationCurrent(data.toString(), origin);
             });
         });
 
         req.on('error', (err) => {
-            //console.log('Error: ', err);
             log('getCurrent Error: ' + err);
         }); 
     
@@ -160,7 +158,6 @@ module.exports = (function()  {
             });
 
             res.on('end', function() {
-                //console.log('\ngetPointMeta status code: ', res.statusCode);
                 log('getPointMeta status code: ' + res.statusCode);
 
                 let meta = JSON.parse(data.toString());
@@ -175,7 +172,6 @@ module.exports = (function()  {
         });
 
         req.on('error', (err) => {
-            //console.log('Error: ', err);
             log('getPointMeta Error: ' + err);
         }); 
     
@@ -211,14 +207,12 @@ module.exports = (function()  {
             });
 
             res.on('end', function() {
-                //console.log('\ngetForecast status code: ', res.statusCode);
                 log('getForecast status code: ' + res.statusCode);
                 parseForecast(data.toString(), origin);
             });
         });
 
         req.on('error', (err) => {
-            //console.log('Error: ', err);
             log('getForecast Error: ' + err);
         }); 
     
@@ -263,45 +257,51 @@ module.exports = (function()  {
 
         let raw = JSON.parse(data);
 
-        // the data provider
-        fcast.svc = wcfg.service.name;
-        // station code & named location
-        fcast.sta = origin.sta;
-        fcast.plc = origin.plc;
+        if(raw.properties.updated === undefined) {
+            log('parseForecast Error: ' + JSON.stringify(raw));
+            log('parseForecast resending last forecast');
+            sys_evts.emit('WSVC_FORCST', wxsvc.forecast);
+        } else {
+            // the data provider
+            fcast.svc = wcfg.service.name;
+            // station code & named location
+            fcast.sta = origin.sta;
+            fcast.plc = origin.plc;
 
-        // date/time of observation
-        let d = new Date(raw.properties.updated);
-        fcast.gmt = d.getTime();
-        // date/time of when data was collected
-        fcast.tstamp = Date.now();
-
-        let nextslot = 0;
-        let end = 5;
-        fcast.per = [];
-
-        for(ix = 0;ix <= end; ix++) {
-            if(ix === 0) {
-                let tmp = raw.properties.periods[ix].name.toLowerCase();
-                if(tmp.includes('night')) {
-                    nextslot = 1;
-                    end -= 1;
+            // date/time of observation
+            let d = new Date(raw.properties.updated);
+            fcast.gmt = d.getTime();
+            // date/time of when data was collected
+            fcast.tstamp = Date.now();
+    
+            let nextslot = 0;
+            let end = 5;
+            fcast.per = [];
+    
+            for(ix = 0;ix <= end; ix++) {
+                if(ix === 0) {
+                    let tmp = raw.properties.periods[ix].name.toLowerCase();
+                    if(tmp.includes('night')) {
+                        nextslot = 1;
+                        end -= 1;
+                    }
+                    else nextslot = 0;
                 }
-                else nextslot = 0;
+    
+                per.slot = nextslot;
+                per.name = raw.properties.periods[ix].name;
+                per.icon = raw.properties.periods[ix].icon;
+                per.alt  = raw.properties.periods[ix].shortForecast;
+                per.text = raw.properties.periods[ix].detailedForecast;
+                fcast.per.push(JSON.parse(JSON.stringify(per)));
+                per = {};
+                nextslot += 1;
             }
-
-            per.slot = nextslot;
-            per.name = raw.properties.periods[ix].name;
-            per.icon = raw.properties.periods[ix].icon;
-            per.alt  = raw.properties.periods[ix].shortForecast;
-            per.text = raw.properties.periods[ix].detailedForecast;
-            fcast.per.push(JSON.parse(JSON.stringify(per)));
-            per = {};
-            nextslot += 1;
+    
+            // break the reference and notify...
+            wxsvc.forecast = JSON.parse(JSON.stringify(fcast));
+            sys_evts.emit('WSVC_FORCST', wxsvc.forecast);
         }
-
-        // break the reference and notify...
-        wxsvc.forecast = JSON.parse(JSON.stringify(fcast));
-        sys_evts.emit('WSVC_FORCST', wxsvc.forecast);
     };
 
     /*
@@ -310,6 +310,7 @@ module.exports = (function()  {
         var tempRet = -999.999;
 
         if(rawtemp.value !== null) {
+            // http://codes.wmo.int/common/unit
             if(rawtemp.unitCode === 'unit:degC') 
                 tempRet = Math.round(rawtemp.value * 9 / 5 + 32);
             else 
