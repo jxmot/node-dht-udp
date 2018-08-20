@@ -16,12 +16,21 @@ module.exports = (function() {
     */
     // For logging, defaults to console.log()
     var log = console.log;
+    var traceopt = false;
 
     // the module client chooses the logging destination
-    notify.setLog = function(newLog){
+    notify.setLog = function(newLog, trace){
         if(newLog !== undefined) log = newLog;
         else log = console.log;
+
+        if(trace !== undefined) traceopt = trace;
+        else traceopt = false;
     };
+
+    function logTrace(msgout) {
+        if(traceopt === true) log(msgout);
+    };
+
 
     /* ******************************************************************** */
     // Initialize the server that web clients will connect to.
@@ -95,12 +104,12 @@ module.exports = (function() {
     // 'channel' will indicate the destination within the client
     // and 'data' becomes the payload. 
     notify.send = function(channel, data) {
-        log(`notify - channel = ${channel}  payload = ${JSON.stringify(data)}`);
+        logTrace(`notify - channel = ${channel}  payload = ${JSON.stringify(data)}`);
         // save for new client connections
         notify.updateLast(channel, data);
         // don't bother broadcasting anything if no one is connected.
         if(connCount > 0) io.emit(channel, {payload: data});
-        else log('notify.send - no connections');
+        else logTrace('notify.send - no connections');
     };
 
     // add fresh data to the sensorlast container

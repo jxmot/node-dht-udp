@@ -15,6 +15,7 @@ module.exports = {
     conlog: false,              // enable console logging while
                                 // file logging is enabled
     silent: true,               // mutes output when log is false
+    trace: false,               // false = quieter log file
     logext: 'log',              // use "log" for the logging file 
                                 // extension when logname is not 
                                 // present or empty
