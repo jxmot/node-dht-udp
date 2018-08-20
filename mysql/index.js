@@ -62,6 +62,10 @@ function log(text) {
     else if(logOpt.silent === false) console.log(text);
 };
 
+function logTrace(text) {
+    if(logOpt.trace === true) log(text);
+};
+
 /* ************************************************************************ */
 /*
     Database Interface Configure and other necessary things.
@@ -105,7 +109,7 @@ module.exports = function init(evts) {
         // did we have success?
         if(dbopen === false) {
             // no, log errors and end the transaction
-            log('ERROR - openDone() err = ');
+            log('ERROR : openDone() err = ');
             log(err);
             // notify all connected clients of the error...
             // To Do: see notify.send()
@@ -150,7 +154,7 @@ module.exports = function init(evts) {
         that there's some "fresh" data to be displayed.
     */
     function writeDone(result, target, data) {
-        log(`writeDone() - result = ${result}   target = ${target}   payload = ${JSON.stringify(data)}`);
+        logTrace(`writeDone() - result = ${result}   target = ${target}   payload = ${JSON.stringify(data)}`);
 
         if(result) {
             // notify all connected clients...
