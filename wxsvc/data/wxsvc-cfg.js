@@ -3,7 +3,6 @@
 */
 module.exports = {
     location: { 
-        // 41.9691,-87.7507
         loc: [41.9691,-87.7507],
         zip: '60630'
     },
@@ -34,7 +33,7 @@ module.exports = {
         // 1 hour = 3600000
         //updintvl: 10000,
         updintvl: 3600000 * 1.5,
-        // add 5min to stagger
+        // add 5min to stagger API calls
         forintvl: (3600000 * 1.5) + 300000
     },
 
