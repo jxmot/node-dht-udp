@@ -160,14 +160,16 @@ module.exports = (function()  {
             res.on('end', function() {
                 log('getPointMeta status code: ' + res.statusCode);
 
-                let meta = JSON.parse(data.toString());
-                let grid = {
-                    cwa: meta.properties.cwa,
-                    gridX: meta.properties.gridX,
-                    gridY: meta.properties.gridY,
-                    idx: idx
-                };
-                getForecast(grid);
+                if(res.statusCode === 200) {
+                    let meta = JSON.parse(data.toString());
+                    let grid = {
+                        cwa: meta.properties.cwa,
+                        gridX: meta.properties.gridX,
+                        gridY: meta.properties.gridY,
+                        idx: idx
+                    };
+                    getForecast(grid);
+                } else log('getPointMeta ERROR from NOAA');
             });
         });
 
