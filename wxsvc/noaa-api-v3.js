@@ -78,7 +78,9 @@ module.exports = (function()  {
 
             res.on('end', function(d) {
                 log('getCurrent status code: ' + res.statusCode);
-                parseStationCurrent(data.toString(), origin);
+                if(res.statusCode === 200) {
+                    parseStationCurrent(data.toString(), origin);
+                }
             });
         });
 
@@ -210,7 +212,9 @@ module.exports = (function()  {
 
             res.on('end', function() {
                 log('getForecast status code: ' + res.statusCode);
-                parseForecast(data.toString(), origin);
+                if(res.statusCode === 200) {
+                    parseForecast(data.toString(), origin);
+                }
             });
         });
 
