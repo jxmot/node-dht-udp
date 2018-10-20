@@ -281,7 +281,9 @@ module.exports = function init(evts) {
         notify.send('wxobsv', wxupdate);
     });
 
-    // wait for weather service forcast update
+    // wait for weather service forecast update
+// TODO : pass along a wxsvc identifier, so that the
+// client knows how to parse the data.
     evts.on('WSVC_FORCST', (wxforcst) => {
         //log(`WSVC_FORCST : ${JSON.stringify(wxforcst)}`);
         log('WSVC_FORCST : recvd');
