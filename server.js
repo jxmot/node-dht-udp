@@ -50,7 +50,7 @@ function consolelog(text) {
 
     Obtain our IP address(IPv4) associated with the Ethernet
     interface. Typically this code will be ran on a platform
-    that uses a wired network connnection. The array below
+    that uses a wired network connection. The array below
     represents the object that is returned by accessing
     os.networkInterfaces().Ethernet.
 
