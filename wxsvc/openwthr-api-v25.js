@@ -327,45 +327,5 @@ module.exports = (function()  {
         sys_evts.emit('WSVC_FORCST', wxsvc.forecast);
     };
 
-    /*
-    function centToFar(rawtemp) {
-        var tempRet = -999.999;
-
-        if(rawtemp.value !== null) {
-            // http://codes.wmo.int/common/unit
-            if(rawtemp.unitCode === 'unit:degC') 
-                tempRet = Math.round(rawtemp.value * 9 / 5 + 32);
-            else 
-                tempRet = Math.round(rawtemp.value);
-        }
-        return tempRet;
-    }
-    */
-
-    /*
-    function metsToMPH(rawwind) {
-        var windRet = -999.999;
-
-        if(rawwind.value !== null) {
-            if(rawwind.unitCode === 'unit:m_s-1')
-                windRet = Math.round(rawwind.value / 0.44704);
-            else
-                windRet = Math.round(rawwind.value);
-        }
-        return windRet;
-    };
-    */
-
-    /*
-    */
-    function paToInchesMerc(rawpa) {
-        let mercRet = -999.999
-
-        if(rawpa !== null) {
-            mercRet = Math.round(rawpa * 0.02952998);
-        }
-        return mercRet;
-    };
-
     return wxsvc;
 })();
