@@ -72,8 +72,6 @@ module.exports = (function()  {
     function getCurrent(location) {
 
         let path = wcfg.urlparts[UPARTS_PATHBASE] + wcfg.urlparts[UPARTS_WEATHER];
-//        path = path + wcfg.urlparts[UPARTS_LAT] + location.loc[LOC_LAT];
-//        path = path + wcfg.urlparts[UPARTS_LON] + location.loc[LOC_LON];
         path = path + wcfg.urlparts[UPARTS_ID] + location.code;
         path = path + wcfg.urlparts[UPARTS_UNITS];
         path = path + wcfg.urlparts[UPARTS_MODE] + wcfg.service.datamode;
@@ -122,6 +120,8 @@ module.exports = (function()  {
         let raw = JSON.parse(data);
 
         upd.svc = wcfg.service.name;
+        // url for retrieving icons
+        upd.iconurl = wcfg.service.iconurl;
 
         upd.sta = origin.sta;
         upd.plc = origin.plc;
@@ -135,17 +135,16 @@ module.exports = (function()  {
         // date/time of when data was collected
         upd.tstamp = Date.now();
 
-        upd.t   = raw.main.temp;
-        upd.h   = raw.main.humidity;
-        upd.wd  = raw.wind.deg;
-        upd.ws  = raw.wind.speed;
-        //upd.wg  = metsToMPH(raw.properties.windGust);
-        //upd.wch = centToFar(raw.properties.windChill);
-        //upd.txt = raw.properties.textDescription;
-        //upd.dew = centToFar(raw.properties.dewpoint);
-        //upd.hix = centToFar(raw.properties.heatIndex);
+        upd.t    = raw.main.temp;
+        upd.h    = raw.main.humidity;
+        upd.wd   = raw.wind.deg;
+        upd.ws   = raw.wind.speed;
+        upd.tmax = raw.main.temp_max;
+        upd.tmin = raw.main.temp_min;
 
-        //upd.bar = paToInchesMerc(raw.main.pressure);
+        upd.desc = raw.weather[0].description;
+        upd.icon = raw.weather[0].icon;
+        upd.main = raw.weather[0].main;
 
         // make a copy without references
         wxsvc.currobsv = JSON.parse(JSON.stringify(upd));
@@ -158,9 +157,8 @@ module.exports = (function()  {
     function getForecast(loc) {
 
         let path = wcfg.urlparts[UPARTS_PATHBASE] + wcfg.urlparts[UPARTS_FORECAST];
-//        path = path + wcfg.urlparts[UPARTS_LAT] + loc[LOC_LAT];
-//        path = path + wcfg.urlparts[UPARTS_LON] + loc[LOC_LON];
-        path = path + wcfg.urlparts[UPARTS_ID] + location.code;
+
+        path = path + wcfg.urlparts[UPARTS_ID] + wcfg.location.code;
         path = path + wcfg.urlparts[UPARTS_UNITS];
         path = path + wcfg.urlparts[UPARTS_MODE] + wcfg.service.datamode;
         path = path + wcfg.urlparts[UPARTS_APPID];
@@ -238,29 +236,33 @@ module.exports = (function()  {
 
         // the data provider
         fcast.svc = wcfg.service.name;
+        // url for retrieving icons
+        fcast.iconurl = wcfg.service.iconurl;
         // station code & named location
         fcast.sta = origin.sta;
         fcast.plc = origin.plc;
 
-
-// forecast timeslots  are - 
-// 01:00 (22:00 to 01:00)
-// 04:00
-// 07:00
-// 10:00
-// 13:00
-// 16:00
-// 19:00
-// 22:00
+// forecast timeslots in UTC for a single day are - 
+// 00:00 
+// 03:00
+// 06:00
+// 09:00
+// 12:00
+// 15:00
+// 18:00
+// 21:00
 // 
-// first forecast in array will be the next timeslot, for
+// first forecast in array should be the next timeslot, for
 // example : if the current time is 14:21 the first timeslot
 // in the list array will be 16:00
 //
-// there will be 40 timeslots : 
+// there can be up to 40 timeslots : 
 //      5 days(24hr periods) X 8 slots/day(24hr period)
 // 
-// current timeslot index = round-up((epoch_now - epoch_last_midnght) / (3 * 3600))
+// the number of timeslots can vary, it depends on what the
+// current timeslot is when the data was requested
+//
+// current timeslot index = round((epoch_now - epoch_last_midnght) / (3 * 3600))
 //
 // stopix = 3(24hr periods) X 8(timeslots)
 // for(fcix = 0; fcix < stopix; fcix++)
@@ -281,7 +283,8 @@ module.exports = (function()  {
         fcast.tstamp = Date.now();
 
         let nextslot = 0;
-        let end = 5;
+        // end = 3(24hr periods) X 8(timeslots)
+        let end = 24;
         fcast.per = [];
         let  cnt = raw.cnt;
 
