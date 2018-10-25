@@ -13,8 +13,15 @@ var serverCfgFile = process.argv[2];
 
 // we're assuming that if there's an argument present then it's going to be
 // "path + filename.ext". It's not checked for validity.
-if((serverCfgFile === undefined) || (serverCfgFile === ''))
-    serverCfgFile = './servercfg.js';
+if((serverCfgFile === undefined) || (serverCfgFile === '')) {
+    serverCfgFile = 'servercfg';
+
+    // To Do : be sure platform env-var gets set for node-nas
+    if(process.env['PLATFORM'] !== undefined)
+        serverCfgFile = serverCfgFile + '-' + process.env['PLATFORM'];
+    
+    serverCfgFile = './' + serverCfgFile + '.js';
+}
 
 // read the IP address and port # that we'll be using
 const cfg = require(serverCfgFile);
