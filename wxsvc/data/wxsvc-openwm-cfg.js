@@ -38,7 +38,7 @@ module.exports = {
     default_station: 0,
 */
     service: {
-        name: 'OpenWeather',
+        name: 'OpenWeatherMap',
         appid: key.data,
         hostname: 'api.openweathermap.org',
         docurl: 'https://openweathermap.org/api',
