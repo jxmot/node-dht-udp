@@ -35,11 +35,8 @@ module.exports = (function()  {
     const UPARTS_MODE     = UPARTS_UNITS + 1;
     const UPARTS_APPID    = UPARTS_MODE + 1;
 
-//    const HEADER_ACCJSON      = 0;
-//    const HEADER_ACCXML       = 1;
-
-    const LOC_LAT             = 0;
-    const LOC_LON             = 1;
+    const LOC_LAT         = 0;
+    const LOC_LON         = 1;
 
     let sys_evts = {};
 
