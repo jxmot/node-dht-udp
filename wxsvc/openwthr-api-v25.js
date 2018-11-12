@@ -112,32 +112,51 @@ module.exports = (function()  {
         let upd = {};
         let raw = JSON.parse(data);
 
+        upd.format = 'owm-v25';
+
         upd.svc = wcfg.service.name;
         // url for retrieving icons
         upd.iconurl = wcfg.service.iconurl;
 
         upd.sta = origin.sta;
         upd.plc = origin.plc;
-     
+        
         // date/time of observation
         // NOTE : openwm time in forecast is UTC!
         let d = new Date(0);
         d.setUTCSeconds(raw.dt);
         upd.gmt = d.getTime();
 
+        // sunrise & sunset times
+        d = new Date(0);
+        d.setUTCSeconds(raw.sys.sunrise);
+        upd.sr  = d.getTime();
+        
+        d = new Date(0);
+        d.setUTCSeconds(raw.sys.sunset);
+        upd.ss  = d.getTime();
+
         // date/time of when data was collected
         upd.tstamp = Date.now();
 
         upd.t    = raw.main.temp;
         upd.h    = raw.main.humidity;
+
+// http://math.info/Misc/Heat_Index/
+//        upd.hix  = ???;
+
         upd.wd   = raw.wind.deg;
         upd.ws   = raw.wind.speed;
+// Wind Chill = 35.74 + (0.6215 * Temp) – (35.75 * (Speed^0.16)) + (0.4275* Temp * (Speed^0.16))
+// Temp - in F
+// Speed - wind MPH
+//        upd.wch  = ???;
         upd.tmax = raw.main.temp_max;
         upd.tmin = raw.main.temp_min;
 
         upd.desc = raw.weather[0].description;
-        upd.icon = raw.weather[0].icon;
         upd.main = raw.weather[0].main;
+        upd.icon = wcfg.service.iconurl + raw.weather[0].icon +'.png';
 
         // make a copy without references
         wxsvc.currobsv = JSON.parse(JSON.stringify(upd));
