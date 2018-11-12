@@ -218,6 +218,8 @@ module.exports = (function()  {
 
         let raw = JSON.parse(data);
 
+        fcast.format = 'owm-v25';
+
         // the data provider
         fcast.svc = wcfg.service.name;
         // url for retrieving icons
@@ -225,90 +227,94 @@ module.exports = (function()  {
         // station code & named location
         fcast.sta = origin.sta;
         fcast.plc = origin.plc;
-
-// forecast timeslots in UTC for a single day are - 
-// 00:00 
-// 03:00
-// 06:00
-// 09:00
-// 12:00
-// 15:00
-// 18:00
-// 21:00
-// 
-// first forecast in array should be the next timeslot, for
-// example : if the current time is 14:21 the first timeslot
-// in the list array will be 16:00
-//
-// there can be up to 40 timeslots : 
-//      5 days(24hr periods) X 8 slots/day(24hr period)
-// 
-// the number of timeslots can vary, it depends on what the
-// current timeslot is when the data was requested
-//
-// current timeslot index = round((epoch_now - epoch_last_midnght) / (3 * 3600))
-//
-// stopix = 3(24hr periods) X 8(timeslots)
-// for(fcix = 0; fcix < stopix; fcix++)
-//
-// NOTE : openwm time in forecast is UTC!
-// let d = new Date(0);
-// d.setUTCSeconds(data.list[fcix].dt);
-// fcast.gmt = d.getTime();
-
-
-        // date/time of forecast
-        // NOTE : openwm time in forecast is UTC!
-        let d = new Date(0);
-        d.setUTCSeconds(raw.list[ix].dt);
-        fcast.gmt = d.getTime();
-
-        // date/time of when data was collected
-        fcast.tstamp = Date.now();
-
-        let nextslot = 0;
-        // end = 3(24hr periods) X 8(timeslots)
-        let end = 24;
-        fcast.per = [];
-        let  cnt = raw.cnt;
-
-// NOTE : JSON wind speed is incorrect, even if the request
-// specifies "&units=imperial". XML is also wrong.
-//
-// If "&units=imperial" in XML - 
-//      <windSpeed mps="11.34" name="Strong breeze"></windSpeed>
-// then if units is omitted - 
-//      <windSpeed mps="5.8" name="Moderate breeze"></windSpeed>
-// ERRORS:
-//      1) "mps" should become "mph", a better fix is :
-//          <wind unit="mps|mph" speed="X.X" name"......"></wind>
-//      2) fix documentation
-//      3) insure that "name" is identical for all units of measure
-//      4) values are not equal for "imperial" vs "default"
-//      5) forecast is NOT formatted like current, and it should be
-// 
-
 /*
-        for(ix = 0;ix <= end; ix++) {
-            if(ix === 0) {
-                let tmp = raw.properties.periods[ix].name.toLowerCase();
-                if(tmp.includes('night')) {
-                    nextslot = 1;
-                    end -= 1;
-                }
-                else nextslot = 0;
-            }
+    forecast timeslots in UTC for a single day are - 
+    00:00 
+    03:00
+    06:00
+    09:00
+    12:00
+    15:00
+    18:00
+    21:00
+    
+    first forecast in array should be the next timeslot, for
+    example : if the current time is 14:21 the first timeslot
+    in the list array will/should be 15:00
+    
+    there can be up to 40 timeslots : 
+         5 days(24hr periods) X 8 slots/day(3hr slots)
+    
+    the number of timeslots can vary, it depends on what the
+    current timeslot is when the data was requested
+    
+    the virtual index(currently not used) will be a value from
+    0 to 7. it indicates where to place the real-index of 0. use 
+    it as an offset to the real-index.
+    virtual timeslot index = round((epoch_now - epoch_last_midnght) / (3 * 3600))
+    
+    stopix = 3(24hr periods) X 8(timeslots)
+    for(fcix = 0; fcix < stopix; fcix++)
+    
+    NOTE : openwm time in forecast is UTC!
+    let d = new Date(0);
+    d.setUTCSeconds(data.list[fcix].dt);
+    fcast.gmt = d.getTime();
 
-            per.slot = nextslot;
-            per.name = raw.properties.periods[ix].name;
-            per.icon = raw.properties.periods[ix].icon;
-            per.alt  = raw.properties.periods[ix].shortForecast;
-            per.text = raw.properties.periods[ix].detailedForecast;
-            fcast.per.push(JSON.parse(JSON.stringify(per)));
-            per = {};
-            nextslot += 1;
+        fcast = {
+            sta: ,
+            plc: ,
+            svc: ,
+            cnt: ,
+            per: [],
+            tstamp: 
+        }
+
+        per = {
+            slot: , // currently unused
+            dt: ,
+            icon: ,
+            t: ,
+            h: ,
+            tmin: ,
+            tmax: ,
+            ws: ,
+            wd: ,
+            main: ,
+            desc: 
         }
 */
+        // date/time of when data was collected
+        fcast.gmt = fcast.tstamp = Date.now();
+
+        // qty of time slots  cnt = 3(24hr periods) X 8(timeslots)
+        fcast.cnt = 24;
+
+        fcast.per = [];
+
+        for(let ix = 0;ix < fcast.cnt; ix++) {
+            // date/time of forecast
+            // NOTE : openwm time in forecast is UTC!
+            let d = new Date(0);
+            d.setUTCSeconds(raw.list[ix].dt);
+            per.dt   = d.getTime();
+            per.icon = wcfg.service.iconurl + raw.list[ix].weather[0].icon +'.png';
+            per.t    = raw.list[ix].main.temp;
+            per.h    = raw.list[ix].main.humidity;
+            per.tmin = raw.list[ix].main.temp_min;
+            per.tmax = raw.list[ix].main.temp_max;
+            per.ws   = raw.list[ix].wind.speed;
+            per.wd   = raw.list[ix].wind.deg;
+            // weather[] can have more than just one 
+            // entry. not sure yet how to combine them 
+            // into usable data because the docs don't 
+            // have enough info and the occurrence is rare.
+            per.main = raw.list[ix].weather[0].main;
+            per.desc = raw.list[ix].weather[0].description;
+
+            fcast.per.push(JSON.parse(JSON.stringify(per)));
+            per = {};
+        }
         // break the reference and notify...
         wxsvc.forecast = JSON.parse(JSON.stringify(fcast));
         sys_evts.emit('WSVC_FORCST', wxsvc.forecast);
