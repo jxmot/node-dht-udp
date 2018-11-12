@@ -178,7 +178,7 @@ module.exports = (function()  {
                 log('getForecast status code: ' + res.statusCode);
                 if(res.statusCode === 200) {
                     parseForecast(data.toString(), origin);
-                } else log('getForecast ERROR from NOAA');
+                } else log('getForecast ERROR from OWM');
             });
         });
 
