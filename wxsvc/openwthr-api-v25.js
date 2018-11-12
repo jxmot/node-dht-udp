@@ -52,11 +52,11 @@ module.exports = (function()  {
         log = _log;
 
         sys_evts.on('WSVC_START', () => {
-//            getCurrent(wcfg.location);
-//            setInterval(getCurrent, wcfg.config.updintvl, wcfg.location);
+            getCurrent(wcfg.location);
+            setInterval(getCurrent, wcfg.config.updintvl, wcfg.location);
 
             getForecast(wcfg.location);
-//            setInterval(getForecast, wcfg.config.forintvl, wcfg.location);
+            setInterval(getForecast, wcfg.config.forintvl, wcfg.location);
         });
     };
 
