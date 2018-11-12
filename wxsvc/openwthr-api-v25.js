@@ -1,11 +1,11 @@
 /*
-    Open Weather Map Configuration & Helper Functions
+    Interface to the Open Weather Map API
 
-    An API for the NOAA's Weather API. See 
+
         https://openweathermap.org/current
-    and
+
         https://openweathermap.org/forecast5
-    for additional information.
+
 
     All APIs : 
         https://openweathermap.org/api
@@ -21,10 +21,6 @@ module.exports = (function()  {
     };
 
     const https = require('https');
-
-    // Events
-//    const EventEmitter = require('events');
-//    const wxsvc_events = new EventEmitter();
 
     let wcfg = require('./data/wxsvc-openwm-cfg.js');
 
@@ -198,34 +194,6 @@ module.exports = (function()  {
     };
 
     /*
-
-        | DAY 1 | DAY 2 | DAY 3 |       <- "slots" 0,2,4
-        +-------+-------+-------+
-        |NIGHT 1|NIGHT 2|NIGHT 3|       <- "slots" 1,3,5
-
-
-        |       | DAY 2 | DAY 3 |
-        +-------+-------+-------+
-        |NIGHT 1|NIGHT 2|NIGHT 3|       <- if first period is "night"
-                                           then put it in slot 1
-
-        fcast = {
-            sta: ,
-            plc: ,
-            svc: ,
-            per: [],
-            gmt: ,
-            tstamp: 
-        }
-
-        per = {
-            slot: ,
-            name: ,
-            icon: ,
-            alt: ,
-            text: 
-        }
-
     */
     function parseForecast(data, origin) {
 
