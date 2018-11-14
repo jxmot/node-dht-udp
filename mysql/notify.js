@@ -47,7 +47,15 @@ module.exports = (function() {
     notify.init = function() {
         // A client has connected, 
         io.on('connection', function(socket) {
+
             socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
+
+// TODO : use "&wxsvc=owm-v25|noaa-v3" in selecting the wx data channel
+// on the server (far future enhancement)
+            socket.on('wxsvcsel', function (data) {
+                log(`socket on wxsvcsel - ${JSON.stringify(data)}`);
+            });
+ 
             // Increment the connection counter
             connCount += 1;
             // log the new connection for debugging purposes.
