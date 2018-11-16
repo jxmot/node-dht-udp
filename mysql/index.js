@@ -269,7 +269,7 @@ module.exports = function init(evts) {
     //////////////////////////////////////////////////////////////////////////
     /*
     */
-// TODO: make wxsvc switching via command line or config
+// TODO: see "wxsvcsel" in notify.js, 
 //    const wsvc = require('../wxsvc/noaa-api-v3.js');
     const wsvc = require('../wxsvc/openwthr-api-v25.js');
     wsvc.init(evts, log);

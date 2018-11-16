@@ -94,10 +94,6 @@ module.exports = (function() {
         //error: []
     };
 
-    //var sensorerr = [];
-    //sensorerr['status'] = {dev_id: 'ESP_DEAD00', status: 'APP_ERROR', msg: 'APP_ERROR', tstamp:Date.now()};
-    //sensorerr['data']   = {dev_id: 'ESP_DEAD00', seq:-99, t: 0.99, h:0.99, tstamp:Date.now()};
-
     // resend (or send) payloads to a specified socket.
     function resend(channel, socket, payloads) {
         if(connCount > 0) {
