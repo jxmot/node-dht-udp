@@ -44,18 +44,36 @@ module.exports = (function() {
     // If the counter is zero then we won't send anything over the socket.
     var connCount = 0;
 
+    // contains the last status and data for each device
+    var sensorlast = {
+        purge: [],
+        status: [],
+        data: [],
+        wxobsv: [],
+        wxfcst: []
+        // To Do: currently not in use, will require some 
+        // thought and a decision in regards to just how
+        // much awareness the client modules need of 
+        // internal errors.
+        //error: []
+    };
+
     notify.init = function() {
         // A client has connected, 
         io.on('connection', function(socket) {
 
-            socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
-
-// TODO : use "&wxsvc=owm-v25|noaa-v3" in selecting the wx data channel
-// on the server (far future enhancement)
             socket.on('wxsvcsel', function (data) {
-                log(`socket on wxsvcsel - ${JSON.stringify(data)}`);
+                log(`socket ${socket.id} on wxsvcsel - ${JSON.stringify(data)}`);
+
+                if(sensorlast['wxobsv'][data.wxsvc] !== undefined)
+                    resend('wxobsv', socket, sensorlast['wxobsv'], data.wxsvc);
+
+                if(sensorlast['wxfcst'][data.wxsvc] !== undefined)
+                    resend('wxfcst', socket, sensorlast['wxfcst'], data.wxsvc);
             });
  
+            socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
+
             // Increment the connection counter
             connCount += 1;
             // log the new connection for debugging purposes.
@@ -80,26 +98,19 @@ module.exports = (function() {
     server.listen(cfg.port);
     log(`listening on port - ${cfg.port}`);
 
-    // contains the last status and data for each device
-    var sensorlast = {
-        purge: [],
-        status: [],
-        data: [],
-        wxobsv: [],
-        wxfcst: []
-        // To Do: currently not in use, will require some 
-        // thought and a decision in regards to just how
-        // much awareness the client modules need of 
-        // internal errors.
-        //error: []
-    };
-
     // resend (or send) payloads to a specified socket.
-    function resend(channel, socket, payloads) {
+    function resend(channel, socket, payloads, format = undefined) {
         if(connCount > 0) {
             for(var key of Object.keys(payloads)) {
-                log(`resend(${channel}) - ${key}: ${JSON.stringify(payloads[key])}`);
-                socket.emit(channel, {payload: payloads[key]});
+                if(format === undefined) {
+                    socket.emit(channel, {payload: payloads[key]});
+                    log(`resend(${channel}) - ${key}: ${JSON.stringify(payloads[key])}`);
+                } else {
+                    if(format === payloads[key].format) {
+                        socket.emit(channel, {payload: payloads[key]});
+                        log(`resend(${channel}) sel ${format} - ${key}: ${JSON.stringify(payloads[key])}`);
+                    }
+                }
             }
         } else log('resend() - no connections');
     };
@@ -123,7 +134,7 @@ module.exports = (function() {
             if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
             else {
                 if((channel === 'wxobsv') || (channel === 'wxfcst')) 
-                    sensorlast[channel][data.sta] = data;
+                    sensorlast[channel][data.format] = data;
                 else sensorlast[channel][data.dev_id] = data;
             }
         } else {

@@ -269,19 +269,22 @@ module.exports = function init(evts) {
     //////////////////////////////////////////////////////////////////////////
     /*
     */
-// TODO: see "wxsvcsel" in notify.js, 
-//    const wsvc = require('../wxsvc/noaa-api-v3.js');
-    const wsvc = require('../wxsvc/openwthr-api-v25.js');
-    wsvc.init(evts, log);
+    const wsvc_noaa = require('../wxsvc/noaa-api-v3.js');
+    wsvc_noaa.init(evts, log);
 
-    // wait for weather service condition update
+    /*
+    */
+    const wsvc_owm = require('../wxsvc/openwthr-api-v25.js');
+    wsvc_owm.init(evts, log);
+
+    // wait for a weather service condition update
     evts.on('WSVC_UPDATE', (wxupdate) => {
         //log(`WSVC_UPDATE : ${JSON.stringify(wxupdate)}`);
         log('WSVC_UPDATE : recvd');
         notify.send('wxobsv', wxupdate);
     });
 
-    // wait for weather service forecast update
+    // wait for a weather service forecast update
     evts.on('WSVC_FORCST', (wxforcst) => {
         //log(`WSVC_FORCST : ${JSON.stringify(wxforcst)}`);
         log('WSVC_FORCST : recvd');
