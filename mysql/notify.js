@@ -71,7 +71,8 @@ module.exports = (function() {
                 if(sensorlast['wxfcst'][data.wxsvc] !== undefined)
                     resend('wxfcst', socket, sensorlast['wxfcst'], data.wxsvc);
             });
- 
+
+            // https://socket.io/docs/emit-cheatsheet/
             socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
 
             // Increment the connection counter
