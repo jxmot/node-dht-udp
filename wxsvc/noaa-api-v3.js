@@ -14,11 +14,7 @@ module.exports = (function()  {
 
     const https = require('https');
 
-    // Events
-//    const EventEmitter = require('events');
-//    const wxsvc_events = new EventEmitter();
-
-    let wcfg = require('./data/wxsvc-cfg.js');
+    let wcfg = require('./data/wxsvc-noaa-cfg.js');
 
     const UPARTS_STATIONS     = 0;
     const UPARTS_OBSERVATIONS = UPARTS_STATIONS + 1;
@@ -80,7 +76,7 @@ module.exports = (function()  {
                 log('getCurrent status code: ' + res.statusCode);
                 if(res.statusCode === 200) {
                     parseStationCurrent(data.toString(), origin);
-                }
+                } else log('getCurrent ERROR from NOAA');
             });
         });
 
@@ -105,6 +101,8 @@ module.exports = (function()  {
 
         let upd = {};
         let raw = JSON.parse(data);
+
+        upd.format = 'noaa-v3';
 
         upd.svc = wcfg.service.name;
 
@@ -214,7 +212,7 @@ module.exports = (function()  {
                 log('getForecast status code: ' + res.statusCode);
                 if(res.statusCode === 200) {
                     parseForecast(data.toString(), origin);
-                }
+                } else log('getForecast ERROR from NOAA');
             });
         });
 
@@ -268,6 +266,8 @@ module.exports = (function()  {
             log('parseForecast resending last forecast');
             sys_evts.emit('WSVC_FORCST', wxsvc.forecast);
         } else {
+            fcast.format = 'noaa-v3';
+
             // the data provider
             fcast.svc = wcfg.service.name;
             // station code & named location

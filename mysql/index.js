@@ -210,7 +210,7 @@ module.exports = function init(evts) {
     };
 
     /*
-        Purge Timer Expired Handler - runs then the purge interval
+        Purge Timer Expired Handler - runs when the purge interval
         timer expires.
     */
     function purgetimerexpired(idx) {
@@ -220,7 +220,7 @@ module.exports = function init(evts) {
 
     /*
         Purge Data - this gets called by purgetimerexpired() when
-        purge interval timer exires. It takes a table name and purge 
+        purge interval timer expires. It takes a table name and purge 
         configuration object as arguments. See example_dbcfg.js(_dbcfg.js) 
         for details on how to specify the interval and depth.
 
@@ -269,17 +269,22 @@ module.exports = function init(evts) {
     //////////////////////////////////////////////////////////////////////////
     /*
     */
-    const wsvc = require('../wxsvc/noaa-api-v3.js');
-    wsvc.init(evts, log);
+    const wsvc_noaa = require('../wxsvc/noaa-api-v3.js');
+    wsvc_noaa.init(evts, log);
 
-    // wait for weather service condition update
+    /*
+    */
+    const wsvc_owm = require('../wxsvc/openwthr-api-v25.js');
+    wsvc_owm.init(evts, log);
+
+    // wait for a weather service condition update
     evts.on('WSVC_UPDATE', (wxupdate) => {
         //log(`WSVC_UPDATE : ${JSON.stringify(wxupdate)}`);
         log('WSVC_UPDATE : recvd');
         notify.send('wxobsv', wxupdate);
     });
 
-    // wait for weather service forcast update
+    // wait for a weather service forecast update
     evts.on('WSVC_FORCST', (wxforcst) => {
         //log(`WSVC_FORCST : ${JSON.stringify(wxforcst)}`);
         log('WSVC_FORCST : recvd');

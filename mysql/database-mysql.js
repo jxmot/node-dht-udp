@@ -89,7 +89,7 @@ exports.database = (function() {
                 // details
             };
     */
-    database.openDB = function(_dbcfg, callme) {
+    database.openDB = function(_dbcfg, callme, callonerror = undefined) {
         // for reporting errors to the client
         var errObj;
         // if the database configuration data hasn't been read 
@@ -105,6 +105,18 @@ exports.database = (function() {
         }
         // connect to the database...
         connection = mysql.createConnection(dbcfg.parms);
+
+        // handle errors like when the server closes the
+        // connection, can occur during development when
+        // no sensor data is being collected for a period
+        // of time. if this isn't done the connection will
+        // close and the app will throw an exception and
+        // crash.
+        if(callonerror !== undefined) 
+            connection.on('error', (callonerror));
+        else
+            connection.on('error', (dbRunTimeError));
+
         connection.connect(function(error) {
             if(error) {
                 errObj = {
@@ -459,6 +471,11 @@ exports.database = (function() {
         }
         log(`database.createTableStr() - ${retStr}`);
         return retStr;
+    };
+
+    function dbRunTimeError(err) {
+        log('ERROR : dbRunTimeError() err = ');
+        log(err);  
     };
 
     return database;

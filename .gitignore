@@ -9,6 +9,7 @@ _*
 # misc stuff i want to ignore -
 *.log
 *.txt
+*.out
 *.bat
 #*.zip
 error_log

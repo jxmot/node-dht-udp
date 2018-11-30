@@ -13,8 +13,15 @@ var serverCfgFile = process.argv[2];
 
 // we're assuming that if there's an argument present then it's going to be
 // "path + filename.ext". It's not checked for validity.
-if((serverCfgFile === undefined) || (serverCfgFile === ''))
-    serverCfgFile = './servercfg.js';
+if((serverCfgFile === undefined) || (serverCfgFile === '')) {
+    serverCfgFile = 'servercfg';
+
+    // To Do : be sure platform env-var gets set for node-nas
+    if(process.env['PLATFORM'] !== undefined)
+        serverCfgFile = serverCfgFile + '-' + process.env['PLATFORM'];
+    
+    serverCfgFile = './' + serverCfgFile + '.js';
+}
 
 // read the IP address and port # that we'll be using
 const cfg = require(serverCfgFile);
@@ -50,7 +57,7 @@ function consolelog(text) {
 
     Obtain our IP address(IPv4) associated with the Ethernet
     interface. Typically this code will be ran on a platform
-    that uses a wired network connnection. The array below
+    that uses a wired network connection. The array below
     represents the object that is returned by accessing
     os.networkInterfaces().Ethernet.
 
