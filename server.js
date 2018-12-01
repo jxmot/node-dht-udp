@@ -189,7 +189,7 @@ client.on('message', (payload, remote) => {
     
     var msg = JSON.parse(message.toString());
 
-    // don't announce heartbeat stauses
+    // don't announce heartbeat statuses
     if((msg.status !== 'TICK') && (msg.status !== 'TOCK')){
         if(!srvmsg_events.emit('STATUS_RCVD', message.toString(), remote)) console.error('STATUS_RCVD no listeners!!!');
     }
