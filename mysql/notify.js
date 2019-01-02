@@ -44,13 +44,16 @@ module.exports = (function() {
     // If the counter is zero then we won't send anything over the socket.
     var connCount = 0;
 
+    const fs = require('fs');
+    const path = require('path');
+
     // contains the last status and data for each device
     var sensorlast = {
-        purge: [],
-        status: [],
-        data: [],
-        wxobsv: [],
-        wxfcst: []
+        purge: {},
+        status: {},
+        data: {},
+        wxobsv: {},
+        wxfcst: {}
         // To Do: currently not in use, will require some 
         // thought and a decision in regards to just how
         // much awareness the client modules need of 
@@ -132,12 +135,19 @@ module.exports = (function() {
     notify.updateLast = function(channel, data, error = null) {
         if(data !== null) {
             // save for new client connections
-            if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
+            if(channel === 'purge') 
+                sensorlast[channel][data.dbtable] = data;
             else {
                 if((channel === 'wxobsv') || (channel === 'wxfcst')) 
                     sensorlast[channel][data.format] = data;
-                else sensorlast[channel][data.dev_id] = data;
+                else 
+                    sensorlast[channel][data.dev_id] = data;
             }
+            // Save the data to a file for other processes 
+            // to use.
+            let fileout = path.join(path.dirname(require.main.filename), '/datashare/sensorlast.json');
+            let filedata = JSON.parse(JSON.stringify(sensorlast));
+            fs.writeFileSync(fileout, JSON.stringify(sensorlast, null, 4));
         } else {
             if((error !== null) && (error.err === true)) {
                 err = {table:channel, data:null, err:error};
