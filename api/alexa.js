@@ -35,10 +35,16 @@ var sensorlast = {
 
 const filein = path.join(appdir, alexacfg.watch);
 
+/*
+    Watch the configured file for changes, when a 
+    change occurs read the file save it into an
+    object.
+*/
 fs.watch(filein, (eventType, filename) => {
     if(filename) {
         console.log(eventType);
         console.log(filename);
+
         getFileData(filein);
     }
 });
@@ -49,7 +55,10 @@ getFileData(filein);
 console.log('waiting.....');
 
 //////////////////////////////////////////////////////////////////////////////
-//
+/*
+    A query has arrived, check the method, verify 
+    the requestor and respond appropriately (data -OR- error)
+*/
 function alexaQuery(req, res) {
     if(req.method === 'GET') {
         const alexaReq = url.parse(req.url,true).query;
@@ -58,6 +67,10 @@ function alexaQuery(req, res) {
     } else replyWith400(res, 'Method NOT allowed: '+req.method);
 };
 
+/*
+    Read a file (assume it's JSON formatted), return
+    true if the data is valid. Otherwise return false.
+*/
 function getFileData(filein) {
     let bRet = false;
     let jsondata = fs.readFileSync(filein);
@@ -70,6 +83,10 @@ function getFileData(filein) {
     return bRet;
 };
 
+/*
+    Get an ID for the device, return it if found
+    otherwise return undefined.
+*/
 function getId(device) {
     let found = undefined;
     Object.keys(alexacfg.devices).forEach(dev => {
@@ -81,14 +98,28 @@ function getId(device) {
     return found;
 };
 
+/*
+    Get the human-friendly name using the
+    device ID (as returned by getId()) to 
+    find it.
+*/
 function getName(id) {
     return alexacfg.devices[id][0];
 };
 
+/*
+    Get the Alexa-friendly device path
+*/
 function getPath(id) {
     return alexacfg.devices[id][1];
 };
 
+/*
+    Verify the requestor's identity by comparing
+    the URL supplied ID (axid) against what has
+    been stored in the configuration. Return true
+    if there's a match otherwise return false.
+*/
 function verifyReq(alexaReq) {
 let bRet = false;
 
@@ -106,12 +137,16 @@ function handleReq(alexaReq, res) {
     if(devid !== undefined) {
         const data = sensorlast['data'][devid];
         if(data !== undefined)
-            replyWith200(res, JSON.stringify({sensor: data}));
+            replyWith200(res, '{"axid":"'+alexaReq.axid+'","name":"'+getName(devid)+'","sensor":'+JSON.stringify(data)+'}');
         else
             replyWith400(res, 'Data NOT found for: '+devid);
     } else replyWith400(res, 'Device NOT found for: '+alexaReq.device);
 };
 
+/*
+    Simple replies, send a status of 400 or 200 with
+    text response data.
+*/
 function replyWith400(res, msg) {
     res.writeHead(400, {'Content-Type': 'text/plain'});
     res.end(msg);
@@ -121,4 +156,3 @@ function replyWith200(res, msg) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end(msg);
 };
-
