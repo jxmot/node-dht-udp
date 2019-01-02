@@ -1,0 +1,425 @@
+{
+    "purge": {
+        "data": {
+            "dbtable": "data",
+            "dbresult": true,
+            "dbrows": 0,
+            "tstamp": 1546384820455
+        },
+        "status": {
+            "dbtable": "status",
+            "dbresult": true,
+            "dbrows": 0,
+            "tstamp": 1546384820459
+        }
+    },
+    "status": {
+        "ESP_49EC8B": {
+            "dev_id": "ESP_49EC8B",
+            "status": "APP_READY",
+            "tstamp": 1546415932933
+        },
+        "ESP_49F542": {
+            "dev_id": "ESP_49F542",
+            "status": "SENSOR_FAULT",
+            "msg": "NaN 4",
+            "tstamp": 1546417834831
+        }
+    },
+    "data": {
+        "ESP_49EC8B": {
+            "dev_id": "ESP_49EC8B",
+            "seq": 91,
+            "t": 71.42,
+            "h": 29.8,
+            "tstamp": 1546415035790
+        }
+    },
+    "wxobsv": {
+        "noaa-v3": {
+            "format": "noaa-v3",
+            "svc": "NOAA",
+            "sta": "KORD",
+            "plc": "Chicago-O'Hare International Airport",
+            "gmt": 1546415460000,
+            "tstamp": 1546417220638,
+            "t": 26,
+            "h": 92,
+            "wd": 0,
+            "ws": 0,
+            "wg": -999.999,
+            "wch": -999.999,
+            "txt": "Cloudy",
+            "dew": 24,
+            "hix": -999.999,
+            "bar": 102440
+        },
+        "owm-v25": {
+            "format": "owm-v25",
+            "svc": "OpenWeatherMap",
+            "iconurl": "https://openweathermap.org/img/w/",
+            "sta": "60630",
+            "plc": "Chicago, Illinois",
+            "gmt": 1546415700000,
+            "sr": 1546435097000,
+            "ss": 1546468286000,
+            "tstamp": 1546417220599,
+            "t": 27.9,
+            "h": 88,
+            "wd": 210,
+            "ws": 3.36,
+            "tmax": 30.74,
+            "tmin": 25.7,
+            "desc": "light snow",
+            "main": "Snow",
+            "icon": "https://openweathermap.org/img/w/13n.png"
+        }
+    },
+    "wxfcst": {
+        "noaa-v3": {
+            "format": "noaa-v3",
+            "svc": "NOAA",
+            "sta": "KORD",
+            "plc": "Chicago-O'Hare International Airport",
+            "gmt": 1546409745000,
+            "tstamp": 1546413320780,
+            "per": [
+                {
+                    "slot": 1,
+                    "name": "Overnight",
+                    "icon": "https://api.weather.gov/icons/land/night/snow?size=medium",
+                    "alt": "Scattered Snow Showers",
+                    "text": "Scattered snow showers. Cloudy, with a low around 24. West southwest wind 0 to 5 mph."
+                },
+                {
+                    "slot": 2,
+                    "name": "Wednesday",
+                    "icon": "https://api.weather.gov/icons/land/day/snow,60/snow,20?size=medium",
+                    "alt": "Chance Snow Showers",
+                    "text": "A chance of snow showers before 10am, then a chance of snow showers and a slight chance of freezing drizzle between 10am and 3pm. Cloudy. High near 32, with temperatures falling to around 30 in the afternoon. Southwest wind 5 to 10 mph, with gusts as high as 20 mph. Chance of precipitation is 60%. New snow accumulation of less than half an inch possible."
+                },
+                {
+                    "slot": 3,
+                    "name": "Wednesday Night",
+                    "icon": "https://api.weather.gov/icons/land/night/sct?size=medium",
+                    "alt": "Partly Cloudy",
+                    "text": "Partly cloudy, with a low around 21. West southwest wind 5 to 10 mph."
+                },
+                {
+                    "slot": 4,
+                    "name": "Thursday",
+                    "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
+                    "alt": "Sunny",
+                    "text": "Sunny, with a high near 37. West southwest wind 5 to 10 mph."
+                },
+                {
+                    "slot": 5,
+                    "name": "Thursday Night",
+                    "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
+                    "alt": "Mostly Clear",
+                    "text": "Mostly clear, with a low around 28. Southwest wind 5 to 10 mph, with gusts as high as 15 mph."
+                }
+            ]
+        },
+        "owm-v25": {
+            "format": "owm-v25",
+            "svc": "OpenWeatherMap",
+            "iconurl": "https://openweathermap.org/img/w/",
+            "sta": "60630",
+            "plc": "Chicago, Illinois",
+            "tstamp": 1546413320580,
+            "gmt": 1546413320580,
+            "cnt": 24,
+            "per": [
+                {
+                    "dt": 1546419600000,
+                    "icon": "https://openweathermap.org/img/w/13n.png",
+                    "t": 26.38,
+                    "h": 100,
+                    "tmin": 26.27,
+                    "tmax": 26.38,
+                    "ws": 8.01,
+                    "wd": 306.005,
+                    "main": "Snow",
+                    "desc": "light snow"
+                },
+                {
+                    "dt": 1546430400000,
+                    "icon": "https://openweathermap.org/img/w/13n.png",
+                    "t": 24.78,
+                    "h": 100,
+                    "tmin": 24.69,
+                    "tmax": 24.78,
+                    "ws": 8.01,
+                    "wd": 276.001,
+                    "main": "Snow",
+                    "desc": "light snow"
+                },
+                {
+                    "dt": 1546441200000,
+                    "icon": "https://openweathermap.org/img/w/13d.png",
+                    "t": 24.67,
+                    "h": 100,
+                    "tmin": 24.6,
+                    "tmax": 24.67,
+                    "ws": 7.29,
+                    "wd": 238.003,
+                    "main": "Snow",
+                    "desc": "light snow"
+                },
+                {
+                    "dt": 1546452000000,
+                    "icon": "https://openweathermap.org/img/w/02d.png",
+                    "t": 27.07,
+                    "h": 100,
+                    "tmin": 27.04,
+                    "tmax": 27.07,
+                    "ws": 10.58,
+                    "wd": 235.502,
+                    "main": "Clouds",
+                    "desc": "few clouds"
+                },
+                {
+                    "dt": 1546462800000,
+                    "icon": "https://openweathermap.org/img/w/03d.png",
+                    "t": 26.63,
+                    "h": 100,
+                    "tmin": 26.63,
+                    "tmax": 26.63,
+                    "ws": 14.65,
+                    "wd": 240.506,
+                    "main": "Clouds",
+                    "desc": "scattered clouds"
+                },
+                {
+                    "dt": 1546473600000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 25.29,
+                    "h": 100,
+                    "tmin": 25.29,
+                    "tmax": 25.29,
+                    "ws": 15.12,
+                    "wd": 250.501,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546484400000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 23.89,
+                    "h": 100,
+                    "tmin": 23.89,
+                    "tmax": 23.89,
+                    "ws": 14.56,
+                    "wd": 255,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546495200000,
+                    "icon": "https://openweathermap.org/img/w/02n.png",
+                    "t": 23.42,
+                    "h": 100,
+                    "tmin": 23.42,
+                    "tmax": 23.42,
+                    "ws": 14.23,
+                    "wd": 261.001,
+                    "main": "Clouds",
+                    "desc": "few clouds"
+                },
+                {
+                    "dt": 1546506000000,
+                    "icon": "https://openweathermap.org/img/w/02n.png",
+                    "t": 21.81,
+                    "h": 100,
+                    "tmin": 21.81,
+                    "tmax": 21.81,
+                    "ws": 11.03,
+                    "wd": 273.002,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546516800000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 19.95,
+                    "h": 100,
+                    "tmin": 19.95,
+                    "tmax": 19.95,
+                    "ws": 8.43,
+                    "wd": 253.001,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546527600000,
+                    "icon": "https://openweathermap.org/img/w/01d.png",
+                    "t": 20.42,
+                    "h": 100,
+                    "tmin": 20.42,
+                    "tmax": 20.42,
+                    "ws": 9.78,
+                    "wd": 238.001,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546538400000,
+                    "icon": "https://openweathermap.org/img/w/01d.png",
+                    "t": 25.98,
+                    "h": 100,
+                    "tmin": 25.98,
+                    "tmax": 25.98,
+                    "ws": 8.41,
+                    "wd": 245,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546549200000,
+                    "icon": "https://openweathermap.org/img/w/01d.png",
+                    "t": 31.33,
+                    "h": 100,
+                    "tmin": 31.33,
+                    "tmax": 31.33,
+                    "ws": 8.97,
+                    "wd": 232,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546560000000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 30.6,
+                    "h": 100,
+                    "tmin": 30.6,
+                    "tmax": 30.6,
+                    "ws": 11.23,
+                    "wd": 225.002,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546570800000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 29.73,
+                    "h": 100,
+                    "tmin": 29.73,
+                    "tmax": 29.73,
+                    "ws": 11.54,
+                    "wd": 227.503,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546581600000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 29.23,
+                    "h": 100,
+                    "tmin": 29.23,
+                    "tmax": 29.23,
+                    "ws": 11.43,
+                    "wd": 244.502,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546592400000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 28.02,
+                    "h": 100,
+                    "tmin": 28.02,
+                    "tmax": 28.02,
+                    "ws": 6.76,
+                    "wd": 260.5,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546603200000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 27.18,
+                    "h": 100,
+                    "tmin": 27.18,
+                    "tmax": 27.18,
+                    "ws": 4.97,
+                    "wd": 211.5,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546614000000,
+                    "icon": "https://openweathermap.org/img/w/01d.png",
+                    "t": 28.62,
+                    "h": 100,
+                    "tmin": 28.62,
+                    "tmax": 28.62,
+                    "ws": 7.16,
+                    "wd": 231.502,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546624800000,
+                    "icon": "https://openweathermap.org/img/w/01d.png",
+                    "t": 34.28,
+                    "h": 100,
+                    "tmin": 34.28,
+                    "tmax": 34.28,
+                    "ws": 5.39,
+                    "wd": 226.5,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546635600000,
+                    "icon": "https://openweathermap.org/img/w/01d.png",
+                    "t": 37.19,
+                    "h": 100,
+                    "tmin": 37.19,
+                    "tmax": 37.19,
+                    "ws": 3.83,
+                    "wd": 215,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546646400000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 35.07,
+                    "h": 100,
+                    "tmin": 35.07,
+                    "tmax": 35.07,
+                    "ws": 8.3,
+                    "wd": 225.504,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546657200000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 32.59,
+                    "h": 100,
+                    "tmin": 32.59,
+                    "tmax": 32.59,
+                    "ws": 9.55,
+                    "wd": 246,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                },
+                {
+                    "dt": 1546668000000,
+                    "icon": "https://openweathermap.org/img/w/01n.png",
+                    "t": 31.37,
+                    "h": 100,
+                    "tmin": 31.37,
+                    "tmax": 31.37,
+                    "ws": 9.44,
+                    "wd": 250.501,
+                    "main": "Clear",
+                    "desc": "clear sky"
+                }
+            ]
+        }
+    }
+}
