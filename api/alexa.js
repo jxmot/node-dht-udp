@@ -30,15 +30,6 @@ const alexacfg = require('./alexacfg.js');
 console.log(JSON.stringify(alexacfg));
 let alexa  = http.createServer(alexaQuery).listen(alexacfg.port, alexacfg.host);
 
-function alexaQuery(req, res) {
-    console.log('alexaQuery');
-    console.log(req.url);
-    console.log(url.parse(req.url,true).query);
-
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end(JSON.stringify({sensor: {t: 90.0, h: 75}})+'\n');
-};
-
 var sensorlast = {
 };
 
@@ -48,11 +39,34 @@ fs.watch(filein, (eventType, filename) => {
     if(filename) {
         console.log(eventType);
         console.log(filename);
-        getFileData();
+        getFileData(filein);
     }
 });
 
-function getFileData() {
+getFileData(filein);
+
+var i = getId('mbr');
+var n = getName(i);
+var p = getPath(i);
+
+console.log('waiting.....');
+
+//////////////////////////////////////////////////////////////////////////////
+//
+function alexaQuery(req, res) {
+    console.log('alexaQuery');
+    console.log(req.url);
+    console.log(url.parse(req.url,true).query);
+
+    //const alexaReq = url.parse(req.url,true).query;
+    //if(verifyReq(alexaReq)) handleReq(alexaReq);
+    //else replyNoVerify();
+
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end(JSON.stringify({sensor: {t: 90.0, h: 75}})+'\n');
+};
+
+function getFileData(filein) {
     let bRet = false;
     let jsondata = fs.readFileSync(filein);
     try {
@@ -64,12 +78,37 @@ function getFileData() {
     return bRet;
 };
 
-console.log('waiting.....');
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
 function getName(id) {
-    return alexacfg.names[id];
+    return alexacfg.devices[id][0];
+};
+
+function getPath(id) {
+    return alexacfg.devices[id][1];
+};
+
+function verifyReq(alexaReq) {
+let bRet = false;
+
+    if(alexaReq.axid === alexacfg.axid) bRet = true;
+    return bRet;
+};
+
+/*
+    ?axid=123456&device=mbr
+*/
+function handleReq(alexaReq) {
+    const devid = getId(alexaReq.device);
+    sensorlast['data'][devid]
+};
+
+function getId(device) {
+    let found = undefined;
+    Object.keys(alexacfg.devices).forEach(dev => {
+        if(device === alexacfg.devices[dev][1]) {
+            found = dev;
+            console.log(dev+':'+alexacfg.devices[dev]);
+        }
+    });
+    return found;
 };
 
