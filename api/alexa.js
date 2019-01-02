@@ -51,10 +51,6 @@ console.log('waiting.....');
 //////////////////////////////////////////////////////////////////////////////
 //
 function alexaQuery(req, res) {
-    console.log('alexaQuery');
-    console.log(req.url);
-    console.log(url.parse(req.url,true).query);
-
     if(req.method === 'GET') {
         const alexaReq = url.parse(req.url,true).query;
         if(verifyReq(alexaReq)) handleReq(alexaReq, res);
@@ -79,7 +75,7 @@ function getId(device) {
     Object.keys(alexacfg.devices).forEach(dev => {
         if(device === alexacfg.devices[dev][1]) {
             found = dev;
-            console.log(dev+':'+alexacfg.devices[dev]);
+            console.log(dev+': '+alexacfg.devices[dev]);
         }
     });
     return found;
@@ -103,6 +99,7 @@ let bRet = false;
 /*
     Request data from a single sensor :
         ?axid=123456&device=mbr
+        {axid: '123456', device: 'mbr'}
 */
 function handleReq(alexaReq, res) {
     const devid = getId(alexaReq.device);
