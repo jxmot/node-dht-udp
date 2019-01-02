@@ -43,11 +43,8 @@ fs.watch(filein, (eventType, filename) => {
     }
 });
 
+// retrieve current data
 getFileData(filein);
-
-var i = getId('mbr');
-var n = getName(i);
-var p = getPath(i);
 
 console.log('waiting.....');
 
@@ -58,12 +55,11 @@ function alexaQuery(req, res) {
     console.log(req.url);
     console.log(url.parse(req.url,true).query);
 
-    //const alexaReq = url.parse(req.url,true).query;
-    //if(verifyReq(alexaReq)) handleReq(alexaReq);
-    //else replyNoVerify();
-
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end(JSON.stringify({sensor: {t: 90.0, h: 75}})+'\n');
+    if(req.method === 'GET') {
+        const alexaReq = url.parse(req.url,true).query;
+        if(verifyReq(alexaReq)) handleReq(alexaReq, res);
+        else replyWith400(res, 'Bad Alexa ID: '+alexaReq.axid);
+    } else replyWith400(res, 'Method NOT allowed: '+req.method);
 };
 
 function getFileData(filein) {
@@ -76,6 +72,17 @@ function getFileData(filein) {
         console.log(e);
     }
     return bRet;
+};
+
+function getId(device) {
+    let found = undefined;
+    Object.keys(alexacfg.devices).forEach(dev => {
+        if(device === alexacfg.devices[dev][1]) {
+            found = dev;
+            console.log(dev+':'+alexacfg.devices[dev]);
+        }
+    });
+    return found;
 };
 
 function getName(id) {
@@ -94,21 +101,27 @@ let bRet = false;
 };
 
 /*
-    ?axid=123456&device=mbr
+    Request data from a single sensor :
+        ?axid=123456&device=mbr
 */
-function handleReq(alexaReq) {
+function handleReq(alexaReq, res) {
     const devid = getId(alexaReq.device);
-    sensorlast['data'][devid]
+    if(devid !== undefined) {
+        const data = sensorlast['data'][devid];
+        if(data !== undefined)
+            replyWith200(res, JSON.stringify({sensor: data}));
+        else
+            replyWith400(res, 'Data NOT found for: '+devid);
+    } else replyWith400(res, 'Device NOT found for: '+alexaReq.device);
 };
 
-function getId(device) {
-    let found = undefined;
-    Object.keys(alexacfg.devices).forEach(dev => {
-        if(device === alexacfg.devices[dev][1]) {
-            found = dev;
-            console.log(dev+':'+alexacfg.devices[dev]);
-        }
-    });
-    return found;
+function replyWith400(res, msg) {
+    res.writeHead(400, {'Content-Type': 'text/plain'});
+    res.end(msg);
+};
+
+function replyWith200(res, msg) {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end(msg);
 };
 
