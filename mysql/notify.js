@@ -146,8 +146,8 @@ module.exports = (function() {
             // Save the data to a file for other processes 
             // to use.
             let fileout = path.join(path.dirname(require.main.filename), '/datashare/sensorlast.json');
-            let filedata = JSON.parse(JSON.stringify(sensorlast));
-            fs.writeFileSync(fileout, JSON.stringify(sensorlast, null, 4));
+            let filedata = JSON.parse(JSON.stringify(sensorlast, null, 4));
+            fs.writeFileSync(fileout, filedata);
         } else {
             if((error !== null) && (error.err === true)) {
                 err = {table:channel, data:null, err:error};
