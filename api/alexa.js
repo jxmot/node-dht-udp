@@ -73,12 +73,16 @@ function alexaQuery(req, res) {
 */
 function getFileData(filein) {
     let bRet = false;
-    let jsondata = fs.readFileSync(filein);
-    try {
-        sensorlast = JSON.parse(jsondata.toString());
-        bRet = true;
-    } catch(e) {
-        console.log(e);
+    let stat = fs.statSync(filein);
+
+    if(stat.size > 0) {
+        let jsondata = fs.readFileSync(filein);
+        try {
+            sensorlast = JSON.parse(jsondata.toString());
+            bRet = true;
+        } catch(e) {
+            console.log(e);
+        }
     }
     return bRet;
 };
@@ -145,7 +149,7 @@ function handleReq(alexaReq, res) {
 
 /*
     Simple replies, send a status of 400 or 200 with
-    text response data.
+    a text response.
 */
 function replyWith400(res, msg) {
     res.writeHead(400, {'Content-Type': 'text/plain'});
