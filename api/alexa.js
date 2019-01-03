@@ -79,6 +79,7 @@ function getFileData(filein) {
         let jsondata = fs.readFileSync(filein);
         try {
             sensorlast = JSON.parse(jsondata.toString());
+            console.log(stat.size);
             bRet = true;
         } catch(e) {
             console.log(e);
