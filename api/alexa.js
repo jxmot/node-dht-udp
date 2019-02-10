@@ -33,13 +33,12 @@ let alexa  = http.createServer(alexaQuery).listen(alexacfg.port, alexacfg.host);
 var sensorlast = {
 };
 
-const filein = path.join(appdir, alexacfg.watch);
-
 /*
     Watch the configured file for changes, when a 
     change occurs read the file save it into an
     object.
 */
+const filein = path.join(appdir, alexacfg.watch);
 fs.watch(filein, (eventType, filename) => {
     if(filename) {
         console.log(eventType);
@@ -136,6 +135,7 @@ let bRet = false;
     Request data from a single sensor :
         ?axid=123456&device=mbr
         {axid: '123456', device: 'mbr'}
+        {axid: '123456', wx: 'noaa-v3'}
 */
 function handleReq(alexaReq, res) {
     const devid = getId(alexaReq.device);
@@ -152,12 +152,14 @@ function handleReq(alexaReq, res) {
     Simple replies, send a status of 400 or 200 with
     a text response.
 */
+const ctype = {'Content-Type': 'text/plain'};
+
 function replyWith400(res, msg) {
-    res.writeHead(400, {'Content-Type': 'text/plain'});
+    res.writeHead(400, ctype);
     res.end(msg);
 };
 
 function replyWith200(res, msg) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.writeHead(200, ctype);
     res.end(msg);
 };

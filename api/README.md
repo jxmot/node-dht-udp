@@ -1,6 +1,20 @@
 # Alexa Skill API
 
-This application will respond to HTTP requests from an Alexa Skill. When properly requested it will reply with JSON formatted data.
+This application will respond to HTTP requests from an Alexa Skill. 
+
+## Overview
+
+
+
+## Endpoints
+
+## Modify for Use
+
+## Notes
+
+### Node.JS File System
+
+### 
 
 ## Application Requirements
 
@@ -20,15 +34,4 @@ This application will respond to HTTP requests from an Alexa Skill. When properl
         * Forecast data period for a format
         * Observation data for a format
 * Will not handle any "commands", this application will only provide data
-
-## Overview
-
-## Endpoints
-
-## Modify for Use
-
-## Notes
-
-### Node.JS File System
-
-### 
+* 

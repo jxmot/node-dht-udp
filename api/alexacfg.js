@@ -6,7 +6,6 @@ module.exports = {
     // requests from the alexa skill
     host : '192.168.0.7',
     port : 80,
-    _port : 8080,
     // devices must match the creator of the
     // data file. 
     devices: {
@@ -21,5 +20,4 @@ module.exports = {
     // this must match the ID provided in the 
     // requests from the alexa skill
     axid: '123456',
-    _axid: 'EvW4{.7sgAzf$E!K'
 };
