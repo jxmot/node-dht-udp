@@ -10,7 +10,7 @@ module.exports = {
     // data file. 
     devices: {
     //  Device ID    Proper Name      Query Path
-        'ESP_39F542':['den',            'den'],
+        'ESP_49F542':['den',            'den'],
         'ESP_49EB40':['master bedroom', 'mbr'],
         'ESP_49ECCD':['living room',    'lr'],
         'ESP_49EC8B':['office',         'ofc']
