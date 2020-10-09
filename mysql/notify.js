@@ -58,7 +58,8 @@ module.exports = (function() {
         //error: []
     };
 
-    notify.init = function() {
+    notify.init = function(_getHistory) {
+
         // A client has connected, 
         io.on('connection', function(socket) {
 
@@ -71,6 +72,37 @@ module.exports = (function() {
                 if(sensorlast['wxfcst'][data.wxsvc] !== undefined)
                     resend('wxfcst', socket, sensorlast['wxfcst'], data.wxsvc);
             });
+
+            socket.on('senshist', function (data) {
+                log(`socket ${socket.id} on senshist - ${JSON.stringify(data)}`);
+                // data {
+                //      dursel: <-- in hours or days, 1,2 or 3 day(72hour) only
+                //      dev_id: `ESP_XXXX` <- device ID or 'ALL' for all of them
+                // }
+                switch(data.dursel) {
+
+                    case '72':
+                    case '3':
+                        break;
+
+                    case '48':
+                    case '2':
+                        break;
+
+                    case '24':
+                    case '1':
+                    default:
+                        break;
+                }
+
+                //_getHistory({data.dev_id:'ESP_49EC8B', from: 1601645954616, to: 1601477571454}, sendHistory)
+                // socket.emit('histdata', 
+                //resend('histdata', socket, 
+            });
+
+            function sendHistory(data) {
+
+            };
 
             // https://socket.io/docs/emit-cheatsheet/
             socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
@@ -93,6 +125,8 @@ module.exports = (function() {
             });
         });
     };
+
+    
     
     // Start listening...
     var cfg = require('./socket_cfg.js');

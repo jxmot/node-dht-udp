@@ -144,8 +144,12 @@ module.exports = function init(evts) {
             }
 
             // initialize the client notification module
-            notify.init();
+            notify.init(getHistory);
         }
+    };
+
+    function getHistory(histreq, callback) {
+
     };
 
     //////////////////////////////////////////////////////////////////////////
@@ -163,7 +167,7 @@ module.exports = function init(evts) {
     };
 
     /*
-        Obtain and save the last sensor status an data that was written to
+        Obtain and save the last sensor status and data that was written to
         the database.
 
         This compliments the client status & data update, which occurs when 
@@ -181,6 +185,9 @@ module.exports = function init(evts) {
                 });
             }
         });
+    };
+
+    function sensorHistory(dur = {f: 0, t:0}) {
     };
 
     //////////////////////////////////////////////////////////////////////////
