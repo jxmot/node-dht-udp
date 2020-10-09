@@ -84,8 +84,8 @@ $(document).on('hist_ready', function() {
     initSocket();
 });
 
-function showHistory(data) {
-    $(document).trigger('hist_show', JSON.stringify(data));
+function showHistory(hist) {
+    $(document).trigger('hist_show', JSON.stringify(hist));
 };
 
 $(document).on('hist_request', function(e, sel) {

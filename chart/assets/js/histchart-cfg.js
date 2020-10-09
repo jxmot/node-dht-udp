@@ -10,9 +10,9 @@
     researched a number of other chart packages and either they
     were too expensive or lacked these needed features:
         * Dual and independant Y-axis <-- MUST HAVE!
-        * Documented (Apex docs are just "OK", they have a lot
+        * Documented (Apex docs are just 'OK', they have a lot
           of info. it's not complete)
-        * Can be used a "live" data chart. So far this seems to 
+        * Can be used a 'live' data chart. So far this seems to 
           be the easiest to force new behavior. <-- MUST HAVE!
 */
 // https://caniuse.com/es6-module-dynamic-import
@@ -22,6 +22,9 @@
 // contains the data series
 var temps = [];
 var humid = [];
+
+// TODO: multiple configs? in an array?
+// TODO: functions to handle specific configs
 
 // chart config
 var histchart_cfg = {
@@ -34,7 +37,7 @@ var histchart_cfg = {
     },
     stroke: {
         width: 3,
-        curve: "smooth"
+        curve: 'smooth'
     },
     chart: {
         type: 'line',
@@ -59,13 +62,13 @@ var histchart_cfg = {
         size: 0,
     },
     title: {
-        text: 'ESP_49EC8B',
+        text: 'ESP_ABCDEF',
         align: 'left'
     },
     yaxis: [
         {
             title: {
-                text: "Temp °F",
+                text: 'Temp °F',
                 style: {
                     color: '#4ecdc4'
                 }
@@ -82,7 +85,7 @@ var histchart_cfg = {
         {
             opposite: true,
             title: {
-                text: "%RH",
+                text: '%RH',
                 style: {
                     color: '#c7f464'
                 }
@@ -113,11 +116,11 @@ var histchart_cfg = {
         x: {
             formatter: function (val) {
                 var dt = new Date(val);
-                var tod = dt.getFullYear() + "-" + (dt.getMonth()+1) + "-" + dt.getDate();
+                var tod = dt.getFullYear() + '-' + (dt.getMonth()+1) + '-' + dt.getDate();
                 var h = dt.getHours();
                 var m = dt.getMinutes();
                 var s = dt.getSeconds();
-                tod = tod + "<br>"+ (h < 10 ? "0"+h : h) +":"+ (m < 10 ? "0"+m : m) +":"+ (s < 10 ? "0"+s : s);
+                tod = tod + '<br>'+ (h < 10 ? '0'+h : h) +':'+ (m < 10 ? '0'+m : m) +':'+ (s < 10 ? '0'+s : s);
                 return tod;
             }
         }
