@@ -79,29 +79,23 @@ module.exports = (function() {
                 //      dursel: <-- in hours or days, 1,2 or 3 day(72hour) only
                 //      dev_id: `ESP_XXXX` <- device ID or 'ALL' for all of them
                 // }
-                switch(data.dursel) {
+                var query = {
+                    from: 0,
+                    to: 0,
+                    dev_id: ''
+                };
 
-                    case '72':
-                    case '3':
-                        break;
+                query.to = (Date.now() - ((86400 * 10) * 1000));
+                query.from = (query.to - ((data.dursel * 3600) * 1000));
+                query.dev_id = data.dev_id;
 
-                    case '48':
-                    case '2':
-                        break;
-
-                    case '24':
-                    case '1':
-                    default:
-                        break;
-                }
-
+                _getHistory(query, sendHistory);
                 //_getHistory({data.dev_id:'ESP_49EC8B', from: 1601645954616, to: 1601477571454}, sendHistory)
-                // socket.emit('histdata', 
-                //resend('histdata', socket, 
             });
 
-            function sendHistory(data) {
-
+            function sendHistory(table, data) {
+                console.log(data);
+                socket.emit('histdata', data);
             };
 
             // https://socket.io/docs/emit-cheatsheet/
