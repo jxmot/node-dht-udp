@@ -25,16 +25,24 @@ for(ix = 0; ix < colldata["ESP_49EC8B"].length; ix++) {
 var chart = new ApexCharts(document.querySelector("#chart"), histchart_cfg);
 chart.render();
 
+
 // incoming history data...
 $(document).on('hist_show', function(e, data) {
     consolelog('hist_show - '+data);
 });
 
+var choices = {
+    dursel: '',
+    dev_id: []
+};
+
 $(document).ready(function() {
     // set up the button handler
    $('#gethist').on('click', function() {
         consolelog('#gethist');
-        $(document).trigger('hist_request', {dursel: '24', dev_id:'ESP_49EC8B'});
+// {dursel: '24', dev_id:['ESP_49EC8B'.'ESP_AAAAAA',ESP_BBBBBB'}
+//        $(document).trigger('hist_request', {dursel: '24', dev_id:'ESP_49EC8B'});
+        $(document).trigger('hist_request', choices);
     });
     // adjust the text color
     adaptColor('#gethist');
@@ -55,9 +63,18 @@ $(document).ready(function() {
             if(this.checked === true) {
                 this.parentElement.classList = 'use-pointer sensor-selected';
                 senscount += 1;
+                // ADD this sensor to the choices.dev_id[] array
+                choices.dev_id.push(this.value);
             } else {
                 this.parentElement.classList = 'use-pointer';
                 senscount -= 1;
+                // REMOVE this sensor from the choices.dev_id[] array
+                sensrmv = this.value;
+                choices.dev_id = choices.dev_id.filter(function(sens) {
+                    var ret = !(sens === sensrmv);
+                    return ret;
+                });
+
             }
             // a count of selected sensors determines if the 
             // "get history" button is enabled or not
@@ -77,6 +94,7 @@ $(document).ready(function() {
         if(durs.dataset.default === 'true') {
             durs.checked = true;
             durs.parentElement.classList = 'use-pointer time-selected';
+            choices.dursel = durs.value;
         }
         durs.onclick = function() {
             consolelog(this.value+'  '+this.checked);
@@ -84,6 +102,8 @@ $(document).ready(function() {
             document.getElementsByName('dursel_ctrl').forEach(function(d){d.parentElement.classList = 'use-pointer';});
             // add the color class. 
             this.parentElement.classList = 'use-pointer time-selected';
+            // save the selection
+            choices.dursel = this.value;
         };
     });
     // let the app know we're ready for incoming sensor data
