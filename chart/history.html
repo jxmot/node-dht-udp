@@ -1,30 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-us">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Zoomable TimeSeries</title>
-    <link href="./styles.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SensorNet Chart</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
     <script>
-        window.Promise ||
-            document.write(
-                '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
-            )
-        window.Promise ||
-            document.write(
-                '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
-            )
-        window.Promise ||
-            document.write(
-                '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
-            )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+        )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+        )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+        )
     </script>
-    <script src="./apex/apexcharts.js"></script>
+<!-- CSS -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cyborg/bootstrap.min.css">
+    <!-- Site-wide CSS -->
+    <link rel="stylesheet" href="./assets/css/site.css">
+    <!-- Project CSS -->
+    <!-- Featured Project - SensorNet -->
+        <!-- CSS specifically for this file -->
+            <!-- HTML Styling -->
+    <link rel="stylesheet" href="./assets/css/sensornet.css">
+        <!-- ^CSS specifically for this file -->
+    <!-- ^Featured Project - SensorNet -->
+    <!-- ^Project CSS -->
+<!-- ^CSS -->
+<!-- JS -->
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
+    <!-- ^jquery -->
+    <script src="./assets/apex/apexcharts.js"></script>
+<!-- ^JS -->
 </head>
-<body>
-    <div id="chart"></div>
+<body id="pagetop" class="page-nocopy">
+    <!-- Featured Project - SensorNet -->
+    <div id="sensornet_project">
+        <div class="sensornet-outer">
+            <!-- SensorNet Sensor History -->
+            <div class="row sensornet-inner">
+                <!-- history panel -->
+                <div class="col-lg-8 col-lg-offset-2 col-md-12 col-sm-12 col-xs-12">
+                    <div id="legend-panel" class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title sensor-panel-title sensornet-overview-title collapsed" data-toggle="collapse" data-target="#legend-collapse">
+                                <span class="fa sensornet-overview-collapse-icon"></span>
+                                <span>Sensor History <i>(click here to open/close)</i></span>
+                            </h3>
+                        </div>
+                        <div id="legend-collapse" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div id="chart"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
+                                        <div class="history-ctrls">
+                                            <div class="history-ctrls-vcenter">
+                                                <h6>Choose sensors:<h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <div class="history-ctrls">
+                                            <div class="history-ctrls-vcenter">
+                                                <label class="use-pointer">
+                                                    <input type="checkbox" value="ESP_49ECCD" name="histsel_ctrl">
+                                                    &nbsp;&nbsp;ESP_49ECCD
+                                                </label>
+                                                <br>
+                                                <label class="use-pointer">
+                                                    <input type="checkbox" value="ESP_49F542" name="histsel_ctrl">
+                                                    &nbsp;&nbsp;ESP_49F542
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <div class="history-ctrls">
+                                            <div class="history-ctrls-vcenter">
+                                                <label class="use-pointer">
+                                                    <input type="checkbox" value="ESP_49EC8B" name="histsel_ctrl">
+                                                    &nbsp;&nbsp;ESP_49EC8B
+                                                </label>
+                                                <br>
+                                                <label class="use-pointer">
+                                                    <input type="checkbox" value="ESP_49EB40" name="histsel_ctrl">
+                                                    &nbsp;&nbsp;ESP_49EB40
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <!-- <hr style="width:80%;text-align:center;height:20px;color:yellow"> -->
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
+                                        <div class="history-ctrls">
+                                            <div class="history-ctrls-vcenter">
+                                                <h6>Choose a time:<h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <div>
+                                            <label class="use-pointer">
+                                                <input type="radio" value="24" name="dursel_ctrl">
+                                                &nbsp;&nbsp;24 hrs
+                                            </label>
+                                            <label class="use-pointer">
+                                                <input type="radio" value="48" name="dursel_ctrl">
+                                                &nbsp;&nbsp;48 hrs
+                                            </label>
+                                            <label class="use-pointer">
+                                                <input type="radio" value="72" name="dursel_ctrl">
+                                                &nbsp;&nbsp;72 hrs
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <div class="history-ctrls">
+                                            <div class="history-ctrls-vcenter">
+                                                <h6>And then:<h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="history-ctrls">
+                                            <div class="history-ctrls-vcenter">
+                                                <button id="gethist" onmousedown="event.preventDefault()" type="button" class="btn btn-success">
+                                                    Get the Data
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+                <!-- /history panel -->
+            </div>
+            <!-- /SensorNet Sensor History -->
+        </div>
+    </div>
+    <!-- Project JS -->
+    <!-- Featured Project - SensorNet -->
+        <!-- for sensor data via socket.io -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <!-- control over console.log() behavior -->
+    <script type="text/javascript" src="./assets/js/consolelog.js"></script>
+        <!-- miscellaneous utility functions -->
+    <script type="text/javascript" src="./assets/js/utils.js"></script>
+        <!-- for sensor data via socket.io -->
+    <script type="text/javascript" src="./assets/js/_socketcfg.js"></script>
+    <script type="text/javascript" src="./assets/js/appsockets.js"></script>
+    <script type="text/javascript" src="./data/sensornet_data-trim.js"></script>
+    <script type="text/javascript" src="./assets/js/histchart-cfg.js"></script>
+    <script type="text/javascript" src="./assets/js/histchart.js"></script>
+    <!-- ^Featured Project - SensorNet -->
+    <!-- For navigation and collapsible contents -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- ^For navigation and collapsible contents -->
 </body>
-<script src="./sensornet_data-trim.js"></script>
-<script src="./histchart-cfg.js"></script>
 </html>
