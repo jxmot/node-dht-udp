@@ -37,33 +37,41 @@ $(document).ready(function() {
    $('#gethist').on('click', function() {
         consolelog('#gethist');
     });
+    $('#gethist').prop("disabled",true);
+
 
     var sensors = document.getElementsByName('histsel_ctrl')
-    
+    var senscount = 0;
     sensors.forEach(function(sens) {
         consolelog(sens);
         sens.onclick = function() {
             consolelog(this.value+'  '+this.checked);
-            if(this.checked === true) this.parentElement.classList = 'use-pointer sensor-selected';
-            else this.parentElement.classList = 'use-pointer';
+            if(this.checked === true) {
+                this.parentElement.classList = 'use-pointer sensor-selected';
+                senscount += 1;
+            } else {
+                this.parentElement.classList = 'use-pointer';
+                senscount -= 1;
+            }
+            if(senscount === 0) $('#gethist').prop("disabled",true);
+            else $('#gethist').prop("disabled",false);
         };
     });
 
     var durats = document.getElementsByName('dursel_ctrl');
     durats.forEach(function(durs) {
         consolelog(durs);
+        if(durs.dataset.default === 'true') {
+            durs.checked = true;
+            durs.parentElement.classList = 'use-pointer time-selected';
+        }
         durs.onclick = function() {
             consolelog(this.value+'  '+this.checked);
-
+            // remove color class
             document.getElementsByName('dursel_ctrl').forEach(function(d){d.parentElement.classList = 'use-pointer';});
-
-
-            if(this.checked === true) this.parentElement.classList = 'use-pointer time-selected';
-            else this.parentElement.classList = 'use-pointer';
+            // add the color class. 
+            this.parentElement.classList = 'use-pointer time-selected';
         };
     });
-  
-
-
 });
 
