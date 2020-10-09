@@ -149,9 +149,26 @@ module.exports = function init(evts) {
     };
 
     function getHistory(histreq, callback) {
+
+        var qstr = '';
+        var sstr = `'`;
+        if(histreq.dev_id.length === 1) {
+            // requesting history for one sensor
+            sstr = `'${histreq.dev_id[0]}'`;
+        } else {
+            // requesting history for more than one sensor
+            histreq.dev_id.forEach(function(s, ix) {
+                sstr += (s + `'`);
+                if(ix < (histreq.dev_id.length - 1))
+                    sstr += ` or dev_id = '`;
+                //else sstr += `'`;
+            });
+        }
+        qstr = `(dev_id = ${sstr}) and (tstamp >= ${histreq.from} and tstamp <= ${histreq.to}) order by tstamp asc;`
+        logTrace(`getHistory() -  qstr = ${qstr}`);
         database.readRow('data',
     // dev_id = histreq.dev_id and tstamp >= histreq.from and tstamp <= histreq.to order by tstamp desc;
-                         `dev_id = '${histreq.dev_id}' and tstamp >= ${histreq.from} and tstamp <= ${histreq.to} order by tstamp asc;`,
+                         qstr,
                          callback);
     };
 
