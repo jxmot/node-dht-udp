@@ -161,13 +161,11 @@ module.exports = function init(evts) {
                 sstr += (s + `'`);
                 if(ix < (histreq.dev_id.length - 1))
                     sstr += ` or dev_id = '`;
-                //else sstr += `'`;
             });
         }
         qstr = `(dev_id = ${sstr}) and (tstamp >= ${histreq.from} and tstamp <= ${histreq.to}) order by tstamp asc;`
-        logTrace(`getHistory() -  qstr = ${qstr}`);
+        logTrace(`getHistory() - qstr = ${qstr}`);
         database.readRow('data',
-    // dev_id = histreq.dev_id and tstamp >= histreq.from and tstamp <= histreq.to order by tstamp desc;
                          qstr,
                          callback);
     };
