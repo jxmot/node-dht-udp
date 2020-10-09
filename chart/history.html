@@ -44,7 +44,7 @@
 <body id="pagetop" class="page-nocopy">
     <!-- Featured Project - SensorNet -->
     <div id="sensornet_project">
-        <div class="sensornet-outer">
+        <div class="container sensornet-outer">
             <!-- SensorNet Sensor History -->
             <div class="row sensornet-inner">
                 <!-- history panel -->
@@ -73,16 +73,23 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
+                                    <div class="col-lg-3 col-lg-offset-9 col-md-3 col-md-offset-9 col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                                        <span><small>Chart Library:&nbsp;<a href="" target"new">Apex Charts</a></small></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 col-xs-12">
                                         <div class="history-ctrls">
-                                            <div class="history-ctrls-vcenter">
-                                                <h6>Choose sensors:<h6>
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
+                                                <h6>Choose sensors:</h6>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                         <div class="history-ctrls">
-                                            <div class="history-ctrls-vcenter">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
                                                 <label class="use-pointer">
                                                     <input type="checkbox" value="ESP_49ECCD" name="histsel_ctrl">
                                                     &nbsp;&nbsp;ESP_49ECCD
@@ -95,9 +102,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                         <div class="history-ctrls">
-                                            <div class="history-ctrls-vcenter">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
                                                 <label class="use-pointer">
                                                     <input type="checkbox" value="ESP_49EC8B" name="histsel_ctrl">
                                                     &nbsp;&nbsp;ESP_49EC8B
@@ -115,15 +123,16 @@
                                 <!-- <hr style="width:80%;text-align:center;height:20px;color:yellow"> -->
                                 <br>
                                 <div class="row">
-                                    <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
+                                    <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 col-xs-4">
                                         <div class="history-ctrls">
-                                            <div class="history-ctrls-vcenter">
-                                                <h6>Choose a time:<h6>
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
+                                                <h6>Choose a time:</h6>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                        <div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-8">
+                                        <div class="history-ctrls">
                                             <label class="use-pointer">
                                                 <input type="radio" value="24" name="dursel_ctrl" data-default="true">
                                                 &nbsp;&nbsp;24 hrs
@@ -138,16 +147,18 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                         <div class="history-ctrls">
-                                            <div class="history-ctrls-vcenter">
-                                                <h6>And then:<h6>
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
+                                                <h6>And then:</h6>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4">
                                         <div class="history-ctrls">
-                                            <div class="history-ctrls-vcenter">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
                                                 <button id="gethist" onmousedown="event.preventDefault()" type="button" class="btn btn-success">
                                                     Get the Data
                                                 </button>
