@@ -23,34 +23,81 @@ for(ix = 0; ix < colldata[device].length; ix++) {
     arr = [colldata[device][ix].tstamp, colldata[device][ix].h];
     humid.push(arr);
 }
-/* ********************************************** */
-/* ********************************************** */
 
-// create & render the chart using the data series
-var chart = new ApexCharts(document.querySelector('#chart'), histchart_cfg);
-chart.render();
+newChart();
+
+
+/* ********************************************** */
+/* ********************************************** */
+var chart = {};
+function newChart() {
+    // create & render the chart using the data series
+    chart = new ApexCharts(document.querySelector('#chart'), histchart_cfg);
+    chart.render();
+};
+
+function collateData(newdata) {
+    // collate the data
+    colldata = null;
+    for(var ix = 0;ix < newdata.length; ix++) {
+        colldata[newdata[ix].dev_id].push(newdata[ix]);
+    }
+};
 
 // incoming history data...
-$(document).on('hist_show', function(e, data) {
-    var tmp = JSON.parse(data);
-    consolelog('hist_show - records = '+tmp.length);
+$(document).on('hist_show', function(e, reply) {
+    var hist = JSON.parse(reply);
+    consolelog('hist_show - records = '+hist.data.length);
+
+    return;
     // 
     // hide chart 
     // "please wait..." ?
     // 
     // erase current series
-    // 
-    // 
-    // if data is a SINGLE sensor then
-    //      load T and H into series
-    //      show T and H 
-    // else 
-    //      collate new t & h data
-    //      load all sensor T only into series
-    // 
-    // update all chart labels and axis config (single vs mult sensors)
-    // render chart
-    // show chart
+    //      get 'name' from global
+    chart.hideSeries('°F');
+    chart.hideSeries('%RH');
+    chart.updateSeries([
+        {
+            name: '°F',
+            data: []
+        },
+        {
+            name: '%RH',
+            data: []
+        }
+    ]);
+/*
+    if data is a SINGLE sensor then
+         load T and H into series
+         show T and H 
+         histchart_cfg.title.text = dev_id
+    else 
+        chart.destroy();
+        histchart_cfg.series = null;
+
+        var newSeries = {
+            name: "device id"
+            data: [] T data from the device
+        }
+
+        for dev_id in hist.query.dev_id[]
+            newSeries.name = dev_id;
+            newSeries.data[] = dev_id hist.data[]{t}
+            histchart_cfg.series.push( JSON...(newSeries))
+
+
+
+         collate new t & h data
+         load all sensor T only into series
+    
+    
+
+    update all chart labels and axis config (single vs mult sensors)
+    render chart
+    show chart
+*/
 });
 
 var choices = {
