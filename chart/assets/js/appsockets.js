@@ -94,7 +94,7 @@ $(document).on('hist_request', function(e, sel) {
     // {dursel: '24', dev_id:'ESP_49EC8B'}
     if(socketready === true) {
         consolelog('hist_request - ' + sel);
-        socket.emit('senshist', {dursel: '24', dev_id:'ESP_49EC8B'});
+        socket.emit('senshist', sel);
     }
 });
 

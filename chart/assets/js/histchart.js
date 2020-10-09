@@ -21,31 +21,37 @@ for(ix = 0; ix < colldata["ESP_49EC8B"].length; ix++) {
     humid.push(arr);
 }
 
+// create & render the chart using the data series
 var chart = new ApexCharts(document.querySelector("#chart"), histchart_cfg);
 chart.render();
 
+// incoming history data...
 $(document).on('hist_show', function(data) {
     consolelog('hist_show - '+JSON.stringify(data));
 });
 
-// let the app know we're ready for incoming sensor 
-// status and data
-$(document).trigger('hist_ready', true);
-
 $(document).ready(function() {
-
+    // set up the button handler
    $('#gethist').on('click', function() {
         consolelog('#gethist');
+        $(document).trigger('hist_request', {dursel: '24', dev_id:'ESP_49EC8B'});
     });
+    // adjust the text color
+    adaptColor('#gethist');
+    // disable the button because no sensors have been selected yet
     $('#gethist').prop("disabled",true);
-
-
+    // adjust the text color
+    adaptColor('#titlehist', '.panel-success>.panel-heading');
+    // iterate through all of the sensor selection checkboxes
+    // and add an onclick handler to each of them.
     var sensors = document.getElementsByName('histsel_ctrl')
     var senscount = 0;
     sensors.forEach(function(sens) {
         consolelog(sens);
         sens.onclick = function() {
             consolelog(this.value+'  '+this.checked);
+            // manage the color with a css class when the checkbox 
+            // has changed to either state
             if(this.checked === true) {
                 this.parentElement.classList = 'use-pointer sensor-selected';
                 senscount += 1;
@@ -53,14 +59,21 @@ $(document).ready(function() {
                 this.parentElement.classList = 'use-pointer';
                 senscount -= 1;
             }
+            // a count of selected sensors determines if the 
+            // "get history" button is enabled or not
             if(senscount === 0) $('#gethist').prop("disabled",true);
-            else $('#gethist').prop("disabled",false);
+            else {
+                $('#gethist').prop("disabled",false);
+                adaptColor('#gethist');
+            }
         };
     });
-
+    // iterate through the duration selections and set 
+    // one as "picked" if it has been set as the default
     var durats = document.getElementsByName('dursel_ctrl');
     durats.forEach(function(durs) {
         consolelog(durs);
+        // if this is the default choice then pre-select it
         if(durs.dataset.default === 'true') {
             durs.checked = true;
             durs.parentElement.classList = 'use-pointer time-selected';
@@ -73,5 +86,7 @@ $(document).ready(function() {
             this.parentElement.classList = 'use-pointer time-selected';
         };
     });
+    // let the app know we're ready for incoming sensor data
+    $(document).trigger('hist_ready', true);
 });
 
