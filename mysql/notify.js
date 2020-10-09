@@ -73,18 +73,20 @@ module.exports = (function() {
                     resend('wxfcst', socket, sensorlast['wxfcst'], data.wxsvc);
             });
 
+            var query = {
+                from: 0,
+                to: 0,
+                dev_id: []
+            };
+
             socket.on('senshist', function (data) {
                 log(`socket ${socket.id} on senshist - ${JSON.stringify(data)}`);
                 // data {
                 //      dursel: <-- in hours, 24,48, or 72 only
                 //      dev_id: ['ESP_XXXX'] <- device IDs
                 // }
-                var query = {
-                    from: 0,
-                    to: 0,
-                    dev_id: []
-                };
-
+// NOTE: for use on live data replace the next line with
+//                query.to = Date.now();
                 query.to = (Date.now() - ((86400 * 10) * 1000));
                 query.from = (query.to - ((data.dursel * 3600) * 1000));
                 query.dev_id = JSON.parse(JSON.stringify(data.dev_id));
@@ -94,8 +96,8 @@ module.exports = (function() {
             });
 
             function sendHistory(table, data) {
-                //console.log(data);
-                socket.emit('histdata', data);
+                var hist = Object.assign({},{query:query},{data:data});
+                socket.emit('histdata', hist);
             };
 
             // https://socket.io/docs/emit-cheatsheet/
