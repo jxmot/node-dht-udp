@@ -39,18 +39,21 @@ var choices = {
 };
 
 $(document).ready(function() {
-    // set up the button handler
+
+    // adjust the text color
+    adaptColor('#titlehist', '.panel-success>.panel-heading');
+    // adjust the text color
+    adaptColor('#gethist');
+    // disable the button because no sensors have been selected yet
+    $('#gethist').prop("disabled",true);
+
+   // set up the button handler
    $('#gethist').on('click', function() {
         consolelog('#gethist - '+JSON.stringify(choices));
         // {dursel: '24', dev_id:['ESP_49EC8B','ESP_AAAAAA',ESP_BBBBBB'}
         $(document).trigger('hist_request', choices);
     });
-    // adjust the text color
-    adaptColor('#gethist');
-    // disable the button because no sensors have been selected yet
-    $('#gethist').prop("disabled",true);
-    // adjust the text color
-    adaptColor('#titlehist', '.panel-success>.panel-heading');
+
     // iterate through all of the sensor selection checkboxes
     // and add an onclick handler to each of them.
     var sensors = document.getElementsByName('histsel_ctrl')
@@ -109,5 +112,6 @@ $(document).ready(function() {
     });
     // let the app know we're ready for incoming sensor data
     $(document).trigger('hist_ready', true);
+    $('#history-panel').show();
 });
 
