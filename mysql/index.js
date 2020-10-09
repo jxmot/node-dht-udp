@@ -149,7 +149,10 @@ module.exports = function init(evts) {
     };
 
     function getHistory(histreq, callback) {
-
+        database.readRow('data',
+    // dev_id = histreq.dev_id and tstamp >= histreq.from and tstamp <= histreq.to order by tstamp desc;
+                         `dev_id = '${histreq.dev_id}' and tstamp >= ${histreq.from} and tstamp <= ${histreq.to} order by tstamp asc;`,
+                         callback);
     };
 
     //////////////////////////////////////////////////////////////////////////
