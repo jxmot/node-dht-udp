@@ -76,25 +76,25 @@ module.exports = (function() {
             socket.on('senshist', function (data) {
                 log(`socket ${socket.id} on senshist - ${JSON.stringify(data)}`);
                 // data {
-                //      dursel: <-- in hours or days, 1,2 or 3 day(72hour) only
-                //      dev_id: `ESP_XXXX` <- device ID or 'ALL' for all of them
+                //      dursel: <-- in hours, 24,48, or 72 only
+                //      dev_id: ['ESP_XXXX'] <- device IDs
                 // }
                 var query = {
                     from: 0,
                     to: 0,
-                    dev_id: ''
+                    dev_id: []
                 };
 
                 query.to = (Date.now() - ((86400 * 10) * 1000));
                 query.from = (query.to - ((data.dursel * 3600) * 1000));
-                query.dev_id = data.dev_id;
+                query.dev_id = JSON.parse(JSON.stringify(data.dev_id));
 
                 _getHistory(query, sendHistory);
                 //_getHistory({data.dev_id:'ESP_49EC8B', from: 1601645954616, to: 1601477571454}, sendHistory)
             });
 
             function sendHistory(table, data) {
-                console.log(data);
+                //console.log(data);
                 socket.emit('histdata', data);
             };
 
