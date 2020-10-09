@@ -28,7 +28,9 @@ chart.render();
 
 // incoming history data...
 $(document).on('hist_show', function(e, data) {
-    consolelog('hist_show - '+data);
+//    consolelog('hist_show - '+data);
+    var tmp = JSON.parse(data);
+    consolelog('hist_show - records = '+tmp.length);
 });
 
 var choices = {
@@ -39,9 +41,8 @@ var choices = {
 $(document).ready(function() {
     // set up the button handler
    $('#gethist').on('click', function() {
-        consolelog('#gethist');
-// {dursel: '24', dev_id:['ESP_49EC8B'.'ESP_AAAAAA',ESP_BBBBBB'}
-//        $(document).trigger('hist_request', {dursel: '24', dev_id:'ESP_49EC8B'});
+        consolelog('#gethist - '+JSON.stringify(choices));
+        // {dursel: '24', dev_id:['ESP_49EC8B','ESP_AAAAAA',ESP_BBBBBB'}
         $(document).trigger('hist_request', choices);
     });
     // adjust the text color

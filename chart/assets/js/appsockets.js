@@ -85,8 +85,6 @@ $(document).on('hist_ready', function() {
 });
 
 function showHistory(data) {
-    // {dev_id:'ESP_XXXXXX'|'ALL', data:[]}
-    consolelog('showHistory - '+JSON.stringify(data));
     $(document).trigger('hist_show', JSON.stringify(data));
 };
 
