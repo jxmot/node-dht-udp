@@ -18,28 +18,10 @@
 // https://caniuse.com/es6-module-dynamic-import
 //import {sensordata} from './sensornet_data-trim.js';
 
-// collate the data
-for(var ix = 0;ix < sensordata.length; ix++) {
-    colldata[sensordata[ix].dev_id].push(sensordata[ix]);
-}
-
-// proof that it worked
-console.log(colldata["ESP_49ECCD"].length);
-console.log(colldata["ESP_49F542"].length);
-console.log(colldata["ESP_49EC8B"].length);
-console.log(colldata["ESP_49EB40"].length);
 
 // contains the data series
 var temps = [];
 var humid = [];
-
-for(ix = 0; ix < colldata["ESP_49EC8B"].length; ix++) {
-    var arr = [colldata["ESP_49EC8B"][ix].tstamp, colldata["ESP_49EC8B"][ix].t];
-    temps.push(arr);
-
-    arr = [colldata["ESP_49EC8B"][ix].tstamp, colldata["ESP_49EC8B"][ix].h];
-    humid.push(arr);
-}
 
 // chart config
 var histchart_cfg = {
@@ -141,6 +123,3 @@ var histchart_cfg = {
         }
     }
 };
-
-var chart = new ApexCharts(document.querySelector("#chart"), histchart_cfg);
-chart.render();

@@ -1,0 +1,58 @@
+/*
+    Gauge CSS
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/
+*/
+.gauge_outer { 
+}
+
+.gauge_inner { 
+    text-align: center;
+    margin: 0 auto; 
+}
+
+.gauge_legend_box {
+    border: 2px solid grey;
+    border-radius: 5px;
+}
+
+.gauge_legend_body {
+    padding: 13px;
+}
+
+.gauge_legend_list {
+    list-style: none;
+}
+
+@media screen and (min-width:100px) {
+    .gauge_legend_humidity_list {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (min-width:988px) {
+    .gauge_legend_humidity_list {
+        margin-top: 0;
+    }
+}
+
+.gauge_legend_item {
+    float: left;
+    display: block;
+    text-align: center;
+}
+
+.gauge_label {
+    text-align: center;
+    font-weight: bold;
+}
+
+.gauge_label_trend {
+    width: 10px;
+}
+
+.gauge_label_last {
+    font-weight: bold;
+    font-size: x-small;
+}
+
