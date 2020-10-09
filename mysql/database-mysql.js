@@ -263,6 +263,9 @@ exports.database = (function() {
     database.readRow = function(table, keyfield, callme) {
         readCallBack = callme;
         if(this.dbopen === true) {
+
+            log('database.readRow() - sql = select * from '+table+' where '+keyfield);
+
             connection.query('select * from '+table+' where '+keyfield, function(error, result) {
                 if(error) {
                     log(`database.readRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
