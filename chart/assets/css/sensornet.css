@@ -119,10 +119,16 @@
     .sensornet-overview-title {
         font-size:1.5rem;
     }
+    .sensornet-history-title {
+        font-size:1.5rem;
+    }
 }
 
 @media screen and (min-width:600px) {
     .sensornet-overview-title {
+        font-size:1.75rem;
+    }
+    .sensornet-history-title {
         font-size:1.75rem;
     }
 }
@@ -131,6 +137,13 @@
     .sensornet-overview-title {
         font-size:2rem;
     }
+    .sensornet-history-title {
+        font-size:2rem;
+    }
+}
+
+.sensornet-history-title {
+    position:relative;
 }
 
 .sensornet-overview-title {
