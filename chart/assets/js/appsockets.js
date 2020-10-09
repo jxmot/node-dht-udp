@@ -93,7 +93,7 @@ function showHistory(data) {
 $(document).on('hist_request', function(e, sel) {
     // {dursel: '24', dev_id:'ESP_49EC8B'}
     if(socketready === true) {
-        consolelog('hist_request - ' + sel);
+        consolelog('hist_request - ' + JSON.stringify(sel));
         socket.emit('senshist', sel);
     }
 });
