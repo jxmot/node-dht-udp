@@ -29,7 +29,7 @@ function initSocket() {
     });
 
     socket.on('server', function(data) {
-        consolelog('server - '+JSON.stringify(data));
+        //consolelog('server - '+JSON.stringify(data));
         // for future use, a placeholder for reacting
         // to messages from the server itself
         if(data.status === true) socketready = true;
@@ -45,7 +45,7 @@ function initSocket() {
 
     socket.on('disconnect', function(){ 
         socketready = false;
-        consolelog('ERROR - socket is disconnected');
+        consolelog('INFO - socket was disconnected');
     });
 };
 /*
@@ -89,9 +89,8 @@ function showHistory(data) {
 };
 
 $(document).on('hist_request', function(e, sel) {
-    // {dursel: '24', dev_id:'ESP_49EC8B'}
     if(socketready === true) {
-        consolelog('hist_request - ' + JSON.stringify(sel));
+        //consolelog('hist_request - ' + JSON.stringify(sel));
         socket.emit('senshist', sel);
     }
 });

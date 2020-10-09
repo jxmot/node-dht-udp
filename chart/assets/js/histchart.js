@@ -1,36 +1,56 @@
-
-
+/* ********************************************** */
+// Load canned data
+//
 // collate the data
 for(var ix = 0;ix < sensordata.length; ix++) {
     colldata[sensordata[ix].dev_id].push(sensordata[ix]);
 }
 
 // proof that it worked
-console.log(colldata["ESP_49ECCD"].length);
-console.log(colldata["ESP_49F542"].length);
-console.log(colldata["ESP_49EC8B"].length);
-console.log(colldata["ESP_49EB40"].length);
+console.log(colldata['ESP_49ECCD'].length);
+console.log(colldata['ESP_49F542'].length);
+console.log(colldata['ESP_49EC8B'].length);
+console.log(colldata['ESP_49EB40'].length);
 
 // transfer some data from the collation into the 
 // chart series data
-for(ix = 0; ix < colldata["ESP_49EC8B"].length; ix++) {
-    var arr = [colldata["ESP_49EC8B"][ix].tstamp, colldata["ESP_49EC8B"][ix].t];
+var device = histchart_cfg.title.text = 'ESP_49ECCD';
+
+for(ix = 0; ix < colldata[device].length; ix++) {
+    var arr = [colldata[device][ix].tstamp, colldata[device][ix].t];
     temps.push(arr);
 
-    arr = [colldata["ESP_49EC8B"][ix].tstamp, colldata["ESP_49EC8B"][ix].h];
+    arr = [colldata[device][ix].tstamp, colldata[device][ix].h];
     humid.push(arr);
 }
+/* ********************************************** */
+/* ********************************************** */
 
 // create & render the chart using the data series
-var chart = new ApexCharts(document.querySelector("#chart"), histchart_cfg);
+var chart = new ApexCharts(document.querySelector('#chart'), histchart_cfg);
 chart.render();
-
 
 // incoming history data...
 $(document).on('hist_show', function(e, data) {
-//    consolelog('hist_show - '+data);
     var tmp = JSON.parse(data);
     consolelog('hist_show - records = '+tmp.length);
+    // 
+    // hide chart 
+    // "please wait..." ?
+    // 
+    // erase current series
+    // 
+    // 
+    // if data is a SINGLE sensor then
+    //      load T and H into series
+    //      show T and H 
+    // else 
+    //      collate new t & h data
+    //      load all sensor T only into series
+    // 
+    // update all chart labels and axis config (single vs mult sensors)
+    // render chart
+    // show chart
 });
 
 var choices = {
@@ -59,7 +79,7 @@ $(document).ready(function() {
     var sensors = document.getElementsByName('histsel_ctrl')
     var senscount = 0;
     sensors.forEach(function(sens) {
-        consolelog(sens);
+//        consolelog(sens);
         sens.onclick = function() {
             consolelog(this.value+'  '+this.checked);
             // manage the color with a css class when the checkbox 
@@ -75,16 +95,16 @@ $(document).ready(function() {
                 // REMOVE this sensor from the choices.dev_id[] array
                 sensrmv = this.value;
                 choices.dev_id = choices.dev_id.filter(function(sens) {
-                    var ret = !(sens === sensrmv);
+                    var ret = (sens !== sensrmv);
                     return ret;
                 });
 
             }
             // a count of selected sensors determines if the 
             // "get history" button is enabled or not
-            if(senscount === 0) $('#gethist').prop("disabled",true);
+            if(senscount === 0) $('#gethist').prop('disabled',true);
             else {
-                $('#gethist').prop("disabled",false);
+                $('#gethist').prop('disabled',false);
                 adaptColor('#gethist');
             }
         };
@@ -93,7 +113,7 @@ $(document).ready(function() {
     // one as "picked" if it has been set as the default
     var durats = document.getElementsByName('dursel_ctrl');
     durats.forEach(function(durs) {
-        consolelog(durs);
+//        consolelog(durs);
         // if this is the default choice then pre-select it
         if(durs.dataset.default === 'true') {
             durs.checked = true;
