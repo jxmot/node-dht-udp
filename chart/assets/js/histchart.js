@@ -26,8 +26,8 @@ var chart = new ApexCharts(document.querySelector("#chart"), histchart_cfg);
 chart.render();
 
 // incoming history data...
-$(document).on('hist_show', function(data) {
-    consolelog('hist_show - '+JSON.stringify(data));
+$(document).on('hist_show', function(e, data) {
+    consolelog('hist_show - '+data);
 });
 
 $(document).ready(function() {
