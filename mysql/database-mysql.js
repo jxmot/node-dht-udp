@@ -206,21 +206,21 @@ exports.database = (function() {
             > 0 success, and value is the quantity of changed rows
 
     */
-    database.updateRow = function(table, record, keyfield, callme, callmeData) {
+    database.updateRows = function(table, record, keyfield, callme, callmeData) {
         updateCallBack = callme;
         updateCallBackData = callmeData;
         if(this.dbopen === true) {
             connection.query('update '+table+' set ? where '+keyfield, record, function(error, result) {
                 if(error) {
-                    log(`database.updateRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
+                    log(`database.updateRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     updateCallBack(table, -1, updateCallBackData);
                 } else {
-                    log(`database.updateRow() - SUCCESS - message = ${result.message}`);
+                    log(`database.updateRows() - SUCCESS - message = ${result.message}`);
                     updateCallBack(table, result.changedRows, updateCallBackData);
                 }
             });
         } else {
-            log('database.updateRow() - ERROR database not open');
+            log('database.updateRows() - ERROR database not open');
             updateCallBack(table, -1, updateCallBackData);
         }
     };
@@ -230,7 +230,7 @@ exports.database = (function() {
 
         Usage: 
 
-            database.readRows(table, dataReady);
+            database.readAllRows(table, dataReady);
 
             function dataReady(dataRows) {
                 if(dataRows === undefined) {
@@ -241,18 +241,18 @@ exports.database = (function() {
                 }
             };
     */
-    database.readRows = function(table, callme) {
+    database.readAllRows = function(table, callme) {
         readCallBack = callme;
         if(this.dbopen === true) {
             connection.query('select * from '+table, function(error, result) {
                 if(error) {
-                    log(`database.readRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
+                    log(`database.readAllRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     this.dbopen = false;
                     readCallBack(table, null);
                 } else readCallBack(table, result);
             });
         } else {
-            log('database.readRows() - ERROR database not open');
+            log('database.readAllRows() - ERROR database not open');
             readCallBack(table, null);
         }
     };
@@ -260,15 +260,15 @@ exports.database = (function() {
     /*
         Read a specific row from a Table
     */
-    database.readRow = function(table, keyfield, callme) {
+    database.readRows = function(table, keyfield, callme) {
         readCallBack = callme;
         if(this.dbopen === true) {
 
-            log('database.readRow() - sql = select * from '+table+' where '+keyfield);
+            log('database.readRows() - sql = select * from '+table+' where '+keyfield);
 
             connection.query('select * from '+table+' where '+keyfield, function(error, result) {
                 if(error) {
-                    log(`database.readRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
+                    log(`database.readRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     readCallBack(table, null, {err:true, msg:'ERROR query: [${error.message}  ${error.code}  ${error.errno}]'});
                 } else {
 // TEMPORARY??? orig only returned 1 row, this now returns ALL. must accomodate
@@ -278,7 +278,7 @@ exports.database = (function() {
                 }
             });
         } else {
-            log('database.readRow() - ERROR database not open');
+            log('database.readRows() - ERROR database not open');
             readCallBack(table, null, {err:true, msg:'database not open', key:keyfield});
         }
     };

@@ -29,7 +29,7 @@ function initSocket() {
     });
 
     socket.on('server', function(data) {
-        //consolelog('server - '+JSON.stringify(data));
+        consolelog('server - '+JSON.stringify(data));
         // for future use, a placeholder for reacting
         // to messages from the server itself
         if(data.status === true) socketready = true;

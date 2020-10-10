@@ -165,7 +165,7 @@ module.exports = function init(evts) {
         }
         qstr = `(dev_id = ${sstr}) and (tstamp >= ${histreq.from} and tstamp <= ${histreq.to}) order by tstamp asc;`
         logTrace(`getHistory() - qstr = ${qstr}`);
-        database.readRow('data',
+        database.readRows('data',
                          qstr,
                          callback);
     };
@@ -195,11 +195,14 @@ module.exports = function init(evts) {
         for when the clients recconnect.
     */
     function sensorLast() {
-        database.readRows('config', (table, rows) => {
+        database.readAllRows('config', (table, rows) => {
             if(rows !== null) {
                 rows.forEach(row => {
-                    database.readRow('status', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
-                    database.readRow('data', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                    // if it's a "dead" sensor then skip it
+                    if((row.loc !== 'X') && (row.t_scale !== 'X')) {
+                        database.readRows('status', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                        database.readRows('data', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                    }
                 });
             }
         });
