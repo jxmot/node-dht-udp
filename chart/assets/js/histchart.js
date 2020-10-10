@@ -24,15 +24,16 @@ for(ix = 0; ix < colldata[device].length; ix++) {
     humid.push(arr);
 }
 
-newChart();
-
-
 /* ********************************************** */
 /* ********************************************** */
 var chart = {};
-function newChart() {
+function newChart(newcfg = undefined) {
     // create & render the chart using the data series
-    chart = new ApexCharts(document.querySelector('#chart'), histchart_cfg);
+    if(newcfg === undefined)
+        chart = new ApexCharts(document.querySelector('#chart'), histchart_cfg);
+    else
+        chart = new ApexCharts(document.querySelector('#chart'), newcfg);
+
     chart.render();
 };
 
@@ -44,60 +45,129 @@ function collateData(newdata) {
     }
 };
 
+function loadSeries(data) {
+    temps = [];
+    humid = [];
+    for(ix = 0; ix < data.length; ix++) {
+        var arr = [data[ix].tstamp, data[ix].t];
+        temps.push(arr);
+    
+        arr = [data[ix].tstamp, data[ix].h];
+        humid.push(arr);
+    }
+};
+
+function loadTempSeries(data) {
+    temps = [];
+    humid = [];
+    for(ix = 0; ix < data.length; ix++) {
+        var arr = [data[ix].tstamp, data[ix].t];
+        if(temps[data[ix].dev_id] === undefined)
+            temps[data[ix].dev_id] = [];
+
+        temps[data[ix].dev_id].push(arr);
+    }
+};
+
+
+
+newChart();
+
+
 // incoming history data...
 $(document).on('hist_show', function(e, reply) {
     var hist = JSON.parse(reply);
     consolelog('hist_show - records = '+hist.data.length);
 
-    return;
-    // 
-    // hide chart 
-    // "please wait..." ?
-    // 
-    // erase current series
-    //      get 'name' from global
-    chart.hideSeries('°F');
-    chart.hideSeries('%RH');
-    chart.updateSeries([
-        {
-            name: '°F',
-            data: []
-        },
-        {
-            name: '%RH',
-            data: []
-        }
-    ]);
-/*
-    if data is a SINGLE sensor then
-         load T and H into series
-         show T and H 
-         histchart_cfg.title.text = dev_id
-    else 
+    // if data is a SINGLE sensor then....
+    if(hist.query.dev_id.length === 1) {
         chart.destroy();
-        histchart_cfg.series = null;
-
-        var newSeries = {
-            name: "device id"
-            data: [] T data from the device
+        histchart_cfg.series = [];
+        histchart_cfg.title.text = hist.query.dev_id[0];
+        loadSeries(hist.data);
+        histchart_cfg.series = [
+            {name: '°F', data: temps},
+            {name: '%RH', data: humid}
+        ];
+        histchart_cfg.yaxis = [
+            {
+                title: {
+                    text: 'Temp °F',
+                    style: {
+                        color: '#4ecdc4'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: ['#4ecdc4'],
+                    },
+                    formatter: function (val) {
+                        return val.toFixed(0)
+                    }
+                }
+            },
+            {
+                opposite: true,
+                title: {
+                    text: '%RH',
+                    style: {
+                        color: '#c7f464'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: ['#c7f464'],
+                    },
+                    formatter: function (val) {
+                        return val.toFixed(0)
+                    }
+                }
+            }
+        ];
+        // draw it!
+        newChart();
+    } else {
+        chart.destroy();
+        histchart_cfg.series = [];
+        histchart_cfg.title.text = hist.query.dev_id.join();
+        loadTempSeries(hist.data);
+        // blank series object
+        var tmp = {
+            name: '',
+            data: []
         }
-
-        for dev_id in hist.query.dev_id[]
-            newSeries.name = dev_id;
-            newSeries.data[] = dev_id hist.data[]{t}
-            histchart_cfg.series.push( JSON...(newSeries))
-
-
-
-         collate new t & h data
-         load all sensor T only into series
-    
-    
-
-    update all chart labels and axis config (single vs mult sensors)
-    render chart
-    show chart
-*/
+        // create one series for each sensor and put it
+        // into the chart config(no references!)
+        for(ix = 0;ix < hist.query.dev_id.length; ix++) {
+            tmp.name = hist.query.dev_id[ix];
+            tmp.data = JSON.parse(JSON.stringify(temps[hist.query.dev_id[ix]]));
+            histchart_cfg.series.push(JSON.parse(JSON.stringify(tmp)));
+        }
+        // adjust options: 
+        //      * single Y axis & legend
+        //      * each series is a unique color
+        //      * 
+        histchart_cfg.yaxis = [
+            {
+                title: {
+                    text: 'Temp °F',
+                    //style: {
+                    //    color: '#4ecdc4'
+                    //}
+                },
+                labels: {
+                    //style: {
+                    //    colors: ['#4ecdc4'],
+                    //},
+                    formatter: function (val) {
+                        return val.toFixed(0)
+                    }
+                }
+            }
+        ];
+        // draw it!
+        newChart();
+    }
 });
 
 var choices = {
