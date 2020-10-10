@@ -1,4 +1,4 @@
-/* ********************************************** */
+/* **********************************************
 // Load canned data
 //
 // collate the data
@@ -24,7 +24,7 @@ for(ix = 0; ix < colldata[device].length; ix++) {
     humid.push(arr);
 }
 
-/* ********************************************** */
+********************************************** */
 /* ********************************************** */
 var chart = {};
 function newChart(newcfg = undefined) {
@@ -69,10 +69,7 @@ function loadTempSeries(data) {
     }
 };
 
-
-
 newChart();
-
 
 // incoming history data...
 $(document).on('hist_show', function(e, reply) {

@@ -28,6 +28,7 @@ var humid = [];
 
 // chart config
 var histchart_cfg = {
+//    colors: ['#xxxxxx', '#xxxxxx'],
     series: [
         {name: '°F', data: temps},
         {name: '%RH', data: humid}
