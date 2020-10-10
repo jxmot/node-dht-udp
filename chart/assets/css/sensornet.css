@@ -296,7 +296,9 @@ header > h6 {
 }
 
 
-
+#chart {
+    padding: 2.5%;
+}
 
 
 .history-ctrls {
