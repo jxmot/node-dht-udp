@@ -206,21 +206,21 @@ exports.database = (function() {
             > 0 success, and value is the quantity of changed rows
 
     */
-    database.updateRow = function(table, record, keyfield, callme, callmeData) {
+    database.updateRows = function(table, record, keyfield, callme, callmeData) {
         updateCallBack = callme;
         updateCallBackData = callmeData;
         if(this.dbopen === true) {
             connection.query('update '+table+' set ? where '+keyfield, record, function(error, result) {
                 if(error) {
-                    log(`database.updateRow() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
+                    log(`database.updateRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     updateCallBack(table, -1, updateCallBackData);
                 } else {
-                    log(`database.updateRow() - SUCCESS - message = ${result.message}`);
+                    log(`database.updateRows() - SUCCESS - message = ${result.message}`);
                     updateCallBack(table, result.changedRows, updateCallBackData);
                 }
             });
         } else {
-            log('database.updateRow() - ERROR database not open');
+            log('database.updateRows() - ERROR database not open');
             updateCallBack(table, -1, updateCallBackData);
         }
     };
