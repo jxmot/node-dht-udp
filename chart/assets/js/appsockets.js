@@ -36,6 +36,11 @@ function initSocket() {
         else socketready = false;
     });
 
+// TODO: pass in an arg that specifies which of the
+// following to enable. For charts a post-init enable
+// of socket.on('data',...) would be useful for live 
+// charting.
+// 
 //    socket.on('status', showStatus);
 //    socket.on('data', showData);
     socket.on('histdata', showHistory);
