@@ -14,11 +14,8 @@
           of info. it's not complete)
         * Can be used a 'live' data chart. So far this seems to 
           be the easiest to force new behavior. <-- MUST HAVE!
+        * Open source - https://github.com/apexcharts/apexcharts.js
 */
-// https://caniuse.com/es6-module-dynamic-import
-//import {sensordata} from './sensornet_data-trim.js';
-
-
 // contains the data series
 var temps = [];
 var humid = [];
@@ -27,8 +24,13 @@ var mins = {
     t: 0,
     h: 0
 };
+// bump the min & max a little so that graphs
+// don't touch the high/low of the scale(s)
 const MIN_ADJ = -2;
 const MAX_ADJ = +2
+// device ID <-> recognizable name
+var names = [];
+
 
 // TODO: multiple configs? in an array?
 // TODO: functions to handle specific configs

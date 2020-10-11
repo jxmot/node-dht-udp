@@ -53,13 +53,14 @@ function loadSeries(data) {
     for(ix = 0; ix < data.length; ix++) {
         var arr = [data[ix].tstamp, data[ix].t];
         temps.push(arr);
-        if(data[ix].t < mins.t)
+        if(data[ix].t < mins.t) {
             mins.t = data[ix].t;
-    
+        }
         arr = [data[ix].tstamp, data[ix].h];
         humid.push(arr);
-        if(data[ix].h < mins.h)
+        if(data[ix].h < mins.h) {
             mins.h = data[ix].h;
+        }
     }
     mins.t = mins.t + MIN_ADJ;
     mins.h = mins.h + MIN_ADJ;
@@ -70,16 +71,14 @@ function loadTempSeries(data) {
     humid = [];
     for(ix = 0; ix < data.length; ix++) {
         var arr = [data[ix].tstamp, data[ix].t];
-        if(temps[data[ix].dev_id] === undefined)
+        if(temps[data[ix].dev_id] === undefined) {
             temps[data[ix].dev_id] = [];
-
+        }
         temps[data[ix].dev_id].push(arr);
     }
 };
 
 newChart();
-
-var names = [];
 
 // incoming configuration data...
 $(document).on('config', function(e, _config) {
