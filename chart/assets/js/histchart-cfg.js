@@ -22,6 +22,13 @@
 // contains the data series
 var temps = [];
 var humid = [];
+// contains the minimum values
+var mins = {
+    t: 0,
+    h: 0
+};
+const MIN_ADJ = -2;
+const MAX_ADJ = +2
 
 // TODO: multiple configs? in an array?
 // TODO: functions to handle specific configs

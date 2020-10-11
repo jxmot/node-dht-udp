@@ -48,13 +48,21 @@ function collateData(newdata) {
 function loadSeries(data) {
     temps = [];
     humid = [];
+    mins = {t:1000,h:1000};
+
     for(ix = 0; ix < data.length; ix++) {
         var arr = [data[ix].tstamp, data[ix].t];
         temps.push(arr);
+        if(data[ix].t < mins.t)
+            mins.t = data[ix].t;
     
         arr = [data[ix].tstamp, data[ix].h];
         humid.push(arr);
+        if(data[ix].h < mins.h)
+            mins.h = data[ix].h;
     }
+    mins.t = mins.t + MIN_ADJ;
+    mins.h = mins.h + MIN_ADJ;
 };
 
 function loadTempSeries(data) {
@@ -135,6 +143,7 @@ $(document).on('hist_show', function(e, _hist) {
                 }
             },
             {
+                min: mins.h,
                 opposite: true,
                 title: {
                     text: '%RH',
