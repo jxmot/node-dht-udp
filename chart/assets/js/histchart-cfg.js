@@ -30,8 +30,8 @@ var humid = [];
 var histchart_cfg = {
 //    colors: ['#xxxxxx', '#xxxxxx'],
     series: [
-        {name: '°F', data: temps},
-        {name: '%RH', data: humid}
+//        {name: '°F', data: temps},
+//        {name: '%RH', data: humid}
     ],
     theme: {
         mode:'dark'
@@ -63,43 +63,43 @@ var histchart_cfg = {
         size: 0,
     },
     title: {
-        text: 'ESP_ABCDEF',
+        text: 'Chart Ready is for Data',
         align: 'left'
     },
     yaxis: [
-        {
-            title: {
-                text: 'Temp °F',
-                style: {
-                    color: '#4ecdc4'
-                }
-            },
-            labels: {
-                style: {
-                    colors: ['#4ecdc4'],
-                },
-                formatter: function (val) {
-                    return val.toFixed(0)
-                }
-            }
-        },
-        {
-            opposite: true,
-            title: {
-                text: '%RH',
-                style: {
-                    color: '#c7f464'
-                }
-            },
-            labels: {
-                style: {
-                    colors: ['#c7f464'],
-                },
-                formatter: function (val) {
-                    return val.toFixed(0)
-                }
-            }
-        }
+//        {
+//            title: {
+//                text: 'Temp °F',
+//                style: {
+//                    color: '#4ecdc4'
+//                }
+//            },
+//            labels: {
+//                style: {
+//                    colors: ['#4ecdc4'],
+//                },
+//                formatter: function (val) {
+//                    return val.toFixed(0)
+//                }
+//            }
+//        },
+//        {
+//            opposite: true,
+//            title: {
+//                text: '%RH',
+//                style: {
+//                    color: '#c7f464'
+//                }
+//            },
+//            labels: {
+//                style: {
+//                    colors: ['#c7f464'],
+//                },
+//                formatter: function (val) {
+//                    return val.toFixed(0)
+//                }
+//            }
+//        }
     ],
     xaxis: {
         type: 'datetime',
