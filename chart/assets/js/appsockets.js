@@ -44,6 +44,7 @@ function initSocket() {
 //    socket.on('status', showStatus);
 //    socket.on('data', showData);
     socket.on('histdata', showHistory);
+    socket.on('config', saveConfig);
 //    socket.on('purge', showPurge);
 //    socket.on('wxobsv', showWXObsv);
 //    socket.on('wxfcst', showWXFcast);
@@ -88,6 +89,10 @@ $(document).on('hist_ready', function() {
     // initialize sockets for incoming sensor status and data
     initSocket();
 });
+
+function saveConfig(cfg) {
+    $(document).trigger('config', JSON.stringify(cfg));
+};
 
 function showHistory(hist) {
     $(document).trigger('hist_show', JSON.stringify(hist));

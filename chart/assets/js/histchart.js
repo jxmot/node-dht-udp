@@ -71,16 +71,46 @@ function loadTempSeries(data) {
 
 newChart();
 
-// incoming history data...
-$(document).on('hist_show', function(e, reply) {
-    var hist = JSON.parse(reply);
-    consolelog('hist_show - records = '+hist.data.length);
+var names = [];
 
+// incoming configuration data...
+$(document).on('config', function(e, _config) {
+    var config = JSON.parse(_config);
+    config.forEach(function(cfg) {
+        if(cfg.loc !== 'X') {
+            names[cfg.dev_id] = cfg.loc;
+            consolelog(`config - ${cfg.dev_id} = ${cfg.loc}`);
+        }
+
+    });
+// TODO: set up checkboxes
+    for(var key in names) {
+        consolelog(`${key}  :  ${names[key]}`);
+    }
+    var devs = Object.entries(names);
+
+    // iterate through all of the sensor selection checkboxes
+    // and add an onclick handler to each of them.
+    var sensors = document.getElementsByName('histsel_ctrl')
+    var senscount = 0;
+    sensors.forEach(function(sens) {
+        sens.value = devs[senscount][0];
+        sens.nextElementSibling.textContent = `\u00a0\u00a0${devs[senscount][1]}`
+        consolelog(`${sens.nextElementSibling.textContent}`);
+        senscount++;
+    });
+});
+
+// incoming history data...
+$(document).on('hist_show', function(e, _hist) {
+    var hist = JSON.parse(_hist);
+    consolelog('hist_show - records = '+hist.data.length);
     // if data is a SINGLE sensor then....
     if(hist.query.dev_id.length === 1) {
         chart.destroy();
         histchart_cfg.series = [];
-        histchart_cfg.title.text = hist.query.dev_id[0];
+//        histchart_cfg.title.text = hist.query.dev_id[0];
+        histchart_cfg.title.text = names[hist.query.dev_id[0]];
         loadSeries(hist.data);
         histchart_cfg.series = [
             {name: '°F', data: temps},
@@ -88,6 +118,7 @@ $(document).on('hist_show', function(e, reply) {
         ];
         histchart_cfg.yaxis = [
             {
+                min: mins.t,
                 title: {
                     text: 'Temp °F',
                     style: {
@@ -126,7 +157,13 @@ $(document).on('hist_show', function(e, reply) {
     } else {
         chart.destroy();
         histchart_cfg.series = [];
-        histchart_cfg.title.text = hist.query.dev_id.join();
+        histchart_cfg.title.text = '';
+        hist.query.dev_id.forEach(function(devid, index) {
+            histchart_cfg.title.text += names[devid];
+            if(index < (hist.query.dev_id.length - 1))
+                histchart_cfg.title.text += ', ';
+        });
+
         loadTempSeries(hist.data);
         // blank series object
         var tmp = {
@@ -136,7 +173,8 @@ $(document).on('hist_show', function(e, reply) {
         // create one series for each sensor and put it
         // into the chart config(no references!)
         for(ix = 0;ix < hist.query.dev_id.length; ix++) {
-            tmp.name = hist.query.dev_id[ix];
+//            tmp.name = hist.query.dev_id[ix];
+            tmp.name = names[hist.query.dev_id[ix]];
             tmp.data = JSON.parse(JSON.stringify(temps[hist.query.dev_id[ix]]));
             histchart_cfg.series.push(JSON.parse(JSON.stringify(tmp)));
         }
@@ -212,7 +250,6 @@ $(document).ready(function() {
                     var ret = (sens !== sensrmv);
                     return ret;
                 });
-
             }
             // a count of selected sensors determines if the 
             // "get history" button is enabled or not
