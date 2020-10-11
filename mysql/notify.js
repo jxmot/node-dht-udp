@@ -58,6 +58,8 @@ module.exports = (function() {
         //error: []
     };
 
+    var configcurr = {};
+
     notify.init = function(_getHistory) {
 
         // A client has connected, 
@@ -103,6 +105,8 @@ module.exports = (function() {
             // https://socket.io/docs/emit-cheatsheet/
             socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
 
+            socket.emit('config', configcurr);
+
             // Increment the connection counter
             connCount += 1;
             // log the new connection for debugging purposes.
@@ -121,8 +125,6 @@ module.exports = (function() {
             });
         });
     };
-
-    
     
     // Start listening...
     var cfg = require('./socket_cfg.js');
@@ -156,6 +158,10 @@ module.exports = (function() {
         // don't bother broadcasting anything if no one is connected.
         if(connCount > 0) io.emit(channel, {payload: data});
         else logTrace('notify.send - no connections');
+    };
+
+    notify.updateConfig = function(data) {
+        configcurr = JSON.parse(JSON.stringify(data));
     };
 
     // add fresh data to the sensorlast container

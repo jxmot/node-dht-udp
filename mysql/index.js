@@ -149,7 +149,6 @@ module.exports = function init(evts) {
     };
 
     function getHistory(histreq, callback) {
-
         var qstr = '';
         var sstr = `'`;
         if(histreq.dev_id.length === 1) {
@@ -197,6 +196,9 @@ module.exports = function init(evts) {
     function sensorLast() {
         database.readAllRows('config', (table, rows) => {
             if(rows !== null) {
+
+                notify.updateConfig(rows);
+
                 rows.forEach(row => {
                     // if it's a "dead" sensor then skip it
                     if((row.loc !== 'X') && (row.t_scale !== 'X')) {
@@ -206,9 +208,6 @@ module.exports = function init(evts) {
                 });
             }
         });
-    };
-
-    function sensorHistory(dur = {f: 0, t:0}) {
     };
 
     //////////////////////////////////////////////////////////////////////////
