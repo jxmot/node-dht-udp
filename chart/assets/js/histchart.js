@@ -88,23 +88,20 @@ $(document).on('config', function(e, _config) {
             names[cfg.dev_id] = cfg.loc;
             consolelog(`config - ${cfg.dev_id} = ${cfg.loc}`);
         }
-
     });
-// TODO: set up checkboxes
-    for(var key in names) {
-        consolelog(`${key}  :  ${names[key]}`);
-    }
+
     var devs = Object.entries(names);
 
     // iterate through all of the sensor selection checkboxes
-    // and add an onclick handler to each of them.
+    // and initialize them by adding a device ID and name.
     var sensors = document.getElementsByName('histsel_ctrl')
-    var senscount = 0;
+    var sensindex = 0;
     sensors.forEach(function(sens) {
-        sens.value = devs[senscount][0];
-        sens.nextElementSibling.textContent = `\u00a0\u00a0${devs[senscount][1]}`
+        sens.value = devs[sensindex][0];
+        sens.dataset.color = sensindex;
+        sens.nextElementSibling.textContent = `\u00a0\u00a0${devs[sensindex][1]}`
         consolelog(`${sens.nextElementSibling.textContent}`);
-        senscount++;
+        sensindex++;
     });
 });
 
@@ -116,26 +113,28 @@ $(document).on('hist_show', function(e, _hist) {
     if(hist.query.dev_id.length === 1) {
         chart.destroy();
         histchart_cfg.series = [];
-//        histchart_cfg.title.text = hist.query.dev_id[0];
         histchart_cfg.title.text = names[hist.query.dev_id[0]];
         loadSeries(hist.data);
         histchart_cfg.series = [
             {name: '°F', data: temps},
             {name: '%RH', data: humid}
         ];
+//        histchart_cfg.colors = [colors[0][0],colors[0][1]],
         histchart_cfg.yaxis = [
             {
                 min: mins.t,
                 title: {
                     text: 'Temp °F',
-                    style: {
-                        color: '#4ecdc4'
-                    }
+//                    style: {
+//                        //color: '#4ecdc4'
+//                        color: colors[0][0]
+//                    }
                 },
                 labels: {
-                    style: {
-                        colors: ['#4ecdc4'],
-                    },
+//                    style: {
+//                        //colors: ['#4ecdc4'],
+//                        colors: [colors[0][0]],
+//                    },
                     formatter: function (val) {
                         return val.toFixed(0)
                     }
@@ -146,14 +145,16 @@ $(document).on('hist_show', function(e, _hist) {
                 opposite: true,
                 title: {
                     text: '%RH',
-                    style: {
-                        color: '#c7f464'
-                    }
+//                    style: {
+//                        //color: '#c7f464'
+//                        color: colors[0][1]
+//                    }
                 },
                 labels: {
-                    style: {
-                        colors: ['#c7f464'],
-                    },
+//                    style: {
+//                        //colors: ['#c7f464'],
+//                        colors: [colors[0][1]],
+//                    },
                     formatter: function (val) {
                         return val.toFixed(0)
                     }
@@ -181,7 +182,6 @@ $(document).on('hist_show', function(e, _hist) {
         // create one series for each sensor and put it
         // into the chart config(no references!)
         for(ix = 0;ix < hist.query.dev_id.length; ix++) {
-//            tmp.name = hist.query.dev_id[ix];
             tmp.name = names[hist.query.dev_id[ix]];
             tmp.data = JSON.parse(JSON.stringify(temps[hist.query.dev_id[ix]]));
             histchart_cfg.series.push(JSON.parse(JSON.stringify(tmp)));
@@ -190,6 +190,9 @@ $(document).on('hist_show', function(e, _hist) {
         //      * single Y axis & legend
         //      * each series is a unique color
         //      * 
+//        histchart_cfg.colors = [
+//            colors[0][0],colors[1][0],colors[2][0],colors[3][0]
+//        ],
         histchart_cfg.yaxis = [
             {
                 title: {
@@ -239,7 +242,6 @@ $(document).ready(function() {
     var sensors = document.getElementsByName('histsel_ctrl')
     var senscount = 0;
     sensors.forEach(function(sens) {
-//        consolelog(sens);
         sens.onclick = function() {
             consolelog(this.value+'  '+this.checked);
             // manage the color with a css class when the checkbox 
@@ -272,7 +274,6 @@ $(document).ready(function() {
     // one as "picked" if it has been set as the default
     var durats = document.getElementsByName('dursel_ctrl');
     durats.forEach(function(durs) {
-//        consolelog(durs);
         // if this is the default choice then pre-select it
         if(durs.dataset.default === 'true') {
             durs.checked = true;
