@@ -1,0 +1,269 @@
+/*
+    Site-wide styling
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/
+*/
+body{
+    margin:0;
+    padding:0;
+    font-family:"Helvetica Neue",Helvetica, Arial;
+}
+
+@media print {
+    body {
+        display: none;
+    }
+}
+
+.page-nocopy {
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+
+/* ********************************************* 
+
+    To Do: 
+        add media breaks that in effect will -
+
+            * at smaller viewports :
+                * no bg image
+                * no banner bg fill
+                * change text color
+
+            * To fix :
+                * banner contents need fixing
+                  at smaller sizes
+                * vertical scroll does not 
+                  appear as expected - FIXED
+
+*/
+.site-bg-image {
+    background-image:url("../img/index-bg-01.jpg");
+    background-repeat:no-repeat;
+    min-width:100%;
+    min-height:100%;
+/*
+    position:fixed;
+*/
+    top:0;
+    left:0;
+    z-index: -1;
+    background-size:cover;
+}
+
+.over-dark-bg {
+/*    text-align:center;*/
+    color:white !important;
+}
+
+/*
+.landing-box-left {
+    border-right: 1px solid #303030;
+}
+
+.landing-box-right {
+    border-left: 1px solid #303030;
+}
+*/
+/*
+.landing-name {
+    text-align:center;
+}
+*/
+.landing-banner {
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom:10%;
+/*
+    border: 3px solid yellow;
+*/
+/*
+    background-color: rgba(79, 79, 79, 0.79);
+*/
+    background-color: rgba(40, 42, 77, 0.71);
+
+	border-radius:1.5em;
+	-webkit-border-radius:1.5em;
+	-moz-border-radius:1.5em;
+	-o-border-radius:1.5em;
+	-ms-border-radius:1.5em;
+
+    padding: 1%
+}
+
+.landing-content {
+}
+
+@media (min-width:100px) {
+    .landing-banner {
+        margin-top:25%;
+    }
+    .landing-name {
+        font-size:22px;
+    }
+    .landing-jobtitle {
+        font-size:18px;
+    }
+}
+@media (min-width:300px) {
+    .landing-banner {
+        margin-top:20%;
+        margin-bottom:20%;
+    }
+    .landing-name {
+        font-size:28px;
+    }
+    .landing-jobtitle {
+        font-size:22px;
+    }
+}
+
+@media (min-width:400px) {
+    .landing-banner {
+        margin-top:15%;
+        margin-bottom:15%;
+    }
+}
+
+@media (min-width:500px) {
+    .landing-banner {
+        margin-top:15%;
+        margin-bottom:15%;
+    }
+    .landing-name {
+        text-align: center;
+    }
+    .landing-jobtitle {
+        text-align: center;
+    }
+}
+
+
+@media (min-width:600px) {
+    .landing-banner {
+        width: 90%;
+        margin-left: 5%;
+        margin-top:10%;
+        margin-bottom:10%;
+    }
+    .landing-name {
+        text-align: center;
+        font-size:32px;
+    }
+    .landing-jobtitle {
+        text-align: center;
+        font-size:24px;
+    }
+}
+
+@media (min-width:700px) {
+    .landing-banner {
+        margin-top:15%;
+        margin-bottom:15%;
+    }
+}
+
+@media (min-width:900px) {
+    .landing-banner {
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 10%;
+        margin-bottom:10%;
+    }
+    .landing-name {
+        /*padding-top:5%;*/
+        text-align: left;
+        font-size:44px;
+    }
+    .landing-jobtitle {
+        text-align: left;
+        font-size:32px;
+    }
+}
+@media (min-width:1199px) {
+    .landing-banner {
+        margin-top:10%;
+        margin-bottom:5%;
+        width: 80%;
+        margin-left: 10%;
+    }
+    .landing-name {
+        padding-top:0%;
+        text-align: left;
+        font-size:48px;
+    }
+}
+
+
+/*
+
+@media (max-width:767px) {
+  .landing-name {
+    font-size:x-large;
+  }
+}
+
+@media (max-width:767px) {
+  .landing-jobtitle {
+    font-size:large;
+  }
+}
+*/
+
+.banner-box {
+  border:2px solid rgb(141,235,22);
+  background-color:rgba(135,135,135,0.5);
+}
+
+/*
+@media print {
+  body {
+    display:none;
+  }
+}
+*/
+/* ************************************************************************ */
+/*
+    Navigation
+*/
+/*
+@media (min-width:100px) {
+    .nav-icon {
+        display:none !important;
+    }
+    .nav-icon-alt {
+        font-style:normal;
+        font-size:x-large;
+        content:"\1F3E0";
+        z-index:5;
+    }
+}
+
+@media (min-width:480px) {
+*/
+@media (min-width:100px) {
+    .nav-icon {
+        width:45px !important;
+        height:45px !important;
+        display:inline-block !important;
+        margin-top:-15px;
+    }
+    .nav-icon-alt {
+        display:none !important;
+    }
+}
+
+@media (min-width:640px) {
+    .nav-icon {
+        width:50px !important;
+        height:50px !important;
+        display:inline-block !important;
+        margin-top:-15px;
+    }
+    .nav-icon-alt {
+        display:none !important;
+    }
+}
+

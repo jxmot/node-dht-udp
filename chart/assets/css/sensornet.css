@@ -1,0 +1,317 @@
+/*
+    SensorNet CSS
+
+    (c) 2017 Jim Motyl - https://github.com/jxmot/
+*/
+.sensornet-inner { 
+    margin: 0 auto; 
+}
+
+.sensor-panel-title {
+    font-weight: bold;
+}
+
+/*
+    One of these classes are added after document ready
+    by calling utils.js:adaptColor().
+*/
+.sensornet_label-dark-color { 
+    color: black;
+    font-weight: bold;
+}
+
+.sensornet_label-light-color { 
+    color: white;
+    font-weight: bold;
+}	
+
+
+@media screen and (min-width:100px) {
+    .sensornet-outer {
+        width:90%;
+        margin-left:5%;
+        padding-top:17%;
+        padding-bottom: 12%;
+    }
+}
+
+@media screen and (min-width:400px) {
+    .sensornet-outer {
+        width:90%;
+        margin-left:5%;
+        padding-top:12%;
+        padding-bottom: 15%;
+    }
+}
+
+@media screen and (min-width:600px) {
+    .sensornet-outer {
+        width:80%;
+        margin-left: 10%;
+        padding-top:10%;
+        padding-bottom: 10%;
+    }
+}
+
+@media screen and (min-width:700px) {
+    .sensornet-outer {
+        width:80%;
+        margin-left:10%;
+        padding-top:8%;
+        padding-bottom: 10%;
+    }
+}
+
+@media screen and (min-width:768px) {
+    .sensornet-outer {
+        width:90%;
+        margin-left:5%;
+        padding-top:8%;
+        padding-bottom: 7%;
+    }
+}
+
+@media screen and (min-width:900px) {
+    .sensornet-outer {
+        width:90%;
+        margin-left:5%;
+        padding-top:6%;
+        padding-bottom: 7%;
+    }
+}
+
+@media screen and (min-width:1199px) {
+    .sensornet-outer {
+        width:100%;
+        margin-left:0%;
+        padding-top:5%;
+    }
+}
+
+@media screen and (min-width:1399px) {
+    .sensornet-outer {
+        width:100%;
+        margin-left:0%;
+        padding-top:5%;
+    }
+}
+
+@media screen and (min-width:1599px) {
+    .sensornet-outer {
+        width:90%;
+        margin-left:5%;
+        padding-top:5%;
+    }
+}
+
+@media screen and (min-width:1799px) {
+    .sensornet-outer {
+        width:90%;
+        margin-left:5%;
+        padding-top:5%;
+    }
+}
+
+.sensornet-overview {
+}
+
+@media screen and (min-width:100px) {
+    .sensornet-overview-title {
+        font-size:1.5rem;
+    }
+    .sensornet-history-title {
+        font-size:1.5rem;
+    }
+}
+
+@media screen and (min-width:600px) {
+    .sensornet-overview-title {
+        font-size:1.75rem;
+    }
+    .sensornet-history-title {
+        font-size:1.75rem;
+    }
+}
+
+@media screen and (min-width:1100px) {
+    .sensornet-overview-title {
+        font-size:2rem;
+    }
+    .sensornet-history-title {
+        font-size:2rem;
+    }
+}
+
+.sensornet-history-title {
+    position:relative;
+}
+
+.sensornet-overview-title {
+    position:relative;
+    cursor:pointer;
+}
+
+.sensornet-overview-close {
+    position:relative;
+    cursor:pointer;
+}
+
+.sensornet-overview-title:hover {
+    font-style:italic;
+}
+
+.sensornet-overview-close:hover {
+    font-style:italic;
+}
+
+.sensornet-overview-collink {
+    text-align: center;
+}
+
+.topagetop:link {
+    text-decoration: none;
+}
+
+.topagetop:visited {
+    text-decoration: none;
+}
+
+.sensornet-overview-collapse-icon::before {
+    content:"\21F1";
+}
+
+.collapsed .sensornet-overview-collapse-icon::before {
+    content:"\21F2";
+}
+
+@media screen and (min-width:100px) {
+    .list-item-build-cost-small {
+        display: list-item;
+    }
+
+    .list-item-build-cost-big {
+        display: none;
+    }
+}
+
+@media screen and (min-width:400px) {
+    .list-item-build-cost-small {
+        display: none;
+    }
+
+    .list-item-build-cost-big {
+        display: list-item;
+    }
+}
+
+.cost-table {
+    border: 1px solid white;
+}
+
+.cost-table-row-head {
+    padding-bottom: 0.5em;
+    border-bottom-style:solid;
+}
+
+.cost-table-cell-head-title {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.cost-table-cell-item {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.cost-table-cell-cost {
+    text-align: center;
+}
+
+.cost-table-cell-nolink {
+    text-align: center;
+    padding-right: 1em;
+}
+
+.cost-table-cell-link {
+    padding-left: 1em;
+    text-align: right;
+    padding-right: 1em;
+}
+
+#cost-table .cost-table-cell-top {
+    padding-top: 0.5em;
+}
+
+.cost-table-cell-bottom {
+    padding-bottom: 0.5em;
+}
+
+#cost-table td a {
+    padding-right: 1em;
+}
+
+#cost-table th {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+
+@media screen and (min-width:100px) {
+    #cost-table .cost-table-row-item {
+        border-bottom: 1px dashed white;
+        border-collapse: collapse;
+    }
+
+    #cost-table .cost-table-row-total {
+        display: none;
+    }
+}
+
+@media screen and (min-width:760px) {
+    #cost-table .cost-table-row-item {
+        border-bottom: none;
+        border-collapse: none;
+    }
+
+    #cost-table .cost-table-row-total {
+        display: table-row;
+    }
+}
+
+header > h6 { 
+    display: inline-block; 
+}
+
+.doclink {
+    text-align: center;
+}
+
+.doccontent {
+    text-align: center;
+    font-weight: bold;
+}
+
+.use-pointer {
+    cursor: pointer!important;
+}
+
+
+#chart {
+    padding: 2.5%;
+}
+
+
+.history-ctrls {
+    height: 80px;
+    position: relative;
+}
+
+.history-ctrls-vcenter {
+    position: absolute;
+    top: 50%;
+}
+
+.time-selected {
+    color:lightblue!important;
+}
+

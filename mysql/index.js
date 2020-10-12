@@ -144,8 +144,29 @@ module.exports = function init(evts) {
             }
 
             // initialize the client notification module
-            notify.init();
+            notify.init(getHistory);
         }
+    };
+
+    function getHistory(histreq, callback) {
+        var qstr = '';
+        var sstr = `'`;
+        if(histreq.dev_id.length === 1) {
+            // requesting history for one sensor
+            sstr = `'${histreq.dev_id[0]}'`;
+        } else {
+            // requesting history for more than one sensor
+            histreq.dev_id.forEach(function(s, ix) {
+                sstr += (s + `'`);
+                if(ix < (histreq.dev_id.length - 1))
+                    sstr += ` or dev_id = '`;
+            });
+        }
+        qstr = `(dev_id = ${sstr}) and (tstamp >= ${histreq.from} and tstamp <= ${histreq.to}) order by tstamp asc;`
+        logTrace(`getHistory() - qstr = ${qstr}`);
+        database.readRows('data',
+                         qstr,
+                         callback);
     };
 
     //////////////////////////////////////////////////////////////////////////
@@ -163,7 +184,7 @@ module.exports = function init(evts) {
     };
 
     /*
-        Obtain and save the last sensor status an data that was written to
+        Obtain and save the last sensor status and data that was written to
         the database.
 
         This compliments the client status & data update, which occurs when 
@@ -173,11 +194,17 @@ module.exports = function init(evts) {
         for when the clients recconnect.
     */
     function sensorLast() {
-        database.readRows('config', (table, rows) => {
+        database.readAllRows('config', (table, rows) => {
             if(rows !== null) {
+
+                notify.updateConfig(rows);
+
                 rows.forEach(row => {
-                    database.readRow('status', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
-                    database.readRow('data', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                    // if it's a "dead" sensor then skip it
+                    if((row.loc !== 'X') && (row.t_scale !== 'X')) {
+                        database.readRows('status', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                        database.readRows('data', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                    }
                 });
             }
         });

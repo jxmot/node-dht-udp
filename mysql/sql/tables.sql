@@ -167,27 +167,20 @@ create table sensornet.config (
     t_scale varchar(2) not null,
     t_high decimal(5,2) not null,
     t_low decimal(5,2) not null,
+    t_color varchar(16) not null,
     h_scale varchar(4) not null,
     h_high decimal(5,2) not null,
-    h_low decimal(5,2) not null
+    h_low decimal(5,2) not null,
+    h_color varchar(16) not null
 );
 
 insert into sensornet.config 
-(dev_id,loc,t_scale,t_high,t_low,h_scale,h_high,h_low)
+(dev_id,loc,t_scale,t_high,t_low,t_color,h_scale,h_high,h_low,h_color)
 values 
-("ESP_111111", "Office", "°F", 95, 40, "%RH", 50, 10),
-("ESP_222222", "Den",    "°F", 95, 40, "%RH", 50, 10),
-("ESP_333333", "MBR",    "°F", 95, 40, "%RH", 50, 10),
-("ESP_444444", "LR",     "°F", 95, 40, "%RH", 50, 10);
-
--- real dev_id's...
-insert into sensornet.config 
-(dev_id,loc,t_scale,t_high,t_low,h_scale,h_high,h_low)
-values 
-("ESP_49EC8B", "Office", "°F", 95, 40, "%RH", 50, 10),
-("ESP_49F542", "Den",    "°F", 95, 40, "%RH", 50, 10),
-("ESP_49EB40", "MBR",    "°F", 95, 40, "%RH", 50, 10),
-("ESP_49ECCD", "LR",     "°F", 95, 40, "%RH", 50, 10);
+("ESP_111111", "Office", "°F", 95, 40, "#c7f464", "%RH", 50, 10, "#4ecdc4"),
+("ESP_222222", "Den",    "°F", 95, 40, "#c7f464", "%RH", 50, 10, "#4ecdc4"),
+("ESP_333333", "MBR",    "°F", 95, 40, "#c7f464", "%RH", 50, 10, "#4ecdc4"),
+("ESP_444444", "LR",     "°F", 95, 40, "#c7f464", "%RH", 50, 10, "#4ecdc4");
 
 /*
     Retrieve rows using join, this will return all data rows and 

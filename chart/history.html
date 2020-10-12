@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SensorNet Chart</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+<!-- CSS -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cyborg/bootstrap.min.css">
+    <!-- Site-wide CSS -->
+    <link rel="stylesheet" href="./assets/css/site.css">
+    <!-- Project CSS -->
+    <!-- Featured Project - SensorNet -->
+        <!-- CSS specifically for this file -->
+            <!-- HTML Styling -->
+    <link rel="stylesheet" href="./assets/css/sensornet.css">
+        <!-- ^CSS specifically for this file -->
+    <!-- ^Featured Project - SensorNet -->
+    <!-- ^Project CSS -->
+<!-- ^CSS -->
+<!-- JS -->
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
+    <!-- ^jquery -->
+    <script src="./assets/apex/apexcharts.js"></script>
+<!-- ^JS -->
+</head>
+<body id="pagetop" class="page-nocopy">
+    <!-- Featured Project - SensorNet -->
+    <div id="sensornet_chart">
+        <div class="container sensornet-outer">
+            <!-- SensorNet Sensor History -->
+            <div class="row sensornet-inner">
+                <!-- history panel -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div id="history-panel" class="panel panel-success" hidden>
+<!--
+                        <div class="panel-heading">
+                            <h3 id="titlehist" class="panel-title sensor-panel-title sensornet-overview-title collapsed" data-toggle="collapse" data-target="#legend-collapse">
+                                <span class="fa sensornet-overview-collapse-icon"></span>
+                                <span>Sensor History <i>(click here to open/close)</i></span>
+                            </h3>
+                        </div>
+                        <div id="legend-collapse" class="panel-collapse collapse">
+-->
+                        <div class="panel-heading">
+                            <h3 id="titlehist" class="panel-title sensor-panel-title sensornet-history-title">
+                                <!-- <span class="fa sensornet-overview-collapse-icon"></span> -->
+                                <span>SensorNet Chart</span>
+                            </h3>
+                        </div>
+                        <div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div id="chart"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-lg-offset-9 col-md-3 col-md-offset-9 col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                                        <span><small>Chart Library:&nbsp;<a href="https://apexcharts.com/" target="new">Apex Charts</a></small></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 col-xs-12">
+                                        <div class="history-ctrls">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
+                                                <h6>Choose sensors:</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                        <div class="history-ctrls">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
+                                                <label class="use-pointer">
+                                                    <input type="checkbox" value="" name="histsel_ctrl">
+                                                    <span></span>
+                                                </label>
+                                                <br>
+                                                <label class="use-pointer">
+                                                    <input type="checkbox" value="" name="histsel_ctrl">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                        <div class="history-ctrls">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
+                                                <label class="use-pointer">
+                                                    <input type="checkbox" value="" name="histsel_ctrl">
+                                                    <span></span>
+                                                </label>
+                                                <br>
+                                                <label class="use-pointer">
+                                                    <input type="checkbox" value="" name="histsel_ctrl">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <!-- <hr style="width:80%;text-align:center;height:20px;color:yellow"> -->
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 col-xs-4">
+                                        <div class="history-ctrls">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="">
+                                                <h6>Choose a time:</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-8">
+                                        <div class="history-ctrls">
+                                            <label class="use-pointer">
+                                                <input type="radio" value="24" name="dursel_ctrl" data-default="true">
+                                                &nbsp;&nbsp;24 hrs
+                                            </label>
+                                            <label class="use-pointer">
+                                                <input type="radio" value="48" name="dursel_ctrl">
+                                                &nbsp;&nbsp;48 hrs
+                                            </label>
+                                            <label class="use-pointer">
+                                                <input type="radio" value="72" name="dursel_ctrl">
+                                                &nbsp;&nbsp;72 hrs
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                        <div class="history-ctrls">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="text-right">
+                                                <h6>And then:</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4">
+                                        <div class="history-ctrls">
+                                            <!-- <div class="history-ctrls-vcenter"> -->
+                                            <div class="text-center">
+                                                <button id="gethist" onmousedown="event.preventDefault()" type="button" class="btn btn-success">
+                                                    Get the Data
+                                                </button>
+                                                <br><br>
+                                                <button id="resetchart" onmousedown="event.preventDefault()" type="button" class="btn-xs btn-danger">
+                                                    RESET
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+                <!-- /history panel -->
+            </div>
+            <!-- /SensorNet Sensor History -->
+        </div>
+    </div>
+    <!-- Project JS -->
+    <!-- Featured Project - SensorNet -->
+        <!-- for sensor data via socket.io -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <!-- control over console.log() behavior -->
+    <script type="text/javascript" src="./assets/js/consolelog.js"></script>
+        <!-- miscellaneous utility functions -->
+    <script type="text/javascript" src="./assets/js/utils.js"></script>
+        <!-- for sensor data via socket.io -->
+    <script type="text/javascript" src="./assets/js/_socketcfg.js"></script>
+    <script type="text/javascript" src="./assets/js/appsockets.js"></script>
+    <script type="text/javascript" src="./data/sensornet_data-trim.js"></script>
+    <script type="text/javascript" src="./assets/js/histchart-cfg.js"></script>
+    <script type="text/javascript" src="./assets/js/histchart.js"></script>
+    <!-- ^Featured Project - SensorNet -->
+    <!-- For navigation and collapsible contents -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- ^For navigation and collapsible contents -->
+</body>
+</html>

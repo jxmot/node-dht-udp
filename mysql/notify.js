@@ -31,7 +31,6 @@ module.exports = (function() {
         if(traceopt === true) log(msgout);
     };
 
-
     /* ******************************************************************** */
     // Initialize the server that web clients will connect to.
     var http   = require('http');
@@ -58,7 +57,10 @@ module.exports = (function() {
         //error: []
     };
 
-    notify.init = function() {
+    var configcurr = {};
+
+    notify.init = function(_getHistory) {
+
         // A client has connected, 
         io.on('connection', function(socket) {
 
@@ -71,9 +73,43 @@ module.exports = (function() {
                 if(sensorlast['wxfcst'][data.wxsvc] !== undefined)
                     resend('wxfcst', socket, sensorlast['wxfcst'], data.wxsvc);
             });
+// NOTE: is not recvd until after the sensorlast resend, needs
+// to occur before that... OR hold off resend until this is recvd
+//            socket.on('optbits', function (data) {
+//                log(`socket ${socket.id} on optbits - ${JSON.stringify(data)}`);
+//            });
+
+            var query = {
+                from: 0,
+                to: 0,
+                dev_id: []
+            };
+
+            socket.on('senshist', function (data) {
+                log(`socket ${socket.id} on senshist - ${JSON.stringify(data)}`);
+                // data {
+                //      dursel: <-- in hours, 24,48, or 72 only
+                //      dev_id: ['ESP_XXXX'] <- device IDs
+                // }
+// NOTE: for use on live data replace the next line with
+//                query.to = Date.now();
+                query.to = (Date.now() - ((86400 * 10) * 1000));
+                query.from = (query.to - ((data.dursel * 3600) * 1000));
+                query.dev_id = JSON.parse(JSON.stringify(data.dev_id));
+
+                _getHistory(query, sendHistory);
+            });
+
+            function sendHistory(table, data) {
+                var hist = Object.assign({},{query:query},{data:data});
+                socket.emit('histdata', hist);
+            };
 
             // https://socket.io/docs/emit-cheatsheet/
+            // tell the client we're ready for them
             socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
+            // send the configuration as it was read during init
+            socket.emit('config', configcurr);
 
             // Increment the connection counter
             connCount += 1;
@@ -126,6 +162,10 @@ module.exports = (function() {
         // don't bother broadcasting anything if no one is connected.
         if(connCount > 0) io.emit(channel, {payload: data});
         else logTrace('notify.send - no connections');
+    };
+
+    notify.updateConfig = function(data) {
+        configcurr = JSON.parse(JSON.stringify(data));
     };
 
     // add fresh data to the sensorlast container
