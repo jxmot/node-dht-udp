@@ -49,7 +49,13 @@ function initSocket(optbits = FUTURE_EN_BIT) {
     socket.on('server', function(data) {
         consolelog('server - '+JSON.stringify(data));
         // the server is ready
-        if(data.status === true) socketready = true;
+        if(data.status === true) {
+            socketready = true;
+// NOTE: the resend of sensorlast happens before
+// we send this. Needs work
+//            if(!(optbits & FUTURE_EN_BIT))
+//                socket.emit('optbits', {opt:optbits});
+        }
         else socketready = false;
     });
 

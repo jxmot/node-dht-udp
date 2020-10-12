@@ -73,6 +73,11 @@ module.exports = (function() {
                 if(sensorlast['wxfcst'][data.wxsvc] !== undefined)
                     resend('wxfcst', socket, sensorlast['wxfcst'], data.wxsvc);
             });
+// NOTE: is not recvd until after the sensorlast resend, needs
+// to occur before that... OR hold off resend until this is recvd
+//            socket.on('optbits', function (data) {
+//                log(`socket ${socket.id} on optbits - ${JSON.stringify(data)}`);
+//            });
 
             var query = {
                 from: 0,
