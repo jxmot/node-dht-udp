@@ -86,9 +86,10 @@ function initSocket() {
 // });
 */
 $(document).on('hist_ready', function() {
-    // initialize sockets for incoming sensor status and data
+    // initialize sockets for incoming sensor config & data
     initSocket();
 });
+
 
 function saveConfig(cfg) {
     $(document).trigger('config', JSON.stringify(cfg));

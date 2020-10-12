@@ -33,7 +33,7 @@ var names = [];
 
 // https://htmlcolorcodes.com/color-picker/
 // use "complementary" colors
-// device ID <-> [t color, h color]
+// device ID -> [t color, h color]
 var colors = [];
 
 // TODO: multiple configs? in an array?
@@ -41,7 +41,6 @@ var colors = [];
 
 // chart config
 var histchart_cfg = {
-//    colors: ['#xxxxxx', '#xxxxxx'],
     series: [
 //        {name: '°F', data: temps},
 //        {name: '%RH', data: humid}

@@ -31,7 +31,6 @@ module.exports = (function() {
         if(traceopt === true) log(msgout);
     };
 
-
     /* ******************************************************************** */
     // Initialize the server that web clients will connect to.
     var http   = require('http');
@@ -94,7 +93,6 @@ module.exports = (function() {
                 query.dev_id = JSON.parse(JSON.stringify(data.dev_id));
 
                 _getHistory(query, sendHistory);
-                //_getHistory({data.dev_id:'ESP_49EC8B', from: 1601645954616, to: 1601477571454}, sendHistory)
             });
 
             function sendHistory(table, data) {
@@ -103,8 +101,9 @@ module.exports = (function() {
             };
 
             // https://socket.io/docs/emit-cheatsheet/
+            // tell the client we're ready for them
             socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
-
+            // send the configuration as it was read during init
             socket.emit('config', configcurr);
 
             // Increment the connection counter
