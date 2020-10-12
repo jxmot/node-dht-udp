@@ -19,7 +19,8 @@
 // contains the data series
 var temps = [];
 var humid = [];
-// contains the minimum values
+// contains the minimum values that are used for
+// scaling the Y-axes
 var mins = {
     t: 0,
     h: 0
