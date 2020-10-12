@@ -161,8 +161,6 @@ $(document).on('hist_show', function(e, _hist) {
                 }
             }
         ];
-        // draw it!
-        newChart();
     } else {
         chart.destroy();
         histchart_cfg.series = [];
@@ -201,9 +199,9 @@ $(document).on('hist_show', function(e, _hist) {
                 }
             }
         ];
-        // draw it!
-        newChart();
     }
+    // draw it!
+    newChart();
 });
 
 var choices = {
