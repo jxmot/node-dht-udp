@@ -98,10 +98,10 @@ function showHistory(hist) {
     $(document).trigger('hist_show', JSON.stringify(hist));
 };
 
-$(document).on('hist_request', function(e, sel) {
+$(document).on('hist_request', function(e, histreq) {
     if(socketready === true) {
-        //consolelog('hist_request - ' + JSON.stringify(sel));
-        socket.emit('senshist', sel);
+        //consolelog('hist_request - ' + JSON.stringify(histreq));
+        socket.emit('senshist', histreq);
     }
 });
 
