@@ -311,10 +311,6 @@ header > h6 {
     top: 50%;
 }
 
-.sensor-selected {
-    color:lightgreen!important;
-}
-
 .time-selected {
     color:lightblue!important;
 }

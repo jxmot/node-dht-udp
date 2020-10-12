@@ -86,6 +86,7 @@ $(document).on('config', function(e, _config) {
     config.forEach(function(cfg) {
         if(cfg.loc !== 'X') {
             names[cfg.dev_id] = cfg.loc;
+            colors[cfg.dev_id] = [cfg.t_color,cfg.h_color]; 
             consolelog(`config - ${cfg.dev_id} = ${cfg.loc}`);
         }
     });
@@ -119,22 +120,23 @@ $(document).on('hist_show', function(e, _hist) {
             {name: '°F', data: temps},
             {name: '%RH', data: humid}
         ];
-//        histchart_cfg.colors = [colors[0][0],colors[0][1]],
+        histchart_cfg.colors = [
+            colors[hist.query.dev_id[0]][0],
+            colors[hist.query.dev_id[0]][1]
+        ],
         histchart_cfg.yaxis = [
             {
                 min: mins.t,
                 title: {
                     text: 'Temp °F',
-//                    style: {
-//                        //color: '#4ecdc4'
-//                        color: colors[0][0]
-//                    }
+                    style: {
+                        color: colors[hist.query.dev_id[0]][0]
+                    }
                 },
                 labels: {
-//                    style: {
-//                        //colors: ['#4ecdc4'],
-//                        colors: [colors[0][0]],
-//                    },
+                    style: {
+                        colors: [colors[hist.query.dev_id[0]][0]]
+                    },
                     formatter: function (val) {
                         return val.toFixed(0)
                     }
@@ -145,16 +147,14 @@ $(document).on('hist_show', function(e, _hist) {
                 opposite: true,
                 title: {
                     text: '%RH',
-//                    style: {
-//                        //color: '#c7f464'
-//                        color: colors[0][1]
-//                    }
+                    style: {
+                        color: colors[hist.query.dev_id[0]][1]
+                    }
                 },
                 labels: {
-//                    style: {
-//                        //colors: ['#c7f464'],
-//                        colors: [colors[0][1]],
-//                    },
+                    style: {
+                        colors: [colors[hist.query.dev_id[0]][1]]
+                    },
                     formatter: function (val) {
                         return val.toFixed(0)
                     }
@@ -179,32 +179,22 @@ $(document).on('hist_show', function(e, _hist) {
             name: '',
             data: []
         }
+        histchart_cfg.colors = [];
         // create one series for each sensor and put it
         // into the chart config(no references!)
         for(ix = 0;ix < hist.query.dev_id.length; ix++) {
             tmp.name = names[hist.query.dev_id[ix]];
             tmp.data = JSON.parse(JSON.stringify(temps[hist.query.dev_id[ix]]));
             histchart_cfg.series.push(JSON.parse(JSON.stringify(tmp)));
+            histchart_cfg.colors.push(colors[hist.query.dev_id[ix]][0]);
         }
-        // adjust options: 
-        //      * single Y axis & legend
-        //      * each series is a unique color
-        //      * 
-//        histchart_cfg.colors = [
-//            colors[0][0],colors[1][0],colors[2][0],colors[3][0]
-//        ],
+
         histchart_cfg.yaxis = [
             {
                 title: {
-                    text: 'Temp °F',
-                    //style: {
-                    //    color: '#4ecdc4'
-                    //}
+                    text: 'Temp °F'
                 },
                 labels: {
-                    //style: {
-                    //    colors: ['#4ecdc4'],
-                    //},
                     formatter: function (val) {
                         return val.toFixed(0)
                     }
@@ -248,11 +238,13 @@ $(document).ready(function() {
             // has changed to either state
             if(this.checked === true) {
                 this.parentElement.classList = 'use-pointer sensor-selected';
+                this.parentElement.style = `color:${colors[this.value][0]}!important`;
                 senscount += 1;
                 // ADD this sensor to the choices.dev_id[] array
                 choices.dev_id.push(this.value);
             } else {
                 this.parentElement.classList = 'use-pointer';
+                this.parentElement.style = '';
                 senscount -= 1;
                 // REMOVE this sensor from the choices.dev_id[] array
                 sensrmv = this.value;
