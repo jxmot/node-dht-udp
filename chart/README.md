@@ -6,3 +6,6 @@ This folder contains the prototyping that was done before the actual [SensorNet 
 * Graphng data - prior to the creation of this prototype several other chart libraries were investigated. At this time [Apex Charts]() provided necessary features, pricing, and documentation.
 * Dynamic UI - each sensor is properly named, and is colored specifically so that its data can be recognized in the chart. 
 
+<p align="center">
+  <img src="./mdimg/chart.jpg" alt="SensorNet Chart" txt="SensorNet Chart"/>
+</p>
