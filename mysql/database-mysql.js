@@ -271,8 +271,6 @@ exports.database = (function() {
                     log(`database.readRows() - ERROR query: [${error.message}  ${error.code}  ${error.errno}]`);
                     readCallBack(table, null, {err:true, msg:'ERROR query: [${error.message}  ${error.code}  ${error.errno}]'});
                 } else {
-// TEMPORARY??? orig only returned 1 row, this now returns ALL. must accomodate
-                    //if((result[0] !== null) && (result[0] !== undefined)) readCallBack(table, result[0]);
                     if((result[0] !== null) && (result[0] !== undefined)) readCallBack(table, JSON.parse(JSON.stringify(result)));
                     else readCallBack(table, null, {err:true, msg:'not found', key:keyfield});
                 }
