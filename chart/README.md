@@ -7,5 +7,5 @@ This folder contains the prototyping that was done before the actual [SensorNet 
 * Dynamic UI - each sensor is properly named, and is colored specifically so that its data can be recognized in the chart. 
 
 <p align="center">
-  <img src="./mdimg/chart.jpg" alt="SensorNet Chart" txt="SensorNet Chart"/>
+  <img width="70%" src="./mdimg/chart.jpg" alt="SensorNet Chart" txt="SensorNet Chart"/>
 </p>
