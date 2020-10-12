@@ -218,7 +218,7 @@ client.bind(mulcfg.port);
 var db;
 
 // Firebase
-// TODO: retest firebase, add mongodb, document both
+// TODO: REMOVE firebase, add mongodb(after host-server config), document both
 if(dbcfg.type === 'firebase') db = require(__dirname + '/firebase');
 
 // MySQL
