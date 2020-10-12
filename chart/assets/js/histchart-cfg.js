@@ -80,39 +80,21 @@ var histchart_cfg = {
         align: 'left'
     },
     yaxis: [
-//        {
-//            title: {
-//                text: 'Temp °F',
-//                style: {
-//                    color: '#4ecdc4'
-//                }
-//            },
-//            labels: {
-//                style: {
-//                    colors: ['#4ecdc4'],
-//                },
-//                formatter: function (val) {
-//                    return val.toFixed(0)
-//                }
-//            }
-//        },
-//        {
-//            opposite: true,
-//            title: {
-//                text: '%RH',
-//                style: {
-//                    color: '#c7f464'
-//                }
-//            },
-//            labels: {
-//                style: {
-//                    colors: ['#c7f464'],
-//                },
-//                formatter: function (val) {
-//                    return val.toFixed(0)
-//                }
-//            }
-//        }
+        {
+            min:55,
+            max:95,
+            title: {
+                text: 'Temp °F'
+            }
+        },
+        {
+            opposite: true,
+            min:40,
+            max:60,
+            title: {
+                text: '%RH'
+            }
+        }
     ],
     xaxis: {
         type: 'datetime',
