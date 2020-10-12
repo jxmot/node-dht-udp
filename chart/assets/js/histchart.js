@@ -241,13 +241,11 @@ $(document).ready(function() {
             // manage the color with a css class when the checkbox 
             // has changed to either state
             if(this.checked === true) {
-                this.parentElement.classList = 'use-pointer sensor-selected';
                 this.parentElement.style = `color:${colors[this.value][0]}!important`;
                 senscount += 1;
                 // ADD this sensor to the choices.dev_id[] array
                 choices.dev_id.push(this.value);
             } else {
-                this.parentElement.classList = 'use-pointer';
                 this.parentElement.style = '';
                 senscount -= 1;
                 // REMOVE this sensor from the choices.dev_id[] array
