@@ -215,14 +215,20 @@ $(document).ready(function() {
     adaptColor('#titlehist', '.panel-success>.panel-heading');
     // adjust the text color
     adaptColor('#gethist');
+    adaptColor('#resetchart');
     // disable the button because no sensors have been selected yet
     $('#gethist').prop("disabled",true);
 
-   // set up the button handler
+   // set up the button handlers
    $('#gethist').on('click', function() {
         consolelog('#gethist - '+JSON.stringify(choices));
         // {dursel: '24', dev_id:['ESP_49EC8B','ESP_AAAAAA',ESP_BBBBBB'}
         $(document).trigger('hist_request', choices);
+    });
+
+   $('#resetchart').on('click', function() {
+        consolelog('#resetchart');
+        location.replace(location.href); 
     });
 
     // iterate through all of the sensor selection checkboxes
