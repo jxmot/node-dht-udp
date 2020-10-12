@@ -31,6 +31,14 @@ const MAX_ADJ = +2
 // device ID <-> recognizable name
 var names = [];
 
+// https://htmlcolorcodes.com/color-picker/
+// use "complementary" colors
+var colors = [
+    ['#83FF33','#AF33FF'],
+    ['#33CEFF','#DAF7A6'],
+    ['#FFC300','#FF6433'],
+    ['#19E7A8','#E71958']
+];
 
 // TODO: multiple configs? in an array?
 // TODO: functions to handle specific configs
