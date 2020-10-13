@@ -100,8 +100,8 @@ module.exports = (function() {
                 _getHistory(query, sendHistory);
             });
 
-            function sendHistory(table, data) {
-                var hist = Object.assign({},{query:query},{data:data});
+            function sendHistory(table, data, err) {
+                var hist = Object.assign({},{query:query},{data:data},{err:err});
                 socket.emit('histdata', hist);
             };
 
