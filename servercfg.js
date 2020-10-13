@@ -5,6 +5,8 @@
 const testmode = true;
 
 module.exports = {
+    name: 'generic',
+
     server : {
         host : '0.0.0.0',
         port : (testmode ? 55555 : 48431),
