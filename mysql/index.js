@@ -118,6 +118,9 @@ module.exports = function init(evts) {
             // get the last status and data rows for all sensors
             sensorLast();
 
+            // get stats from the database
+            sensorStats();
+
             // wait for sensor events from the server....
             evts.on('MSG_RCVD', (m, r) => {
                 log(`MSG_RCVD : ${m}`);
@@ -204,6 +207,23 @@ module.exports = function init(evts) {
                     if((row.loc !== 'X') && (row.t_scale !== 'X')) {
                         database.readRows('status', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
                         database.readRows('data', `dev_id = "${row.dev_id}" order by tstamp desc limit 1`, notify.updateLast);
+                    }
+                });
+            }
+        });
+    };
+
+    /*
+    */
+    function sensorStats() {
+        database.readAllRows('config', (table, rows) => {
+            if(rows !== null) {
+                rows.forEach(row => {
+                    // if it's a "dead" sensor then skip it
+                    if((row.loc !== 'X') && (row.t_scale !== 'X')) {
+                        //database.readRows('status', `dev_id = "${row.dev_id}" order by tstamp asc limit 1`, notify.updateStats);
+                        database.readRows('data', `dev_id = "${row.dev_id}" order by tstamp asc limit 1`, notify.updateStats);
+                        database.countRows('data', 'tstamp', `dev_id = "${row.dev_id}"`, notify.updateCounts);
                     }
                 });
             }

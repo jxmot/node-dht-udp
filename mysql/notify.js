@@ -94,7 +94,8 @@ module.exports = (function() {
 // NOTE: for use on live data replace the next line with
 //                query.to = Date.now();
                 query.to = (Date.now() - ((86400 * 10) * 1000));
-                query.from = (query.to - ((data.dursel * 3600) * 1000));
+//                query.from = (query.to - ((data.dursel * 3600) * 1000));
+                query.from = data.datefrom;
                 query.dev_id = JSON.parse(JSON.stringify(data.dev_id));
 
                 _getHistory(query, sendHistory);
@@ -110,6 +111,8 @@ module.exports = (function() {
             socket.emit('server', {message: 'READY', status: true, id: socket.id, tstamp : Date.now()});
             // send the configuration as it was read during init
             socket.emit('config', configcurr);
+            // send the sensor stats
+            socket.emit('stats', stats);
 
             // Increment the connection counter
             connCount += 1;
@@ -166,6 +169,24 @@ module.exports = (function() {
 
     notify.updateConfig = function(data) {
         configcurr = JSON.parse(JSON.stringify(data));
+    };
+
+    var stats = {
+        data: {},
+        status: {}
+    };
+
+    notify.updateStats = function(table, data) {
+        if(data !== null) {
+            stats[table][data[0].dev_id] = Object.assign({}, stats[table][data[0].dev_id], {oldest:data[0].tstamp});
+        }
+    };
+
+    notify.updateCounts = function(table, ignore, res) {
+        if(res !== -1) {
+            var dev_id = res.k.substring(res.k.indexOf('"') + 1, res.k.lastIndexOf('"'));
+            stats[table][dev_id] = Object.assign({}, stats[table][dev_id], {total:res.r});
+        }
     };
 
     // add fresh data to the sensorlast container
