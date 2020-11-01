@@ -103,6 +103,7 @@ module.exports = (function() {
 
             function sendHistory(table, data, err) {
                 var hist = Object.assign({},{query:query},{data:data},{err:err});
+                log(`socket ${socket.id} on sendHistory() - ${JSON.stringify(hist).length}`);
                 socket.emit('histdata', hist);
             };
 
@@ -144,11 +145,11 @@ module.exports = (function() {
             for(var key of Object.keys(payloads)) {
                 if(format === undefined) {
                     socket.emit(channel, {payload: payloads[key]});
-                    log(`resend(${channel}) - ${key}: ${JSON.stringify(payloads[key])}`);
+                    log(`resend(${channel}) - ${key}: ${JSON.stringify(payloads[key]).length}`);
                 } else {
                     if(format === payloads[key].format) {
                         socket.emit(channel, {payload: payloads[key]});
-                        log(`resend(${channel}) sel ${format} - ${key}: ${JSON.stringify(payloads[key])}`);
+                        log(`resend(${channel}) sel ${format} - ${key}: ${JSON.stringify(payloads[key]).length}`);
                     }
                 }
             }
