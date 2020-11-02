@@ -191,11 +191,22 @@ module.exports = (function() {
     notify.updateLast = function(channel, data, error = null) {
         if(data !== null) {
             // save for new client connections
-            if(channel === 'purge') sensorlast[channel][data.dbtable] = data;
-            else {
-                if((channel === 'wxobsv') || (channel === 'wxfcst')) 
+            if(channel === 'purge') { 
+                sensorlast[channel][data.dbtable] = data;
+            } else {
+                if((channel === 'wxobsv') || (channel === 'wxfcst')) {
                     sensorlast[channel][data.format] = data;
-                else sensorlast[channel][data.dev_id] = data;
+                } else {
+                    if(data.dev_id !== undefined) {
+                        sensorlast[channel][data.dev_id] = data;
+                        logTrace(`notify.updateLast - ${channel}  ${data.dev_id}  ${JSON.stringify(sensorlast[channel][data.dev_id])}`);
+                    } else {
+                        if(data[0].dev_id !== undefined) {
+                            sensorlast[channel][data[0].dev_id] = data[0];
+                            logTrace(`notify.updateLast array - ${channel}  ${data[0].dev_id}  ${JSON.stringify(sensorlast[channel][data[0].dev_id])}`);
+                        }else log(`notify.updateLast - WARNING not updated \"${channel}\" data = ${JSON.stringify(data)}`);
+                    }
+                }
             }
         } else {
             if((error !== null) && (error.err === true)) {
