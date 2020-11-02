@@ -193,7 +193,7 @@ module.exports = function init(evts) {
         This compliments the client status & data update, which occurs when 
         a client is connected. In situations where the parent application 
         has been started there is no accumulated status & data. This function
-        reads the database for the most recent status & data and then saves
+        reads the database for the most recent status & data and then saves it
         for when the clients recconnect.
     */
     function sensorLast() {

@@ -88,13 +88,10 @@ module.exports = (function() {
             socket.on('senshist', function (data) {
                 log(`socket ${socket.id} on senshist - ${JSON.stringify(data)}`);
                 // data {
-                //      dursel: <-- in hours, 24,48, or 72 only
+                //      datefrom: an epoch date value, at 00:00 of the selected day
                 //      dev_id: ['ESP_XXXX'] <- device IDs
                 // }
-// NOTE: for use on live data replace the next line with
-//                query.to = Date.now();
-                query.to = (Date.now() - ((86400 * 10) * 1000));
-//                query.from = (query.to - ((data.dursel * 3600) * 1000));
+                query.to = Date.now();
                 query.from = data.datefrom;
                 query.dev_id = JSON.parse(JSON.stringify(data.dev_id));
 
