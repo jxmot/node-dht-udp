@@ -178,7 +178,5 @@ A method utilizing *websockets* will be investigated for communicating current u
 
 Not sure if what I need is possible with a Mongo database. Further investigation is necessary, but is not likely to proceed at this time.
 
-
+---
 <img src="http://webexperiment.info/extcounter/mdcount.php?id=node-dht-udp">
-
-
