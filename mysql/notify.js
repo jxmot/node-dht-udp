@@ -57,6 +57,25 @@ module.exports = (function() {
         //error: []
     };
 
+    /*
+        Contains sensor statistics:
+        data: [
+            "devid": {
+                oldest: epoch time of oldest record
+                total: total number of records at time of update
+            }
+        ]
+
+        NOTE: data["devid"].oldest does not change except during
+        app-start and after a purge has occurred. The same is true
+        of data["devid"].total.
+
+    */
+    var stats = {
+        data: {},
+//        status: {}
+    };
+
     var configcurr = {};
 
     notify.init = function(_getHistory) {
@@ -169,11 +188,6 @@ module.exports = (function() {
         configcurr = JSON.parse(JSON.stringify(data));
     };
 
-    var stats = {
-        data: {},
-        status: {}
-    };
-
     notify.updateStats = function(table, data) {
         if(data !== null) {
             stats[table][data[0].dev_id] = Object.assign({}, stats[table][data[0].dev_id], {oldest:data[0].tstamp});
@@ -185,6 +199,13 @@ module.exports = (function() {
             var dev_id = res.k.substring(res.k.indexOf('"') + 1, res.k.lastIndexOf('"'));
             stats[table][dev_id] = Object.assign({}, stats[table][dev_id], {total:res.r});
         }
+    };
+
+    notify.sendNewStats = function() {
+        log(`sendNewStats ${connCount} - ${JSON.stringify(stats)}`);
+        // don't bother broadcasting anything if no one is connected.
+        if(connCount > 0) io.emit('stats', stats);
+        else logTrace('notify.sendNewStats - no connections');
     };
 
     // add fresh data to the sensorlast container
