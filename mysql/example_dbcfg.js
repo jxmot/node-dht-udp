@@ -34,11 +34,13 @@ module.exports = {
 
     // data purge configuration
     purge: {
-        enabled: true,
-        table: [
+        config: [
             {
-                // will execute a purge if true when the 
-                // application is started.
+                // sensor status purge configuration
+                // true = enabled timed  database purge
+                enabled: true,
+                // true = purge database on app init, ignored
+                // if purge.config[].enabled = false
                 oninit: true,
                 // the column used for comparison, this
                 // is also this table's primary key
@@ -52,10 +54,12 @@ module.exports = {
                 depth: 7
             },
             {
+                // sensor data purge configuration
+                enabled: true,
                 oninit: true,
                 col: 'tstamp',
-                interval: 5,
-                depth: 21
+                interval: 1,
+                depth: 14
             }
         ]
     }

@@ -135,15 +135,13 @@ module.exports = function init(evts) {
                 }
                 database.writeRow(dbcfg.table[dbcfg.TABLE_STATUS_IDX], status, writeDone);
             });
-
-            // if enabled set up a recurring data purge...
-            if(dbcfg.purge.enabled === true) {
-                // sensor data
+            // if enabled set up a recurring database purge...
+            if(dbcfg.purge.config[dbcfg.TABLE_DATA_IDX].enabled === true) {
                 enablePurge(dbcfg.TABLE_DATA_IDX);
-                // sensor status
+            }
+            if(dbcfg.purge.config[dbcfg.TABLE_STATUS_IDX].enabled === true) {
                 enablePurge(dbcfg.TABLE_STATUS_IDX);
             }
-
             // initialize the client notification module
             notify.init(getHistory);
         }
@@ -166,8 +164,8 @@ module.exports = function init(evts) {
         qstr = `(dev_id = ${sstr}) and (tstamp >= ${histreq.from} and tstamp <= ${histreq.to}) order by tstamp asc;`
         logTrace(`getHistory() - qstr = ${qstr}`);
         database.readRows('data',
-                         qstr,
-                         callback);
+                          qstr,
+                          callback);
     };
 
     //////////////////////////////////////////////////////////////////////////
