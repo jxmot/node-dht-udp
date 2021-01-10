@@ -73,7 +73,7 @@ function logTrace(text) {
 var database = require('./database-mysql.js').database;
 // database configuration, we need access to it here because
 // we're using the database name to create a logfile name
-var dbcfg = require('./_dbcfg.js');
+var dbcfg = require('./example_dbcfg.js');
 // initialize a logfile for this database
 initLog(dbcfg.parms.database);
 // set the database module to use the same log file
@@ -117,10 +117,8 @@ module.exports = function init(evts) {
         } else {
             // get the last status and data rows for all sensors
             sensorLast();
-
             // get stats from the database
             sensorStats();
-
             // wait for sensor events from the server....
             evts.on('MSG_RCVD', (m, r) => {
                 log(`MSG_RCVD : ${m}`);
